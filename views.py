@@ -23,7 +23,14 @@ class PrimerPasForm(forms.Form):
 
 class SegonPasForm(forms.Form):
     nom = forms.CharField()
+    # llinatges = forms.CharField()
+    # tel = forms.CharField()
+    # pob = forms.CharField()
     email = forms.CharField()
+    titol1 = forms.ModelChoiceField(queryset=TitolGeneric.objects.all())
+    tit1 = forms.CharField()
+    # uni1 = forms.CharField()
+    # dta1 = forms.CharField()
     currfile = forms.FileField()
 
 def primerPas(request):
@@ -39,9 +46,7 @@ def segonPas(request):
         if f.is_valid():
             # TODO: comprovar...
             email = f.cleaned_data['email']
-
             families = FamiliaTitol.objects.all()
-
             return renderResponse(
                 request,
                 'curriculums/segonpas.html', {
@@ -53,8 +58,6 @@ def segonPas(request):
     return redirect('curr-primerpas')
 
 def final(request):
-    return redirect('curr-primerpas')
-    
     if request.POST:
         # ALERTA: VALIDAR!!! (o fer amb form django)
         f = SegonPasForm(request.POST, request.FILES)
@@ -64,9 +67,13 @@ def final(request):
             fle = dta['currfile']
             nom = dta['nom']
             email = dta['email']
-            # real_name = stor.fs.save('prova', fle)
+            tit_generic_1 = dta['titol1']
+            tit1 = dta['tit1']
+            titol_1 = TitolUniversitari(nom=tit1, titolgeneric=tit_generic_1)
+            titol_1.save()
 
-            c = Curriculum(nom=nom, email=email, file=fle)
+            c = Curriculum(nom=nom, email=email, file=fle, titol1=titol_1)
+            # Caldria comprovar que s'ha enregistrat bé...
             c.save()
 
             return renderResponse(
