@@ -51,7 +51,7 @@
                         {% for f in families %}
                         <optgroup label="{{ f.nom }}">
                             {% for t in f.titolgeneric_set.all %}
-                            <option value="{{ t.nom }}"> {{t.nom}} </option>
+                            <option value="{{ t.id }}"> {{t.nom}} </option>
                             {% endfor %}
                         </optgroup>
                         {% endfor %}
@@ -67,7 +67,7 @@
                         {% for f in families %}
                         <optgroup label="{{ f.nom }}">
                             {% for t in f.titolgeneric_set.all %}
-                            <option value="{{ t.nom }}"> {{t.nom}} </option>
+                            <option value="{{ t.id }}"> {{t.nom}} </option>
                             {% endfor %}
                         </optgroup>
                         {% endfor %}
@@ -83,7 +83,7 @@
                         {% for f in families %}
                         <optgroup label="{{ f.nom }}">
                             {% for t in f.titolgeneric_set.all %}
-                            <option value="{{ t.nom }}"> {{t.nom}} </option>
+                            <option value="{{ t.id }}"> {{t.nom}} </option>
                             {% endfor %}
                         </optgroup>
                         {% endfor %}
