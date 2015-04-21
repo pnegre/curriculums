@@ -53,6 +53,8 @@ def segonPas(request):
     return redirect('curr-primerpas')
 
 def final(request):
+    return redirect('curr-primerpas')
+    
     if request.POST:
         # ALERTA: VALIDAR!!! (o fer amb form django)
         f = SegonPasForm(request.POST, request.FILES)

@@ -6,24 +6,39 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.js" type="text/javascript"></script>
 
     <style>
-        #titol2, #titol3 {
-            display: none;
-        }
+    #titol2, #titol3, #ref1, #ref2, #ref3 {
+        display: none;
+    }
     </style>
 
     <script>
-        $(document).ready(function() {
-            $("#butmes").click(function() {
-                var t2 = $("#titol2");
-                var t3 = $("#titol3");
-                if (!t2.is(":visible")) {
-                    t2.show();
-                } else if (!t3.is(":visible")) {
-                    t3.show();
-                    $("#butmes").hide();
-                }
-            });
+    $(document).ready(function() {
+        $("#butmes").click(function() {
+            var t2 = $("#titol2");
+            var t3 = $("#titol3");
+            if (!t2.is(":visible")) {
+                t2.show();
+            } else if (!t3.is(":visible")) {
+                t3.show();
+                $("#butmes").hide();
+            }
         });
+
+        $("#butref").click(function() {
+            var r1 = $("#ref1");
+            var r2 = $("#ref2");
+            var r3 = $("#ref3");
+            if (!r1.is(":visible")) {
+                r1.show();
+            } else if (!r2.is(":visible")) {
+                r2.show();
+            } else if (!r3.is(":visible")) {
+                r3.show();
+                $("#butref").hide();
+            }
+
+        })
+    });
     </script>
 </head>
 
@@ -77,7 +92,7 @@
                     <input type="text" name="dta2" placeholder="Data d'obtenció del títol">
                 </div>
 
-                <div id=titol3>
+                <div id="titol3">
                     <label>Titulació:</label>
                     <select name="titol3">
                         {% for f in families %}
@@ -99,24 +114,26 @@
                 <legend><span class="number">3</span> Currículum </legend>
 
                 <label> Indica'ns les persones a qui podem adreçar-nos per demanar referències </label>
-                <input type="text" name="ref1" placeholder="Persona de referència 1">
-                <input type="text" name="ref1_email" placeholder="E-Mail">
+                <div id="ref1">
+                    <input type="text" name="ref1" placeholder="Persona de referència 1">
+                    <input type="text" name="ref1_email" placeholder="E-Mail">
+                </div>
+                <div id="ref2">
+                    <input type="text" name="ref2" placeholder="Persona de referència 2">
+                    <input type="text" name="ref2_email" placeholder="E-Mail">
+                </div>
 
-                <input type="text" name="ref2" placeholder="Persona de referència 2">
-                <input type="text" name="ref2_email" placeholder="E-Mail">
-
-                <input type="text" name="ref2" placeholder="Persona de referència 2">
-                <input type="text" name="ref2_email" placeholder="E-Mail">
+                <div id =ref3>
+                    <input type="text" name="ref3" placeholder="Persona de referència 3">
+                    <input type="text" name="ref3_email" placeholder="E-Mail">
+                </div>
+                <input type="button" name="mes" id="butref" value="Afegir referència"/>
 
                 <label> Envia'ns el teu currículum: </label>
                 <div class="fileUpload btn btn-primary" style="margin-bottom: 30px">
                     <span>Sel·lecciona el fitxer...</span>
                     <input type="file" name="currfile" id="id_currfile" class="upload"/>
                 </div>
-
-                <!--
-                <input type="file" name="image_file" id="image_file" onchange="fileSelected();" />
-                <input type="button" value="Upload" onclick="startUploading()" /> -->
 
             </fieldset>
 
