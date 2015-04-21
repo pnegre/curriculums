@@ -1,0 +1,94 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/curriculums/styles.css">
+</head>
+
+<body>
+    <h1 style="text-align: center"> EL TEU CURRICULUM </h1>
+
+    <div class="form-style-5">
+        <form action="/curriculums/final" enctype="multipart/form-data" method="POST">
+            <fieldset>
+                <legend><span class="number">1</span> Informació del candidat </legend>
+                <input type="text" name="nom" placeholder="Nom">
+                <input type="text" name="llinatges" placeholder="Llinatges">
+                <input type="email" name="email" placeholder="E-Mail" value="{{ email }}">
+                <input type="text" name="tel" placeholder="Telèfon">
+                <input type="text" name="pob" placeholder="Població">
+                <!-- <label for="motiu"> Per què vols fer feina a "ES LICEU"? </label>
+                <textarea name="motiu"> </textarea> -->
+            </fieldset>
+
+            <fieldset>
+                <legend><span class="number">2</span> Dades acadèmiques </legend>
+                <label for="job">Titulació:</label>
+                <select id="job" name="field4">
+                    <optgroup label="Ciències socials i jurídiques">
+                        <option value="edinfantil">Educació infantil</option>
+                        <option value="edprimaria">Educació primària</option>
+                        <option value="dret">Dret</option>
+                        <option value="turisme">Turisme</option>
+                        <option value="csoc_altres">Altres</option>
+                    </optgroup>
+                    <optgroup label="Ciències">
+                        <option value="mates">Matemàtiques</option>
+                        <option value="ciencies_altres">Altres</option>
+                    </optgroup>
+                    <optgroup label="Arts i humanitats">
+                        <option value="angles">Estudis anglesos</option>
+                        <option value="arts_altres">Altres</option>
+                    </optgroup>
+                    <optgroup label="Enginyeria i arquitectura">
+                        <option value="informatica">Informàtica</option>
+                        <option value="industrials">Industrials</option>
+                        <option value="telematica">Telemàtica</option>
+                        <option value="eng_altres">Altres</option>
+                    </optgroup>
+                    <optgroup label="Altres famílies">
+                        <option value="altres_altres">Altres</option>
+                    </optgroup>
+
+
+                </select>
+                <input type="text" name="tit" placeholder="Nom de la teva titulació">
+                <input type="text" name="uni" placeholder="Universitat">
+                <input type="text" name="dta" placeholder="Data d'obtenció del títol">
+            </fieldset>
+            <fieldset>
+                <legend><span class="number">3</span> Currículum </legend>
+
+                <label> Indica'ns les persones a qui podem adreçar-nos per demanar referències </label>
+                <input type="text" name="ref1" placeholder="Persona de referència 1">
+                <input type="text" name="ref1_email" placeholder="E-Mail">
+
+                <input type="text" name="ref2" placeholder="Persona de referència 2">
+                <input type="text" name="ref2_email" placeholder="E-Mail">
+
+                <input type="text" name="ref2" placeholder="Persona de referència 2">
+                <input type="text" name="ref2_email" placeholder="E-Mail">
+
+                <label> Envia'ns el teu currículum: </label>
+                <div class="fileUpload btn btn-primary" style="margin-bottom: 30px">
+                    <span>Sel·lecciona el fitxer...</span>
+                    <input type="file" name="currfile" id="id_currfile" class="upload"/>
+                </div>
+
+                <!--
+                <input type="file" name="image_file" id="image_file" onchange="fileSelected();" />
+                <input type="button" value="Upload" onclick="startUploading()" /> -->
+
+            </fieldset>
+
+            <fieldset>
+                <legend><span class="number">4</span> Finalitza </legend>
+                <input type="submit" value="Envia-ho" />
+            </fieldset>
+
+        </form>
+    </div>
+
+</body>
+
+</html>
