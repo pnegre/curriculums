@@ -33,14 +33,20 @@ def primerPas(request):
     } )
 
 def segonPas(request):
+    # Aquí només hi hauria d'arribar en cas de clicar al link enviat al correu
     if request.POST:
         f = PrimerPasForm(request.POST)
         if f.is_valid():
+            # TODO: comprovar...
             email = f.cleaned_data['email']
+
+            families = FamiliaTitol.objects.all()
+
             return renderResponse(
                 request,
                 'curriculums/segonpas.html', {
                     'email': email,
+                    'families': families,
             } )
 
     # TODO: Mostrar errors
