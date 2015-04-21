@@ -7,17 +7,29 @@ import storage as stor
 class FamiliaTitol(models.Model):
     nom = models.CharField(max_length=500)
 
+    def __unicode__(self):
+        return self.nom
+
 class TitolGeneric(models.Model):
     nom = models.CharField(max_length=500)
     familia = models.ForeignKey(FamiliaTitol)
+
+    def __unicode__(self):
+        return self.nom
 
 class Referencia(models.Model):
     nom = models.CharField(max_length=500)
     email = models.CharField(max_length=500)
 
+    def __unicode__(self):
+        return self.nom
+
 class TitolUniversitari(models.Model):
     nom = models.CharField(max_length=500)
     titolgeneric = models.ForeignKey(TitolGeneric)
+
+    def __unicode__(self):
+        return self.nom
 
 class Curriculum(models.Model):
     email = models.CharField(max_length=500)
