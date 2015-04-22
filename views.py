@@ -72,26 +72,29 @@ def primerPas(request):
 
 def segonPas(request):
     codi = request.GET.get('codi')
-    cr = Curriculum.objects.get(codi_edicio=codi)
-    if cr.categoria == 'D':
-        # Docent
-        families = FamiliaTitol.objects.all()
-        return renderResponse(
-            request,
-            'curriculums/segonpas.html', {
-                'cr': cr,
-                'families': families,
-        } )
-    elif cr.categoria == 'N':
-        # No docent
-        catlaborals = CategoriaLaboralND.objects.all()
-        return renderResponse(
-            request,
-            'curriculums/segonpas_nd.html', {
-                'cr': cr,
-                'catlaborals': catlaborals,
-            }
-        )
+    try:
+        cr = Curriculum.objects.get(codi_edicio=codi)
+        if cr.categoria == 'D':
+            # Docent
+            families = FamiliaTitol.objects.all()
+            return renderResponse(
+                request,
+                'curriculums/segonpas.html', {
+                    'cr': cr,
+                    'families': families,
+            } )
+        elif cr.categoria == 'N':
+            # No docent
+            catlaborals = CategoriaLaboralND.objects.all()
+            return renderResponse(
+                request,
+                'curriculums/segonpas_nd.html', {
+                    'cr': cr,
+                    'catlaborals': catlaborals,
+                }
+            )
+    except:
+        pass
 
     # TODO: Mostrar errors
     return redirect('curr-primerpas')
@@ -102,6 +105,8 @@ def final(request):
         f = SegonPasForm(request.POST, request.FILES)
         if f.is_valid():
             # TODO: comprovar amb codi de seguretat...
+            # TODO: també mirar com podem posar una grandària màxima pel fitxer
+            # TODO: i que el fitxer sigui de tipus PDF, odt... (que no hi pugui haver .exes...)
             dta = f.cleaned_data
             fle = dta['currfile']
             nom = dta['nom']

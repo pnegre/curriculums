@@ -35,6 +35,7 @@
 
     <div class="form-style-5">
         <form action="/curriculums/final" enctype="multipart/form-data" method="POST">
+            <input type="hidden" name="codi_edicio" value="{{ cr.codi_edicio }}"/>
             <fieldset>
                 <legend><span class="number">1</span> Informació del candidat </legend>
                 <input type="text" name="nom" placeholder="Nom">
