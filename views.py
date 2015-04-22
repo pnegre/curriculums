@@ -23,9 +23,9 @@ class PrimerPasForm(forms.Form):
 
 class SegonPasForm(forms.Form):
     nom = forms.CharField()
-    # llinatges = forms.CharField()
-    # tel = forms.CharField()
-    # pob = forms.CharField()
+    llinatges = forms.CharField()
+    tel = forms.CharField()
+    pob = forms.CharField()
     email = forms.CharField()
     titol1 = forms.ModelChoiceField(queryset=TitolGeneric.objects.all())
     tit1 = forms.CharField()
