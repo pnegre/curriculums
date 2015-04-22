@@ -44,9 +44,9 @@ def primerPas(request):
             email = f.cleaned_data['email']
             feina = f.cleaned_data['feina']
             # Generem codi a partir de l'hora actual, mirant els microseconds...
-            codi_md5 = hashlib.md5()
-            codi_md5.update(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'))
-            codi = codi_md5.hexdigest()
+            codi_sha = hashlib.sha512()
+            codi_sha.update(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'))
+            codi = codi_sha.hexdigest()
             c = Curriculum(email=email, categoria=feina, codi_edicio=codi)
             c.save()
             return renderResponse(
@@ -61,32 +61,27 @@ def primerPas(request):
     } )
 
 def segonPas(request):
-    # Aquí només hi hauria d'arribar en cas de clicar al link enviat al correu
-    if request.POST:
-        f = PrimerPasForm(request.POST)
-        if f.is_valid():
-            # TODO: comprovar...
-            email = f.cleaned_data['email']
-            feina = f.cleaned_data['feina']
-            if feina == 'D':
-                # Formulari DOCENT
-                families = FamiliaTitol.objects.all()
-                return renderResponse(
-                    request,
-                    'curriculums/segonpas.html', {
-                        'email': email,
-                        'families': families,
-                } )
-            elif feina == 'ND':
-                # Formulari NO DOCENT
-                catlaborals = CategoriaLaboralND.objects.all()
-                return renderResponse(
-                    request,
-                    'curriculums/segonpas_nd.html', {
-                        'email': email,
-                        'catlaborals': catlaborals,
-                    }
-                )
+    codi = request.GET.get('codi')
+    cr = Curriculum.objects.get(codi_edicio=codi)
+    if cr.categoria == 'D':
+        # Docent
+        families = FamiliaTitol.objects.all()
+        return renderResponse(
+            request,
+            'curriculums/segonpas.html', {
+                'email': cr.email,
+                'families': families,
+        } )
+    elif cr.categoria == 'N':
+        # No docent
+        catlaborals = CategoriaLaboralND.objects.all()
+        return renderResponse(
+            request,
+            'curriculums/segonpas_nd.html', {
+                'email': cr.email,
+                'catlaborals': catlaborals,
+            }
+        )
 
     # TODO: Mostrar errors
     return redirect('curr-primerpas')

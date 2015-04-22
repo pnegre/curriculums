@@ -31,7 +31,7 @@
 </head>
 
 <body>
-    <h1 style="text-align: center"> EL TEU CURRICULUM </h1>
+    <h1 style="text-align: center"> EL TEU CURRICULUM {{ email }}</h1>
 
     <div class="form-style-5">
         <form action="/curriculums/final" enctype="multipart/form-data" method="POST">
@@ -39,7 +39,7 @@
                 <legend><span class="number">1</span> Informació del candidat </legend>
                 <input type="text" name="nom" placeholder="Nom">
                 <input type="text" name="llinatges" placeholder="Llinatges">
-                <input type="email" name="email" placeholder="E-Mail" value="{{ email }}">
+                <!-- <input type="email" name="email" placeholder="E-Mail" value="{{ email }}"> -->
                 <input type="text" name="tel" placeholder="Telèfon">
                 <input type="text" name="pob" placeholder="Població">
                 <!-- <label for="motiu"> Per què vols fer feina a "ES LICEU"? </label>
