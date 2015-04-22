@@ -1,0 +1,25 @@
+
+{% extends "hub/menu_base.html" %}
+
+{% block baseheader %}
+
+	{% block head %}
+	{% endblock %}
+
+{% endblock %}
+
+
+{% block basebody %}
+
+	{% block content %}
+	<h1> Taula amb els currículums </h1>
+
+	<table border="1">
+		{% for c in curriculums %}
+		<tr><td> {{ c.email }} </td><td> {{ c.nom }} </td><td> {{ c.llinatges }} </td></tr>
+		{% endfor %}
+	</table>
+
+	{% endblock %}
+
+{% endblock %}

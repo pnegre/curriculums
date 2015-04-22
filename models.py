@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.db import models
 
 # Create your models here.
@@ -39,6 +41,7 @@ class Curriculum(models.Model):
 
     email = models.CharField(max_length=500)
     nom = models.CharField(max_length=500, blank=True, null=True)
+    llinatges = models.CharField(max_length=500, blank=True, null=True)
     poblacio = models.CharField(max_length=500, blank=True, null=True)
     telefon = models.CharField(max_length=500, blank=True, null=True)
     categoria_laboral_nodocent = models.ForeignKey(CategoriaLaboralND, blank=True, null=True)
@@ -61,6 +64,12 @@ class Curriculum(models.Model):
     ref2_email = models.CharField(max_length=500, blank=True, null=True)
     ref3 = models.CharField(max_length=500, blank=True, null=True)
     ref3_email = models.CharField(max_length=500, blank=True, null=True)
+
+    class Meta:
+		permissions = (
+			("veure_curriculums_docents","Pot veure currículums docents"),
+			("veure_curriculums_no_docents","Pot veure currículums no docents"),
+		)
 
     def __unicode__(self):
         return self.email

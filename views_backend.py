@@ -6,6 +6,8 @@ from django.utils import simplejson
 from django.core.mail import send_mail
 from django.template import RequestContext
 
+from django.contrib.auth.decorators import login_required, permission_required
+
 from django import forms
 
 from curriculums.models import *
@@ -18,9 +20,12 @@ import storage as stor
 def renderResponse(request,tmpl,dic):
     return render_to_response(tmpl, dic, context_instance=RequestContext(request))
 
+@permission_required('curriculums.veure_curriculums_docents')
 def index(request):
+    curriculums = Curriculum.objects.all()
     return renderResponse(
         request,
-        'curriculums/codi.html', {
+        'curriculums/backend/base.html', {
+            'curriculums': curriculums,
         }
     )

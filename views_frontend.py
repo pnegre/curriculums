@@ -27,14 +27,15 @@ class PrimerPasForm(forms.Form):
 class SegonPasForm(forms.Form):
     nom = forms.CharField()
     llinatges = forms.CharField()
-    tel = forms.CharField()
-    pob = forms.CharField()
-    email = forms.CharField()
-    titol1 = forms.ModelChoiceField(queryset=TitolGeneric.objects.all())
-    tit1 = forms.CharField()
-    # uni1 = forms.CharField()
-    # dta1 = forms.CharField()
-    currfile = forms.FileField()
+    codi_edicio = forms.CharField()
+    # tel = forms.CharField()
+    # pob = forms.CharField()
+    # email = forms.CharField()
+    # titol1 = forms.ModelChoiceField(queryset=TitolGeneric.objects.all())
+    # tit1 = forms.CharField()
+    # # uni1 = forms.CharField()
+    # # dta1 = forms.CharField()
+    # currfile = forms.FileField()
 
 def generarCodi(email):
     # Generem codi a partir de l'hora actual, mirant els microseconds...
@@ -105,26 +106,33 @@ def final(request):
         # ALERTA: VALIDAR!!! (o fer amb form django)
         f = SegonPasForm(request.POST, request.FILES)
         if f.is_valid():
-            # TODO: comprovar amb codi de seguretat...
             # TODO: també mirar com podem posar una grandària màxima pel fitxer
             # TODO: i que el fitxer sigui de tipus PDF, odt... (que no hi pugui haver .exes...)
             dta = f.cleaned_data
-            fle = dta['currfile']
-            nom = dta['nom']
-            email = dta['email']
-            tit_generic_1 = dta['titol1']
-            tit1 = dta['tit1']
-            titol_1 = TitolUniversitari(nom=tit1, titolgeneric=tit_generic_1)
-            titol_1.save()
+            codi = dta['codi_edicio']
 
-            c = Curriculum(nom=nom, email=email, file=fle, titol1=titol_1)
-            # Caldria comprovar que s'ha enregistrat bé...
-            c.save()
+            try:
+                cr = Curriculum.objects.get(codi_edicio=codi)
+                # fle = dta['currfile']
+                nom = dta['nom']
+                llinatges = dta['llinatges']
+                # tit_generic_1 = dta['titol1']
+                # tit1 = dta['tit1']
+                # titol_1 = TitolUniversitari(nom=tit1, titolgeneric=tit_generic_1)
+                # titol_1.save()
 
-            return renderResponse(
-                request,
-                'curriculums/final.html', {}
-            )
+                # c = Curriculum(nom=nom, email=email, file=fle, titol1=titol_1)
+                # Caldria comprovar que s'ha enregistrat bé...
+                cr.nom = nom
+                cr.llinatges = llinatges
+                cr.save()
+
+                return renderResponse(
+                    request,
+                    'curriculums/final.html', {}
+                )
+            except:
+                pass
 
     # TODO: Mostrar errors
     return redirect('curr-primerpas')
