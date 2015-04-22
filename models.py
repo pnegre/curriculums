@@ -32,14 +32,22 @@ class CategoriaLaboralND(models.Model):
 
 
 class Curriculum(models.Model):
+    CAT_CHOICES = (
+		(u'D', u'Docent'),
+		(u'N', u'No Docent'),
+    )
+
     email = models.CharField(max_length=500)
-    nom = models.CharField(max_length=500)
-    poblacio = models.CharField(max_length=500)
-    telefon = models.CharField(max_length=500)
+    nom = models.CharField(max_length=500, blank=True, null=True)
+    poblacio = models.CharField(max_length=500, blank=True, null=True)
+    telefon = models.CharField(max_length=500, blank=True, null=True)
     categoria_laboral_nodocent = models.ForeignKey(CategoriaLaboralND, blank=True, null=True)
-    file = models.FileField(storage=stor.fs, upload_to='.')
+    file = models.FileField(storage=stor.fs, upload_to='.', blank=True, null=True)
     observacions = models.CharField(max_length=1000, blank=True, null=True)
     entrevistat = models.BooleanField(default=False)
+
+    categoria = models.CharField(max_length=2, choices = CAT_CHOICES)
+    codi_edicio = models.CharField(max_length=500) # Codi per editar el currículum
 
     # Suportem fins a tres titols (suficient?)
     titol1 = models.ForeignKey(TitolUniversitari, related_name='titol1', blank=True, null=True)

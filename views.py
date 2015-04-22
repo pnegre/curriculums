@@ -20,6 +20,7 @@ def renderResponse(request,tmpl,dic):
 
 class PrimerPasForm(forms.Form):
     email = forms.CharField()
+    feina = forms.CharField()
 
 class SegonPasForm(forms.Form):
     nom = forms.CharField()
@@ -46,13 +47,26 @@ def segonPas(request):
         if f.is_valid():
             # TODO: comprovar...
             email = f.cleaned_data['email']
-            families = FamiliaTitol.objects.all()
-            return renderResponse(
-                request,
-                'curriculums/segonpas.html', {
-                    'email': email,
-                    'families': families,
-            } )
+            feina = f.cleaned_data['feina']
+            if feina == 'D':
+                # Formulari DOCENT
+                families = FamiliaTitol.objects.all()
+                return renderResponse(
+                    request,
+                    'curriculums/segonpas.html', {
+                        'email': email,
+                        'families': families,
+                } )
+            elif feina == 'ND':
+                # Formulari NO DOCENT
+                catlaborals = CategoriaLaboralND.objects.all()
+                return renderResponse(
+                    request,
+                    'curriculums/segonpas_nd.html', {
+                        'email': email,
+                        'catlaborals': catlaborals,
+                    }
+                )
 
     # TODO: Mostrar errors
     return redirect('curr-primerpas')
