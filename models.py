@@ -46,8 +46,8 @@ class Curriculum(models.Model):
     observacions = models.CharField(max_length=1000, blank=True, null=True)
     entrevistat = models.BooleanField(default=False)
 
-    categoria = models.CharField(max_length=2, choices = CAT_CHOICES)
-    codi_edicio = models.CharField(max_length=500) # Codi per editar el currículum
+    categoria = models.CharField(max_length=2, choices=CAT_CHOICES)
+    codi_edicio = models.CharField(max_length=500) # Codi per editar el curriculum
 
     # Suportem fins a tres titols (suficient?)
     titol1 = models.ForeignKey(TitolUniversitari, related_name='titol1', blank=True, null=True)
