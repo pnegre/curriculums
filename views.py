@@ -36,19 +36,29 @@ class SegonPasForm(forms.Form):
     # dta1 = forms.CharField()
     currfile = forms.FileField()
 
+def generarCodi():
+    # Generem codi a partir de l'hora actual, mirant els microseconds...
+    codi_sha = hashlib.sha512()
+    codi_sha.update(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'))
+    return codi_sha.hexdigest()
+
 def primerPas(request):
     if request.POST:
         f = PrimerPasForm(request.POST)
         if f.is_valid():
-            # TODO: comprovar...
             email = f.cleaned_data['email']
             feina = f.cleaned_data['feina']
-            # Generem codi a partir de l'hora actual, mirant els microseconds...
-            codi_sha = hashlib.sha512()
-            codi_sha.update(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'))
-            codi = codi_sha.hexdigest()
-            c = Curriculum(email=email, categoria=feina, codi_edicio=codi)
-            c.save()
+            codi = generarCodi()
+            # Comprovem que l'adreça email ja existeix...
+            # TODO: el codi hauria de tenir només vigència en 24h...
+            try:
+                cr = Curriculum.objects.get(email=email)
+                cr.codi_edicio = codi
+                cr.save()
+            except:
+                c = Curriculum(email=email, categoria=feina, codi_edicio=codi)
+                c.save()
+
             return renderResponse(
                 request,
                 'curriculums/codi.html', {
@@ -69,7 +79,7 @@ def segonPas(request):
         return renderResponse(
             request,
             'curriculums/segonpas.html', {
-                'email': cr.email,
+                'cr': cr,
                 'families': families,
         } )
     elif cr.categoria == 'N':
@@ -78,7 +88,7 @@ def segonPas(request):
         return renderResponse(
             request,
             'curriculums/segonpas_nd.html', {
-                'email': cr.email,
+                'cr': cr,
                 'catlaborals': catlaborals,
             }
         )
