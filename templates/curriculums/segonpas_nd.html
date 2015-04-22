@@ -12,21 +12,21 @@
     </style>
 
     <script>
-        $("#butref").click(function() {
-            var r1 = $("#ref1");
-            var r2 = $("#ref2");
-            var r3 = $("#ref3");
-            if (!r1.is(":visible")) {
-                r1.show();
-            } else if (!r2.is(":visible")) {
-                r2.show();
-            } else if (!r3.is(":visible")) {
-                r3.show();
-                $("#butref").hide();
-            }
-
-        })
-    });
+        $(document).ready(function() {
+            $("#butref").click(function() {
+                var r1 = $("#ref1");
+                var r2 = $("#ref2");
+                var r3 = $("#ref3");
+                if (!r1.is(":visible")) {
+                    r1.show();
+                } else if (!r2.is(":visible")) {
+                    r2.show();
+                } else if (!r3.is(":visible")) {
+                    r3.show();
+                    $("#butref").hide();
+                }
+            });
+        });
     </script>
 </head>
 
