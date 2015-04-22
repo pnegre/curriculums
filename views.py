@@ -36,10 +36,11 @@ class SegonPasForm(forms.Form):
     # dta1 = forms.CharField()
     currfile = forms.FileField()
 
-def generarCodi():
+def generarCodi(email):
     # Generem codi a partir de l'hora actual, mirant els microseconds...
     codi_sha = hashlib.sha512()
     codi_sha.update(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'))
+    codi_sha.update(email)
     return codi_sha.hexdigest()
 
 def primerPas(request):
@@ -48,7 +49,7 @@ def primerPas(request):
         if f.is_valid():
             email = f.cleaned_data['email']
             feina = f.cleaned_data['feina']
-            codi = generarCodi()
+            codi = generarCodi(email)
             # Comprovem que l'adreça email ja existeix...
             # TODO: el codi hauria de tenir només vigència en 24h...
             try:
