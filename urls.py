@@ -4,8 +4,12 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('',
 
-	(r'^$', 'curriculums.views.primerPas', {}, 'curr-primerpas'),
-	(r'^next$', 'curriculums.views.segonPas'),
-	(r'^final$', 'curriculums.views.final'),
+	# URLS FRONT-END
+	(r'^$', 'curriculums.views_frontend.primerPas', {}, 'curr-primerpas'),
+	(r'^next$', 'curriculums.views_frontend.segonPas'),
+	(r'^final$', 'curriculums.views_frontend.final'),
+
+	# URLS BACK-END
+	(r'^backend/', 'curriculums.views_backend.index'),
 
 )
