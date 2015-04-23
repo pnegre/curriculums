@@ -1,154 +1,152 @@
+<!DOCTYPE html>
 <html>
+    <head>
+        <title>Treballa amb nosaltres - Es Liceu Som Cooperativa</title>
+        <meta charset="UTF-8">
+        <meta name="description" content="Aplicació interna d\'Es Liceu per a gestionar currículums.">
+        <meta name="keywords" content="treball,professor,curriculum,liceu,es liceu">
+        <meta name="robots" content="index,follow">
+        <meta name="author" content="Pere Negre, Miquel Piulats, Joan Galmés">
+        
+        <link rel="stylesheet" href="/static/curriculums/css/styles.css">
+    </head>
 
-<head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/curriculums/css/styles.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.js" type="text/javascript"></script>
+    <body>
+        <h1 style="text-align: center"> EL TEU CURRICULUM {{ cr.email }} </h1>
 
-    <style>
-    #titol2, #titol3, #ref1, #ref2, #ref3 {
-        display: none;
-    }
-    </style>
+        <div class="form-style-5">
+            <form action="/curriculums/final" enctype="multipart/form-data" method="POST">
+                <input type="hidden" name="codi_edicio" value="{{ cr.codi_edicio }}"/>
+                <fieldset>
+                    <legend><span class="number">1</span> Informació del candidat </legend>
+                    <input type="text" name="nom" placeholder="Nom">
+                    <input type="text" name="llinatges" placeholder="Llinatges">
+                    <!-- <input type="email" name="email" placeholder="E-Mail" value="{{ email }}"> -->
+                    <input type="text" name="tel" placeholder="Telèfon">
+                    <input type="text" name="pob" placeholder="Població">
+                    <!-- <label for="motiu"> Per què vols fer feina a "ES LICEU"? </label>
+                    <textarea name="motiu"> </textarea> -->
+                </fieldset>
 
-    <script>
-    $(document).ready(function() {
-        $("#butmes").click(function() {
-            var t2 = $("#titol2");
-            var t3 = $("#titol3");
-            if (!t2.is(":visible")) {
-                t2.show();
-            } else if (!t3.is(":visible")) {
-                t3.show();
-                $("#butmes").hide();
-            }
-        });
-
-        $("#butref").click(function() {
-            var r1 = $("#ref1");
-            var r2 = $("#ref2");
-            var r3 = $("#ref3");
-            if (!r1.is(":visible")) {
-                r1.show();
-            } else if (!r2.is(":visible")) {
-                r2.show();
-            } else if (!r3.is(":visible")) {
-                r3.show();
-                $("#butref").hide();
-            }
-
-        })
-    });
-    </script>
-</head>
-
-<body>
-    <h1 style="text-align: center"> EL TEU CURRICULUM {{ cr.email }} </h1>
-
-    <div class="form-style-5">
-        <form action="/curriculums/final" enctype="multipart/form-data" method="POST">
-            <input type="hidden" name="codi_edicio" value="{{ cr.codi_edicio }}"/>
-            <fieldset>
-                <legend><span class="number">1</span> Informació del candidat </legend>
-                <input type="text" name="nom" placeholder="Nom">
-                <input type="text" name="llinatges" placeholder="Llinatges">
-                <!-- <input type="email" name="email" placeholder="E-Mail" value="{{ email }}"> -->
-                <input type="text" name="tel" placeholder="Telèfon">
-                <input type="text" name="pob" placeholder="Població">
-                <!-- <label for="motiu"> Per què vols fer feina a "ES LICEU"? </label>
-                <textarea name="motiu"> </textarea> -->
-            </fieldset>
-
-            <fieldset>
-                <legend><span class="number">2</span> Dades acadèmiques </legend>
-                <div id="titol1">
-                    <label>Titulació:</label>
-                    <select name="titol1">
-                        <option disabled selected> -- Selecciona una opció -- </option>
-                        {% for f in families %}
-                        <optgroup label="{{ f.nom }}">
-                            {% for t in f.titolgeneric_set.all %}
-                            <option value="{{ t.id }}"> {{t.nom}} </option>
+                <fieldset>
+                    <legend><span class="number">2</span> Dades acadèmiques </legend>
+                    <div id="titol1">
+                        <label>Titulació:</label>
+                        <select name="titol1">
+                            <option disabled selected> -- Selecciona una opció -- </option>
+                            {% for f in families %}
+                            <optgroup label="{{ f.nom }}">
+                                {% for t in f.titolgeneric_set.all %}
+                                <option value="{{ t.id }}"> {{t.nom}} </option>
+                                {% endfor %}
+                            </optgroup>
                             {% endfor %}
-                        </optgroup>
-                        {% endfor %}
-                    </select>
-                    <input type="text" name="tit1" placeholder="Titulació i especialitat">
-                    <input type="text" name="uni1" placeholder="Universitat">
-                    <input type="text" name="dta1" placeholder="Data d'obtenció del títol">
-                </div>
+                        </select>
+                        <input type="text" name="tit1" placeholder="Titulació i especialitat">
+                        <input type="text" name="uni1" placeholder="Universitat">
+                        <input type="text" name="dta1" placeholder="Data d'obtenció del títol">
+                    </div>
 
-                <div id="titol2">
-                    <label>Titulació:</label>
-                    <select name="titol2">
-                        <option disabled selected> -- Selecciona una opció -- </option>
-                        {% for f in families %}
-                        <optgroup label="{{ f.nom }}">
-                            {% for t in f.titolgeneric_set.all %}
-                            <option value="{{ t.id }}"> {{t.nom}} </option>
+                    <div id="titol2">
+                        <label>Titulació:</label>
+                        <select name="titol2">
+                            <option disabled selected> -- Selecciona una opció -- </option>
+                            {% for f in families %}
+                            <optgroup label="{{ f.nom }}">
+                                {% for t in f.titolgeneric_set.all %}
+                                <option value="{{ t.id }}"> {{t.nom}} </option>
+                                {% endfor %}
+                            </optgroup>
                             {% endfor %}
-                        </optgroup>
-                        {% endfor %}
-                    </select>
-                    <input type="text" name="tit2" placeholder="Titulació i especialitat">
-                    <input type="text" name="uni2" placeholder="Universitat">
-                    <input type="text" name="dta2" placeholder="Data d'obtenció del títol">
-                </div>
+                        </select>
+                        <input type="text" name="tit2" placeholder="Titulació i especialitat">
+                        <input type="text" name="uni2" placeholder="Universitat">
+                        <input type="text" name="dta2" placeholder="Data d'obtenció del títol">
+                    </div>
 
-                <div id="titol3">
-                    <label>Titulació:</label>
-                    <select name="titol3">
-                        <option disabled selected> -- Selecciona una opció -- </option>
-                        {% for f in families %}
-                        <optgroup label="{{ f.nom }}">
-                            {% for t in f.titolgeneric_set.all %}
-                            <option value="{{ t.id }}"> {{t.nom}} </option>
+                    <div id="titol3">
+                        <label>Titulació:</label>
+                        <select name="titol3">
+                            <option disabled selected> -- Selecciona una opció -- </option>
+                            {% for f in families %}
+                            <optgroup label="{{ f.nom }}">
+                                {% for t in f.titolgeneric_set.all %}
+                                <option value="{{ t.id }}"> {{t.nom}} </option>
+                                {% endfor %}
+                            </optgroup>
                             {% endfor %}
-                        </optgroup>
-                        {% endfor %}
-                    </select>
-                    <input type="text" name="tit3" placeholder="Titulació i especialitat">
-                    <input type="text" name="uni3" placeholder="Universitat">
-                    <input type="text" name="dta3" placeholder="Data d'obtenció del títol">
-                </div>
+                        </select>
+                        <input type="text" name="tit3" placeholder="Titulació i especialitat">
+                        <input type="text" name="uni3" placeholder="Universitat">
+                        <input type="text" name="dta3" placeholder="Data d'obtenció del títol">
+                    </div>
 
-                <input type="button" name="mes" id="butmes" value="Vull afegir un altre títol"/>
-            </fieldset>
-            <fieldset>
-                <legend><span class="number">3</span> Currículum </legend>
+                    <input type="button" name="mes" id="butmes" value="Vull afegir un altre títol"/>
+                </fieldset>
+                <fieldset>
+                    <legend><span class="number">3</span> Currículum </legend>
 
-                <label> Indica'ns les persones a qui podem adreçar-nos per demanar referències </label>
-                <div id="ref1">
-                    <input type="text" name="ref1" placeholder="Persona de referència 1">
-                    <input type="text" name="ref1_email" placeholder="E-Mail">
-                </div>
-                <div id="ref2">
-                    <input type="text" name="ref2" placeholder="Persona de referència 2">
-                    <input type="text" name="ref2_email" placeholder="E-Mail">
-                </div>
+                    <label> Indica'ns les persones a qui podem adreçar-nos per demanar referències </label>
+                    <div id="ref1">
+                        <input type="text" name="ref1" placeholder="Persona de referència 1">
+                        <input type="text" name="ref1_email" placeholder="E-Mail">
+                    </div>
+                    <div id="ref2">
+                        <input type="text" name="ref2" placeholder="Persona de referència 2">
+                        <input type="text" name="ref2_email" placeholder="E-Mail">
+                    </div>
 
-                <div id =ref3>
-                    <input type="text" name="ref3" placeholder="Persona de referència 3">
-                    <input type="text" name="ref3_email" placeholder="E-Mail">
-                </div>
-                <input type="button" name="mes" id="butref" value="Afegir referència"/>
+                    <div id =ref3>
+                        <input type="text" name="ref3" placeholder="Persona de referència 3">
+                        <input type="text" name="ref3_email" placeholder="E-Mail">
+                    </div>
+                    <input type="button" name="mes" id="butref" value="Afegir referència"/>
 
-                <label> Envia'ns el teu currículum: </label>
-                <div class="fileUpload btn btn-primary" style="margin-bottom: 30px">
-                    <span>Sel·lecciona el fitxer...</span>
-                    <input type="file" name="currfile" id="id_currfile" class="upload"/>
-                </div>
+                    <label> Envia'ns el teu currículum: </label>
+                    <div class="fileUpload btn btn-primary" style="margin-bottom: 30px">
+                        <span>Sel·lecciona el fitxer...</span>
+                        <input type="file" name="currfile" id="id_currfile" class="upload"/>
+                    </div>
 
-            </fieldset>
+                </fieldset>
 
-            <fieldset>
-                <legend><span class="number">4</span> Finalitza </legend>
-                <input type="submit" value="Envia-ho" />
-            </fieldset>
+                <fieldset>
+                    <legend><span class="number">4</span> Finalitza </legend>
+                    <input type="submit" value="Envia-ho" />
+                </fieldset>
 
-        </form>
-    </div>
+            </form>
+        </div>
 
-</body>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#butmes").click(function () {
+                    var t2 = $("#titol2");
+                    var t3 = $("#titol3");
+                    if (!t2.is(":visible")) {
+                        t2.show();
+                    } else if (!t3.is(":visible")) {
+                        t3.show();
+                        $("#butmes").hide();
+                    }
+                });
+
+                $("#butref").click(function () {
+                    var r1 = $("#ref1");
+                    var r2 = $("#ref2");
+                    var r3 = $("#ref3");
+                    if (!r1.is(":visible")) {
+                        r1.show();
+                    } else if (!r2.is(":visible")) {
+                        r2.show();
+                    } else if (!r3.is(":visible")) {
+                        r3.show();
+                        $("#butref").hide();
+                    }
+
+                })
+            });
+        </script>
+    </body>
 
 </html>
