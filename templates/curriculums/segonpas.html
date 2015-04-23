@@ -64,6 +64,7 @@
                 <div id="titol1">
                     <label>Titulació:</label>
                     <select name="titol1">
+                        <option disabled selected> -- Selecciona una opció -- </option>
                         {% for f in families %}
                         <optgroup label="{{ f.nom }}">
                             {% for t in f.titolgeneric_set.all %}
@@ -80,6 +81,7 @@
                 <div id="titol2">
                     <label>Titulació:</label>
                     <select name="titol2">
+                        <option disabled selected> -- Selecciona una opció -- </option>
                         {% for f in families %}
                         <optgroup label="{{ f.nom }}">
                             {% for t in f.titolgeneric_set.all %}
@@ -96,6 +98,7 @@
                 <div id="titol3">
                     <label>Titulació:</label>
                     <select name="titol3">
+                        <option disabled selected> -- Selecciona una opció -- </option>
                         {% for f in families %}
                         <optgroup label="{{ f.nom }}">
                             {% for t in f.titolgeneric_set.all %}
