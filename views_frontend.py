@@ -52,7 +52,6 @@ def primerPas(request):
             feina = f.cleaned_data['feina']
             codi = generarCodi(email)
             # Comprovem que l'adreça email ja existeix...
-            # TODO: el codi hauria de tenir només vigència en 24h...
             cr = None
             try:
                 cr = Curriculum.objects.get(email=email)
@@ -77,25 +76,28 @@ def segonPas(request):
     codi = request.GET.get('codi')
     try:
         cr = Curriculum.objects.get(codi_edicio=codi)
-        if cr.categoria == 'D':
-            # Docent
-            families = FamiliaTitol.objects.all()
-            return renderResponse(
-                request,
-                'curriculums/segonpas.html', {
-                    'cr': cr,
-                    'families': families,
-            } )
-        elif cr.categoria == 'N':
-            # No docent
-            catlaborals = CategoriaLaboralND.objects.all()
-            return renderResponse(
-                request,
-                'curriculums/segonpas_nd.html', {
-                    'cr': cr,
-                    'catlaborals': catlaborals,
-                }
-            )
+        delta_seconds = (datetime.datetime.now() - cr.codi_data).seconds
+        if delta_seconds < 3600:
+            # Només deixem editar si fa manco de 1 hora que s'ha creat el link
+            if cr.categoria == 'D':
+                # Docent
+                families = FamiliaTitol.objects.all()
+                return renderResponse(
+                    request,
+                    'curriculums/segonpas.html', {
+                        'cr': cr,
+                        'families': families,
+                } )
+            elif cr.categoria == 'N':
+                # No docent
+                catlaborals = CategoriaLaboralND.objects.all()
+                return renderResponse(
+                    request,
+                    'curriculums/segonpas_nd.html', {
+                        'cr': cr,
+                        'catlaborals': catlaborals,
+                    }
+                )
     except:
         pass
 
