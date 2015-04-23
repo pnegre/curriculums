@@ -53,14 +53,15 @@ def primerPas(request):
             codi = generarCodi(email)
             # Comprovem que l'adreça email ja existeix...
             # TODO: el codi hauria de tenir només vigència en 24h...
+            cr = None
             try:
                 cr = Curriculum.objects.get(email=email)
-                cr.codi_edicio = codi
-                cr.save()
             except:
-                c = Curriculum(email=email, categoria=feina, codi_edicio=codi)
-                c.save()
+                cr = Curriculum(email=email, categoria=feina, codi_edicio=codi)
 
+            cr.codi_edicio = codi
+            cr.codi_data = datetime.datetime.now()
+            cr.save()
             return renderResponse(
                 request,
                 'curriculums/codi.html', {

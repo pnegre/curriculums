@@ -51,6 +51,7 @@ class Curriculum(models.Model):
 
     categoria = models.CharField(max_length=2, choices=CAT_CHOICES)
     codi_edicio = models.CharField(max_length=500) # Codi per editar el curriculum
+    codi_data = models.DateTimeField() # Data de creació del codi
 
     # Suportem fins a tres titols (suficient?)
     titol1 = models.ForeignKey(TitolUniversitari, related_name='titol1', blank=True, null=True)
