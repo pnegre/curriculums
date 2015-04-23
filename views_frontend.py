@@ -124,41 +124,49 @@ def segonPas(request):
     # TODO: Mostrar errors
     return redirect('curr-primerpas')
 
+def processar_docent(cr, f):
+    if f.is_valid():
+        # TODO: també mirar com podem posar una grandària màxima pel fitxer
+        # TODO: i que el fitxer sigui de tipus PDF, odt... (que no hi pugui haver .exes...)
+        dta = f.cleaned_data
+
+        fle = dta['currfile']
+        nom = dta['nom']
+        llinatges = dta['llinatges']
+        # tit_generic_1 = dta['titol1']
+        # tit1 = dta['tit1']
+        # titol_1 = TitolUniversitari(nom=tit1, titolgeneric=tit_generic_1)
+        # titol_1.save()
+
+        # c = Curriculum(nom=nom, email=email, file=fle, titol1=titol_1)
+        # Caldria comprovar que s'ha enregistrat bé...
+        cr.nom = nom
+        cr.llinatges = llinatges
+        cr.save()
+
+        return renderResponse(
+        request,
+        'curriculums/final.html', {}
+        )
+        
+    # TODO: Mostrar errors
+    return redirect('curr-primerpas')
+
+def processar_nodocent(cr, f):
+    pass
+
+
 def final(request):
     if request.POST:
-        # ALERTA: VALIDAR!!! (o fer amb form django)
-        f = SegonPasForm(request.POST, request.FILES)
-        if f.is_valid():
-            # TODO: també mirar com podem posar una grandària màxima pel fitxer
-            # TODO: i que el fitxer sigui de tipus PDF, odt... (que no hi pugui haver .exes...)
-            dta = f.cleaned_data
-            codi = dta['codi_edicio']
-
-            try:
-                cr = Curriculum.objects.get(codi_edicio=codi)
-                if tooLate(cr):
-                    raise("Too late")
-
-                # fle = dta['currfile']
-                nom = dta['nom']
-                llinatges = dta['llinatges']
-                # tit_generic_1 = dta['titol1']
-                # tit1 = dta['tit1']
-                # titol_1 = TitolUniversitari(nom=tit1, titolgeneric=tit_generic_1)
-                # titol_1.save()
-
-                # c = Curriculum(nom=nom, email=email, file=fle, titol1=titol_1)
-                # Caldria comprovar que s'ha enregistrat bé...
-                cr.nom = nom
-                cr.llinatges = llinatges
-                cr.save()
-
-                return renderResponse(
-                    request,
-                    'curriculums/final.html', {}
-                )
-            except:
-                pass
+        codi = request.POST.get('codi_edicio')
+        cr = Curriculum.objects.get(codi_edicio=codi)
+        if not tooLate(cr):
+            if cr.categoria == 'D':
+                f = SegonPasForm_Docents(request.POST, request.FILES)
+                return processar_docent(cr, f)
+            elif cr.categoria == 'N':
+                f = SegonPasForm_NoDocents(request.POST, request.FILES)
+                return processar_nodocent(cr, f)
 
     # TODO: Mostrar errors
     return redirect('curr-primerpas')
