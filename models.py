@@ -23,6 +23,7 @@ class TitolUniversitari(models.Model):
     nom = models.CharField(max_length=500)
     titolgeneric = models.ForeignKey(TitolGeneric)
     data = models.DateTimeField()
+    uni = models.CharField(max_length=500)
 
     def __unicode__(self):
         return self.nom

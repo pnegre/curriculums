@@ -124,31 +124,59 @@ def segonPas(request):
     # TODO: Mostrar errors
     return redirect('curr-primerpas')
 
+def getTitolUniversitari(gen, nom, uni, data):
+    try:
+        t = TitolUniversitari(nom=nom, titolgeneric=gen, uni=uni, data=data)
+        return t
+    except:
+        return None
+
 def processar_docent(cr, f):
     if f.is_valid():
-        # TODO: també mirar com podem posar una grandària màxima pel fitxer
-        # TODO: i que el fitxer sigui de tipus PDF, odt... (que no hi pugui haver .exes...)
         dta = f.cleaned_data
 
-        fle = dta['currfile']
-        nom = dta['nom']
-        llinatges = dta['llinatges']
-        # tit_generic_1 = dta['titol1']
-        # tit1 = dta['tit1']
-        # titol_1 = TitolUniversitari(nom=tit1, titolgeneric=tit_generic_1)
-        # titol_1.save()
+        cr.nom = dta['nom']
+        cr.llinatges = dta['llinatges']
+        cr.poblacio = dta['pob']
+        cr.telefon = dta['telefon']
 
-        # c = Curriculum(nom=nom, email=email, file=fle, titol1=titol_1)
-        # Caldria comprovar que s'ha enregistrat bé...
-        cr.nom = nom
-        cr.llinatges = llinatges
-        cr.save()
+        # TODO: també mirar com podem posar una grandària màxima pel fitxer
+        # TODO: i que el fitxer sigui de tipus PDF, odt... (que no hi pugui haver .exes...)
+        cr.file = dta['currfile']
 
-        return renderResponse(
-        request,
-        'curriculums/final.html', {}
-        )
-        
+        cr.ref1 = dta['ref1']
+        cr.ref1_email = dta['ref1_email']
+        cr.ref2 = dta['ref2']
+        cr.ref2_email = dta['ref2_email']
+        cr.ref3 = dta['ref3']
+        cr.ref3_email = dta['ref3_email']
+
+        tu1 = getTitolUniversitari(dta['titol1'], dta['tit1'], dta['uni1'], dta['dta1'])
+        tu2 = getTitolUniversitari(dta['titol2'], dta['tit2'], dta['uni2'], dta['dta2'])
+        tu3 = getTitolUniversitari(dta['titol3'], dta['tit3'], dta['uni3'], dta['dta3'])
+
+        if tu1 is not None:
+            tu1.save()
+            cr.titol1 = tu1
+        if tu2 is not None:
+            tu2.save()
+            cr.titol2 = tu2
+        if tu3 is not None:
+            tu3.save()
+            cr.titol3 = tu3
+
+        try:
+            cr.save()
+            return renderResponse(
+                request,
+                'curriculums/final.html', {}
+            )
+        except:
+            # Error gravant el currículum. Esborrar dades...
+            if tu1 is not None: tu1.delete()
+            if tu2 is not None: tu2.delete()
+            if tu3 is not None: tu3.delete()
+
     # TODO: Mostrar errors
     return redirect('curr-primerpas')
 
