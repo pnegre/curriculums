@@ -22,6 +22,7 @@ class TitolGeneric(models.Model):
 class TitolUniversitari(models.Model):
     nom = models.CharField(max_length=500)
     titolgeneric = models.ForeignKey(TitolGeneric)
+    data = models.DateTimeField()
 
     def __unicode__(self):
         return self.nom

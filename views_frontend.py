@@ -24,18 +24,33 @@ class PrimerPasForm(forms.Form):
     email = forms.CharField()
     feina = forms.CharField()
 
-class SegonPasForm(forms.Form):
+class SegonPasForm_Docents(forms.Form):
     nom = forms.CharField()
     llinatges = forms.CharField()
     codi_edicio = forms.CharField()
-    # tel = forms.CharField()
-    # pob = forms.CharField()
-    # email = forms.CharField()
-    # titol1 = forms.ModelChoiceField(queryset=TitolGeneric.objects.all())
-    # tit1 = forms.CharField()
-    # # uni1 = forms.CharField()
-    # # dta1 = forms.CharField()
-    # currfile = forms.FileField()
+    tel = forms.CharField()
+    pob = forms.CharField()
+    titol1 = forms.ModelChoiceField(queryset=TitolGeneric.objects.all())
+    tit1 = forms.CharField()
+    uni1 = forms.CharField()
+    dta1 = forms.DateField()
+    titol2 = forms.ModelChoiceField(queryset=TitolGeneric.objects.all(), required=False)
+    tit2 = forms.CharField(required=False)
+    uni2 = forms.CharField(required=False)
+    dta2 = forms.DateField(required=False)
+    titol3 = forms.ModelChoiceField(queryset=TitolGeneric.objects.all(), required=False)
+    tit3 = forms.CharField(required=False)
+    uni3 = forms.CharField(required=False)
+    dta3 = forms.DateField(required=False)
+
+    ref1 = forms.CharField(required=False)
+    ref1_email = forms.CharField(required=False)
+    ref2 = forms.CharField(required=False)
+    ref2_email = forms.CharField(required=False)
+    ref3 = forms.CharField(required=False)
+    ref3_email = forms.CharField(required=False)
+
+    currfile = forms.FileField()
 
 def generarCodi(email):
     # Generem codi a partir de l'hora actual, mirant els microseconds...
@@ -72,13 +87,18 @@ def primerPas(request):
         'curriculums/index.html', {
     } )
 
+# Comprovem que no fa més de 1 hora que hem demanat el link
+def tooLate(cr):
+    delta_seconds = (datetime.datetime.now() - cr.codi_data).seconds
+    if delta_seconds > 3600:
+        return True
+    return False
+
 def segonPas(request):
     codi = request.GET.get('codi')
     try:
         cr = Curriculum.objects.get(codi_edicio=codi)
-        delta_seconds = (datetime.datetime.now() - cr.codi_data).seconds
-        if delta_seconds < 3600:
-            # Només deixem editar si fa manco de 1 hora que s'ha creat el link
+        if not tooLate(cr):
             if cr.categoria == 'D':
                 # Docent
                 families = FamiliaTitol.objects.all()
@@ -116,6 +136,9 @@ def final(request):
 
             try:
                 cr = Curriculum.objects.get(codi_edicio=codi)
+                if tooLate(cr):
+                    raise("Too late")
+
                 # fle = dta['currfile']
                 nom = dta['nom']
                 llinatges = dta['llinatges']
