@@ -14,6 +14,9 @@ from curriculums.models import *
 
 import storage as stor
 
+CONTENT_TYPES = ['image', 'video', 'application/pdf']
+MAX_UPLOAD_SIZE = "5242880"
+
 # Quan treiem les pàgines amb RequestContext, fem visibles a la template
 # algunes variables que no estarien disponibles.
 # Les altres funcions cridaran a aquesta en haver de fer el render de les templates
@@ -66,11 +69,13 @@ def primerPas(request):
             email = f.cleaned_data['email']
             feina = f.cleaned_data['feina']
             codi = generarCodi(email)
-            # Comprovem que l'adreça email ja existeix...
+
             cr = None
             try:
+                # Comprovem que l'adreça email ja existeix...
                 cr = Curriculum.objects.get(email=email)
             except:
+                # Si no existeix, creem un objecte nou
                 cr = Curriculum(email=email, categoria=feina, codi_edicio=codi)
 
             cr.codi_edicio = codi
@@ -131,53 +136,73 @@ def getTitolUniversitari(gen, nom, uni, data):
     except:
         return None
 
-def processar_docent(cr, f):
+def file_is_valid(content):
+    content_type = content.content_type.split('/')[0]
+    # Falta comprovar el content_type, però s'han de fer experiments perquè
+    # alguns navegadors no ho fan standard...
+    if content._size > int(MAX_UPLOAD_SIZE):
+        return False
+
+    # if content_type in CONTENT_TYPES:
+    #     if content._size > int(MAX_UPLOAD_SIZE):
+    #         return False
+    # else:
+    #     return False
+
+    return True
+
+def processar_docent(request, cr, f):
     if f.is_valid():
         dta = f.cleaned_data
 
         cr.nom = dta['nom']
         cr.llinatges = dta['llinatges']
         cr.poblacio = dta['pob']
-        cr.telefon = dta['telefon']
+        cr.telefon = dta['tel']
 
         # TODO: també mirar com podem posar una grandària màxima pel fitxer
         # TODO: i que el fitxer sigui de tipus PDF, odt... (que no hi pugui haver .exes...)
-        cr.file = dta['currfile']
+        file = dta['currfile']
+        if file_is_valid(file):
+            print "---file valid"
+            cr.file = file
+            cr.ref1 = dta['ref1']
+            cr.ref1_email = dta['ref1_email']
+            cr.ref2 = dta['ref2']
+            cr.ref2_email = dta['ref2_email']
+            cr.ref3 = dta['ref3']
+            cr.ref3_email = dta['ref3_email']
 
-        cr.ref1 = dta['ref1']
-        cr.ref1_email = dta['ref1_email']
-        cr.ref2 = dta['ref2']
-        cr.ref2_email = dta['ref2_email']
-        cr.ref3 = dta['ref3']
-        cr.ref3_email = dta['ref3_email']
+            tu1 = getTitolUniversitari(dta['titol1'], dta['tit1'], dta['uni1'], dta['dta1'])
+            tu2 = getTitolUniversitari(dta['titol2'], dta['tit2'], dta['uni2'], dta['dta2'])
+            tu3 = getTitolUniversitari(dta['titol3'], dta['tit3'], dta['uni3'], dta['dta3'])
 
-        tu1 = getTitolUniversitari(dta['titol1'], dta['tit1'], dta['uni1'], dta['dta1'])
-        tu2 = getTitolUniversitari(dta['titol2'], dta['tit2'], dta['uni2'], dta['dta2'])
-        tu3 = getTitolUniversitari(dta['titol3'], dta['tit3'], dta['uni3'], dta['dta3'])
+            if tu1 is not None:
+                tu1.save()
+                cr.titol1 = tu1
+            if tu2 is not None:
+                tu2.save()
+                cr.titol2 = tu2
+            if tu3 is not None:
+                tu3.save()
+                cr.titol3 = tu3
 
-        if tu1 is not None:
-            tu1.save()
-            cr.titol1 = tu1
-        if tu2 is not None:
-            tu2.save()
-            cr.titol2 = tu2
-        if tu3 is not None:
-            tu3.save()
-            cr.titol3 = tu3
+            try:
+                cr.save()
+                return renderResponse(
+                    request,
+                    'curriculums/final.html', {}
+                )
+            except Exception as e:
+                print e
 
-        try:
-            cr.save()
-            return renderResponse(
-                request,
-                'curriculums/final.html', {}
-            )
-        except:
-            # Error gravant el currículum. Esborrar dades...
-            if tu1 is not None: tu1.delete()
-            if tu2 is not None: tu2.delete()
-            if tu3 is not None: tu3.delete()
+                # Error gravant el currículum. Esborrar dades...
+                if tu1 is not None: tu1.delete()
+                if tu2 is not None: tu2.delete()
+                if tu3 is not None: tu3.delete()
 
     # TODO: Mostrar errors
+    # print f
     return redirect('curr-primerpas')
 
 def processar_nodocent(cr, f):
@@ -191,7 +216,7 @@ def final(request):
         if not tooLate(cr):
             if cr.categoria == 'D':
                 f = SegonPasForm_Docents(request.POST, request.FILES)
-                return processar_docent(cr, f)
+                return processar_docent(request, cr, f)
             elif cr.categoria == 'N':
                 f = SegonPasForm_NoDocents(request.POST, request.FILES)
                 return processar_nodocent(cr, f)
