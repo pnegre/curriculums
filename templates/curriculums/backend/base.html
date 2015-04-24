@@ -32,15 +32,18 @@
 
 <div id="div1">
 
-	<h1> Taula amb els currículums </h1>
+	<h1> Vista dels currículums </h1>
 
 	<table id="tcurriculums" class="table table-striped table-bordered" cellspacing="0">
 		<thead>
-			<tr><td>email</td><td>nom</td><td>llinatges</td></tr>
+			<tr><td>Llinatges, nom</td><td>població</td><td>Títols</td><td>Referències</td></tr>
 		</thead>
 		<tbody>
 			{% for c in curriculums %}
-			<tr><td> {{ c.email }} </td><td> {{ c.nom }} </td><td> {{ c.llinatges }} </td></tr>
+			<tr><td> {{ c.llinatges }}, {{ c.nom }} </td><td> {{ c.poblacio }} </td>
+				<td> {{c.titol1.nom}}, {{c.titol2.nom}}, {{c.titol3.nom}} </td>
+				<td> {{c.ref1}}, {{c.ref2}}, {{c.ref3}} </td>
+			</tr>
 			{% endfor %}
 		</tbody>
 	</table>

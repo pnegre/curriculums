@@ -202,7 +202,7 @@ def processar_docent(request, cr, f):
                 if tu3 is not None: tu3.delete()
 
     # TODO: Mostrar errors
-    # print f
+    print f
     return redirect('curr-primerpas')
 
 def processar_nodocent(cr, f):

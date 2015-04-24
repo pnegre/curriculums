@@ -7,13 +7,13 @@
         <meta name="keywords" content="treball,professor,curriculum,liceu,es liceu">
         <meta name="robots" content="index,follow">
         <meta name="author" content="Pere Negre, Miquel Piulats, Joan Galmés">
-        
+
         <!-- JQUERY UI -->
         <link rel="stylesheet" href="/static/curriculums/js/jquery-ui/jquery-ui.min.css">
-        
+
         <!-- SELECT 2 -->
         <link rel="stylesheet" href="/static/curriculums/js/select2/dist/css/select2.css">
-   
+
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300italic,300,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="/static/curriculums/css/styles.css">
     </head>
@@ -25,7 +25,7 @@
                 <input type="hidden" name="codi_edicio" value="{{ cr.codi_edicio }}"/>
                 <fieldset>
                     <legend><span class="number">1</span> Informació del candidat </legend>
-                    <input type="text" name="nom" placeholder="Nom">
+                    <input type="text" name="nom" placeholder="Nom" value="{{ cr.nom }}">
                     <input type="text" name="llinatges" placeholder="Llinatges">
                     <!-- <input type="email" name="email" placeholder="E-Mail" value="{{ email }}"> -->
                     <input type="text" name="tel" placeholder="Telèfon">
@@ -129,7 +129,7 @@
         <script type="text/javascript">
             $(document).ready(function () {
                 $(".select2").select2();
-                
+
                 $("#butmes").click(function () {
                     var t2 = $("#titol2");
                     var t3 = $("#titol3");
