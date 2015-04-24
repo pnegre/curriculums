@@ -3,23 +3,49 @@
 
 {% block baseheader %}
 
-	{% block head %}
-	{% endblock %}
+	<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.6/js/jquery.dataTables.min.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.6/css/jquery.dataTables.css">
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+	<script>
+	$(document).ready(function() {
+			$("#tcurriculums").DataTable();
+	});
+
+	</script>
+
+	<style>
+
+		#div1 {
+			margin-left: 20px;
+			margin-right: 20px;
+		}
+
+	</style>
 
 {% endblock %}
 
 
 {% block basebody %}
 
-	{% block content %}
+<div id="div1">
+
 	<h1> Taula amb els currículums </h1>
 
-	<table border="1">
-		{% for c in curriculums %}
-		<tr><td> {{ c.email }} </td><td> {{ c.nom }} </td><td> {{ c.llinatges }} </td></tr>
-		{% endfor %}
+	<table id="tcurriculums" class="table table-striped table-bordered" cellspacing="0">
+		<thead>
+			<tr><td>email</td><td>nom</td><td>llinatges</td></tr>
+		</thead>
+		<tbody>
+			{% for c in curriculums %}
+			<tr><td> {{ c.email }} </td><td> {{ c.nom }} </td><td> {{ c.llinatges }} </td></tr>
+			{% endfor %}
+		</tbody>
 	</table>
 
-	{% endblock %}
+</div>
+
 
 {% endblock %}
