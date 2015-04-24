@@ -8,12 +8,13 @@
         <meta name="robots" content="index,follow">
         <meta name="author" content="Pere Negre, Miquel Piulats, Joan Galmés">
         
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300italic,300,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="/static/curriculums/css/styles.css">
     </head>
     <body>
         <h1 style="text-align: center"> EL TEU CURRICULUM {{ cr.email }}</h1>
 
-        <div class="form-style-5">
+        <div class="form-esliceu">
             <form action="/curriculums/final" enctype="multipart/form-data" method="POST">
                 <input type="hidden" name="codi_edicio" value="{{ cr.codi_edicio }}"/>
                 <fieldset>

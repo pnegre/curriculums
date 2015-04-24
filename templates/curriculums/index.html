@@ -1,40 +1,36 @@
+<!-- Estils dels forms trets de http://www.sanwebe.com/downloads/74-css-form-samples -->
 <!DOCTYPE html>
 <html>
-
-<head>
-    <title>Treballa amb nosaltres - Es Liceu Som Cooperativa</title>
+    <head>
+        <title>Treballa amb nosaltres - Es Liceu Som Cooperativa</title>
         <meta charset="UTF-8">
         <meta name="description" content="Aplicació interna d\'Es Liceu per a gestionar currículums.">
         <meta name="keywords" content="treball,professor,curriculum,liceu,es liceu">
         <meta name="robots" content="index,follow">
         <meta name="author" content="Pere Negre, Miquel Piulats, Joan Galmés">
-        
-    <link rel="stylesheet" href="/static/curriculums/css/styles.css">
-</head>
 
-<!-- Estils dels forms trets de http://www.sanwebe.com/downloads/74-css-form-samples -->
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300italic,300,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="/static/curriculums/css/styles.css">
+    </head>
+    <body>
+        <h1 style="text-align: center"> Candidats CV </h1>
 
-<body>
-    <h1 style="text-align: center"> Candidats CV </h1>
+        <div class="form-esliceu">
+            <form method="post">
+                <fieldset>
+                    <legend><span class="number">1</span> Indica'ns el teu correu electrònic</legend>
+                    <input type="email" name="email" placeholder="E-mail">
+                </fieldset>
+                <fieldset>
+                    <legend><span class="number">2</span> Tipus de feina </legend>
+                    <select name="feina">
+                        <option value="D"> Docent </option>
+                        <option value="N"> No Docent </option>
+                    </select>
+                </fieldset>
 
-    <div class="form-style-5">
-        <form method="post">
-            <fieldset>
-                <legend><span class="number">1</span> Indica'ns el teu correu electrònic</legend>
-                <input type="email" name="email" placeholder="E-mail">
-            </fieldset>
-            <fieldset>
-                <legend><span class="number">2</span> Tipus de feina </legend>
-                <select name="feina">
-                    <option value="D"> Docent </option>
-                    <option value="N"> No Docent </option>
-                </select>
-            </fieldset>
-
-            <input type="submit" value="Segueix" />
-        </form>
-    </div>
-
-</body>
-
+                <input type="submit" value="Segueix" />
+            </form>
+        </div>
+    </body>
 </html>
