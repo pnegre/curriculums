@@ -1,6 +1,3 @@
-
-
-
 body{
     font-family: "Open Sans";
     font-weight: 100;
@@ -66,7 +63,7 @@ h1{
 .form-esliceu input[type="url"]:focus,
 .form-esliceu textarea:focus,
 .form-esliceu select:focus{
-    background: #921413;
+    background: #d2d9dd;;
 }
 /*.form-esliceu select{
     -webkit-appearance: menulist-button;
