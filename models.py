@@ -34,6 +34,9 @@ class Curriculum(models.Model):
     # Data en que s'introdueix el currículum el primer cop
     data_inicial = models.DateTimeField()
 
+    # DOCENT / NO DOCENT
+    categoria = models.CharField(max_length=2, choices=CAT_CHOICES)
+
     email = models.CharField(max_length=500)
     nom = models.CharField(max_length=500, blank=True, null=True)
     llinatges = models.CharField(max_length=500, blank=True, null=True)
@@ -44,7 +47,6 @@ class Curriculum(models.Model):
     observacions = models.CharField(max_length=1000, blank=True, null=True)
     entrevistat = models.BooleanField(default=False)
 
-    categoria = models.CharField(max_length=2, choices=CAT_CHOICES)
     # Codi per editar el curriculum
     codi_edicio = models.CharField(max_length=500)
     # Data de creació del codi

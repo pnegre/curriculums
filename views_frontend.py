@@ -78,6 +78,7 @@ def primerPas(request):
                 # Si no existeix, creem un objecte nou
                 cr = Curriculum(email=email, categoria=feina, codi_edicio=codi)
 
+            cr.data_inicial = datetime.datetime.now()
             cr.codi_edicio = codi
             cr.codi_data = datetime.datetime.now()
             cr.save()
@@ -151,20 +152,19 @@ def file_is_valid(content):
 
     return True
 
-def processar_docent(request, cr, f):
+def processar_docent(request, cr):
+    f = SegonPasForm_Docents(request.POST, request.FILES)
     if f.is_valid():
         dta = f.cleaned_data
-
         cr.nom = dta['nom']
         cr.llinatges = dta['llinatges']
         cr.poblacio = dta['pob']
         cr.telefon = dta['tel']
 
-        # TODO: també mirar com podem posar una grandària màxima pel fitxer
-        # TODO: i que el fitxer sigui de tipus PDF, odt... (que no hi pugui haver .exes...)
+        # Comprovem que el fitxer és vàlid (grandària, mimetype...)
         file = dta['currfile']
         if file_is_valid(file):
-            print "---file valid"
+            # print "---file valid"
             cr.file = file
             cr.ref1 = dta['ref1']
             cr.ref1_email = dta['ref1_email']
@@ -173,19 +173,20 @@ def processar_docent(request, cr, f):
             cr.ref3 = dta['ref3']
             cr.ref3_email = dta['ref3_email']
 
-            tu1 = getTitolUniversitari(dta['titol1'], dta['tit1'], dta['uni1'], dta['dta1'])
-            tu2 = getTitolUniversitari(dta['titol2'], dta['tit2'], dta['uni2'], dta['dta2'])
-            tu3 = getTitolUniversitari(dta['titol3'], dta['tit3'], dta['uni3'], dta['dta3'])
+            cr.titol1_generic = dta['titol1']
+            cr.titol1_nom = dta['tit1']
+            cr.titol1_uni = dta['uni1']
+            cr.titol1_data = dta['dta1']
 
-            if tu1 is not None:
-                tu1.save()
-                cr.titol1 = tu1
-            if tu2 is not None:
-                tu2.save()
-                cr.titol2 = tu2
-            if tu3 is not None:
-                tu3.save()
-                cr.titol3 = tu3
+            cr.titol2_generic = dta['titol2']
+            cr.titol2_nom = dta['tit2']
+            cr.titol2_uni = dta['uni2']
+            cr.titol2_data = dta['dta2']
+
+            cr.titol3_generic = dta['titol3']
+            cr.titol3_nom = dta['tit3']
+            cr.titol3_uni = dta['uni3']
+            cr.titol3_data = dta['dta3']
 
             try:
                 cr.save()
@@ -195,14 +196,11 @@ def processar_docent(request, cr, f):
                 )
             except Exception as e:
                 print e
-
                 # Error gravant el currículum. Esborrar dades...
-                if tu1 is not None: tu1.delete()
-                if tu2 is not None: tu2.delete()
-                if tu3 is not None: tu3.delete()
+                # Feedback a l'usuari???
 
     # TODO: Mostrar errors
-    print f
+    # print f
     return redirect('curr-primerpas')
 
 def processar_nodocent(cr, f):
@@ -215,8 +213,7 @@ def final(request):
         cr = Curriculum.objects.get(codi_edicio=codi)
         if not tooLate(cr):
             if cr.categoria == 'D':
-                f = SegonPasForm_Docents(request.POST, request.FILES)
-                return processar_docent(request, cr, f)
+                return processar_docent(request, cr)
             elif cr.categoria == 'N':
                 f = SegonPasForm_NoDocents(request.POST, request.FILES)
                 return processar_nodocent(cr, f)
