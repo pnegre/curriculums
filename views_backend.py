@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 
+import os
+
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import simplejson
 from django.core.mail import send_mail
 from django.template import RequestContext
+from django.core.servers.basehttp import FileWrapper
 
 from django.contrib.auth.decorators import login_required, permission_required
 
@@ -29,3 +32,12 @@ def index(request):
             'curriculums': curriculums,
         }
     )
+
+@permission_required('curriculums.veure_curriculums_docents')
+def download(request,idc):
+    cr = Curriculum.objects.get(id=idc)
+    wrapper = FileWrapper(cr.file)
+    response = HttpResponse(wrapper, content_type='text/plain')
+    # response['Content-Length'] = os.path.getsize(filename)
+    return response
+    print cr
