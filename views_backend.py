@@ -36,8 +36,9 @@ def index(request):
 @permission_required('curriculums.veure_curriculums_docents')
 def download(request,idc):
     cr = Curriculum.objects.get(id=idc)
-    wrapper = FileWrapper(cr.file)
-    response = HttpResponse(wrapper, content_type='text/plain')
-    # response['Content-Length'] = os.path.getsize(filename)
+    filename = cr.file.name.split('/')[-1]
+
+    # Content/type????
+    response = HttpResponse(cr.file, content_type='text/plain')
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename
     return response
-    print cr
