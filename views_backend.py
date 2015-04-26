@@ -28,7 +28,7 @@ def index(request):
     curriculums = Curriculum.objects.all()
     return renderResponse(
         request,
-        'curriculums/backend/base.html', {
+        'curriculums/backend/llista.html', {
             'curriculums': curriculums,
         }
     )

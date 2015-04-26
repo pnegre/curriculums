@@ -1,0 +1,34 @@
+{% extends "curriculums/backend/base.html" %}
+
+{% block currheader %}
+
+	<script>
+
+	   $(document).ready(function() {
+           $("#tcurriculums").DataTable();
+       })
+
+	</script>
+
+{% endblock %}
+
+{% block currbody %}
+
+	<h1> Vista dels currículums </h1>
+
+	<table id="tcurriculums" class="table table-striped table-bordered" cellspacing="0">
+		<thead>
+			<tr><td>Llinatges, nom</td><td>població</td><td>Títols</td><td>Referències</td><td>Fitxer</td></tr>
+		</thead>
+		<tbody>
+			{% for c in curriculums %}
+			<tr><td> {{ c.llinatges }}, {{ c.nom }} </td><td> {{ c.poblacio }} </td>
+				<td> {{ c.titol1_nom }} ({{c.titol1_generic.nom}}), {{ c.titol2_nom }} ({{c.titol2_generic.nom}}), {{ c.titol3_nom }} ({{c.titol3_generic.nom}}) </td>
+				<td> {{c.ref1}} ({{c.ref1_email}}), {{c.ref2}} ({{c.ref2_email}}), {{c.ref3}} ({{c.ref3_email}}) </td>
+				<td> <a href="download/{{c.id}}"> link </a> </td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+{% endblock %}
