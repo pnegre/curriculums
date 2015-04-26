@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import hashlib, datetime
+import hashlib, datetime, random
 
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
@@ -58,6 +58,8 @@ class SegonPasForm_Docents(forms.Form):
 def generarCodi(email):
     # Generem codi a partir de l'hora actual, mirant els microseconds...
     codi_sha = hashlib.sha512()
+    random_string = ''.join(random.choice("abcdefghijklmnopqrstuvwxyz1234567890?¿;:_<>") for i in range(200))
+    codi_sha.update(random_string)
     codi_sha.update(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'))
     codi_sha.update(email)
     return codi_sha.hexdigest()
