@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import hashlib, datetime, random, os
+import hashlib, datetime, random
 
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
@@ -25,28 +25,6 @@ MAX_UPLOAD_SIZE = "5242880"
 def renderResponse(request,tmpl,dic):
     return render_to_response(tmpl, dic, context_instance=RequestContext(request))
 
-
-def slugify(data):
-    udata=data.decode("utf-8")
-    asciidata=udata.encode("ascii","ignore")
-    return asciidata
-
-
-class MyFileField(forms.FileField):
-
-    def __init__(self, *args, **kwargs):
-        super(MyFileField, self).__init__(*args, **kwargs)
-
-    def clean(self, *args, **kwargs):
-        data = super(MyFileField, self).clean(*args, **kwargs)
-        filename = os.path.splitext(data.name)
-        data.name = unicode(data.name)
-        print filename
-        print data.name
-        print slugify(data.name)
-        if len(filename[1]):
-            data.name += u'.'+slugify(filename[1])
-        return data
 
 
 class PrimerPasForm(forms.Form):
@@ -79,7 +57,7 @@ class SegonPasForm_Docents(forms.Form):
     ref3 = forms.CharField(required=False)
     ref3_email = forms.CharField(required=False)
 
-    currfile = MyFileField()
+    currfile = forms.FileField()
 
 def generarCodi(email):
     # Generem codi a partir de l'hora actual, mirant els microseconds...

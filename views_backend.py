@@ -33,10 +33,16 @@ def index(request):
         }
     )
 
+def removeUTF(text):
+    return ''.join([i if ord(i) < 128 else '_' for i in text])
+
 @permission_required('curriculums.veure_curriculums_docents')
 def download(request, idc):
     cr = Curriculum.objects.get(id=idc)
+    # Hi pot haver problemes si el nom del fitxer té caràcters UTF
+    # Convendria passar a ascii
     filename = cr.file.name.split('/')[-1]
+    filename = removeUTF(filename)
 
     # Content/type????
     response = HttpResponse(cr.file, content_type='text/plain')
