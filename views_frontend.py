@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
-import hashlib, datetime, random
+import hashlib, datetime, random, os
 
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import simplejson
 from django.core.mail import send_mail
 from django.template import RequestContext
+from django.conf import settings
+from django.core.mail import send_mail
 
 from django import forms
 
@@ -22,6 +24,30 @@ MAX_UPLOAD_SIZE = "5242880"
 # Les altres funcions cridaran a aquesta en haver de fer el render de les templates
 def renderResponse(request,tmpl,dic):
     return render_to_response(tmpl, dic, context_instance=RequestContext(request))
+
+
+def slugify(data):
+    udata=data.decode("utf-8")
+    asciidata=udata.encode("ascii","ignore")
+    return asciidata
+
+
+class MyFileField(forms.FileField):
+
+    def __init__(self, *args, **kwargs):
+        super(MyFileField, self).__init__(*args, **kwargs)
+
+    def clean(self, *args, **kwargs):
+        data = super(MyFileField, self).clean(*args, **kwargs)
+        filename = os.path.splitext(data.name)
+        data.name = unicode(data.name)
+        print filename
+        print data.name
+        print slugify(data.name)
+        if len(filename[1]):
+            data.name += u'.'+slugify(filename[1])
+        return data
+
 
 class PrimerPasForm(forms.Form):
     email = forms.CharField()
@@ -53,7 +79,7 @@ class SegonPasForm_Docents(forms.Form):
     ref3 = forms.CharField(required=False)
     ref3_email = forms.CharField(required=False)
 
-    currfile = forms.FileField()
+    currfile = MyFileField()
 
 def generarCodi(email):
     # Generem codi a partir de l'hora actual, mirant els microseconds...
@@ -84,12 +110,36 @@ def primerPas(request):
             cr.codi_edicio = codi
             cr.codi_data = datetime.datetime.now()
             cr.save()
-            return renderResponse(
-                request,
-                'curriculums/codi.html', {
-                    'codi': codi,
-                }
-            )
+
+            lnk = "http://%s/curriculums/next?codi=%s" % (settings.CURR_SERVER, codi)
+
+            if settings.CURR_SEND_EMAIL:
+                # Enviem un email i mostrem un missatge a l'usuari perquè continui
+                txtEmail = unicode("Això és un missatge automàtic. No cal que responeu.\n\n" +
+                    "Hem rebut la teva sol·ŀicitud per introduir el teu currículum \n" +
+                    "Fes clic en el següent enllaç per continuar: %s", 'utf-8')
+                txt = txtEmail % (unicode(lnk))
+                send_mail('[Es Liceu] Sol·licitud per enviar el currículum',
+                    txt,
+                    'curriculums@esliceu.com',
+                    [cr.email],
+                    fail_silently=False)
+
+                return renderResponse(
+                    request,
+                    'curriculums/missatge.html', {
+                    }
+                )
+
+            else:
+                # DEBUG: mostrem directament l'enllaç
+                return renderResponse(
+                    request,
+                    'curriculums/codi.html', {
+                        'lnk': lnk,
+                    }
+                )
+
     return renderResponse(
         request,
         'curriculums/index.html', {
