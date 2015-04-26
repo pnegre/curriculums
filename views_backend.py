@@ -34,7 +34,7 @@ def index(request):
     )
 
 @permission_required('curriculums.veure_curriculums_docents')
-def download(request,idc):
+def download(request, idc):
     cr = Curriculum.objects.get(id=idc)
     filename = cr.file.name.split('/')[-1]
 
@@ -42,3 +42,14 @@ def download(request,idc):
     response = HttpResponse(cr.file, content_type='text/plain')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
     return response
+
+
+@permission_required('curriculums.veure_curriculums_docents')
+def show(request, idc):
+    cr = Curriculum.objects.get(id=idc)
+    return renderResponse(
+        request,
+        'curriculums/backend/curriculum.html', {
+            'cr': cr,
+        }
+    )
