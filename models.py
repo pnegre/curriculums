@@ -19,27 +19,23 @@ class TitolGeneric(models.Model):
     def __unicode__(self):
         return self.nom
 
-class TitolUniversitari(models.Model):
-    nom = models.CharField(max_length=500)
-    titolgeneric = models.ForeignKey(TitolGeneric)
-    data = models.DateTimeField()
-    uni = models.CharField(max_length=500)
-
-    def __unicode__(self):
-        return self.nom
-
 class CategoriaLaboralND(models.Model):
     nom = models.CharField(max_length=500)
 
     def __unicode__(self):
         return self.nom
 
-
 class Curriculum(models.Model):
     CAT_CHOICES = (
 		(u'D', u'Docent'),
 		(u'N', u'No Docent'),
     )
+
+    # Data en que s'introdueix el currículum el primer cop
+    data_inicial = models.DateTimeField()
+
+    # DOCENT / NO DOCENT
+    categoria = models.CharField(max_length=2, choices=CAT_CHOICES)
 
     email = models.CharField(max_length=500)
     nom = models.CharField(max_length=500, blank=True, null=True)
@@ -51,14 +47,26 @@ class Curriculum(models.Model):
     observacions = models.CharField(max_length=1000, blank=True, null=True)
     entrevistat = models.BooleanField(default=False)
 
-    categoria = models.CharField(max_length=2, choices=CAT_CHOICES)
-    codi_edicio = models.CharField(max_length=500) # Codi per editar el curriculum
-    codi_data = models.DateTimeField() # Data de creació del codi
+    # Codi per editar el curriculum
+    codi_edicio = models.CharField(max_length=500)
+    # Data de creació del codi
+    codi_data = models.DateTimeField()
 
     # Suportem fins a tres titols (suficient?)
-    titol1 = models.ForeignKey(TitolUniversitari, related_name='titol1', blank=True, null=True)
-    titol2 = models.ForeignKey(TitolUniversitari, related_name='titol2', blank=True, null=True)
-    titol3 = models.ForeignKey(TitolUniversitari, related_name='titol3', blank=True, null=True)
+    titol1_generic = models.ForeignKey(TitolGeneric, related_name='titol1_generic', blank=True, null=True)
+    titol1_nom = models.CharField(max_length=500, blank=True, null=True)
+    titol1_uni = models.CharField(max_length=500, blank=True, null=True)
+    titol1_data = models.DateTimeField(blank=True, null=True)
+
+    titol2_generic = models.ForeignKey(TitolGeneric, related_name='titol2_generic', blank=True, null=True)
+    titol2_nom = models.CharField(max_length=500, blank=True, null=True)
+    titol2_uni = models.CharField(max_length=500, blank=True, null=True)
+    titol2_data = models.DateTimeField(blank=True, null=True)
+
+    titol3_generic = models.ForeignKey(TitolGeneric, related_name='titol3_generic', blank=True, null=True)
+    titol3_nom = models.CharField(max_length=500, blank=True, null=True)
+    titol3_uni = models.CharField(max_length=500, blank=True, null=True)
+    titol3_data = models.DateTimeField(blank=True, null=True)
 
     # Fins a tres referencies
     ref1 = models.CharField(max_length=500, blank=True, null=True)

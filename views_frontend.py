@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
-import hashlib, datetime
+import hashlib, datetime, random
 
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import simplejson
 from django.core.mail import send_mail
 from django.template import RequestContext
+from django.conf import settings
+from django.core.mail import send_mail
 
 from django import forms
 
@@ -22,6 +24,8 @@ MAX_UPLOAD_SIZE = "5242880"
 # Les altres funcions cridaran a aquesta en haver de fer el render de les templates
 def renderResponse(request,tmpl,dic):
     return render_to_response(tmpl, dic, context_instance=RequestContext(request))
+
+
 
 class PrimerPasForm(forms.Form):
     email = forms.CharField()
@@ -58,6 +62,8 @@ class SegonPasForm_Docents(forms.Form):
 def generarCodi(email):
     # Generem codi a partir de l'hora actual, mirant els microseconds...
     codi_sha = hashlib.sha512()
+    random_string = ''.join(random.choice("abcdefghijklmnopqrstuvwxyz1234567890?¿;:_<>") for i in range(200))
+    codi_sha.update(random_string)
     codi_sha.update(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'))
     codi_sha.update(email)
     return codi_sha.hexdigest()
@@ -78,15 +84,40 @@ def primerPas(request):
                 # Si no existeix, creem un objecte nou
                 cr = Curriculum(email=email, categoria=feina, codi_edicio=codi)
 
+            cr.data_inicial = datetime.datetime.now()
             cr.codi_edicio = codi
             cr.codi_data = datetime.datetime.now()
             cr.save()
-            return renderResponse(
-                request,
-                'curriculums/codi.html', {
-                    'codi': codi,
-                }
-            )
+
+            lnk = "http://%s/curriculums/next?codi=%s" % (settings.CURR_SERVER, codi)
+
+            if settings.CURR_SEND_EMAIL:
+                # Enviem un email i mostrem un missatge a l'usuari perquè continui
+                txtEmail = unicode("Això és un missatge automàtic. No cal que responeu.\n\n" +
+                    "Hem rebut la teva sol·ŀicitud per introduir el teu currículum \n" +
+                    "Fes clic en el següent enllaç per continuar: %s", 'utf-8')
+                txt = txtEmail % (unicode(lnk))
+                send_mail('[Es Liceu] Sol·licitud per enviar el currículum',
+                    txt,
+                    'curriculums@esliceu.com',
+                    [cr.email],
+                    fail_silently=False)
+
+                return renderResponse(
+                    request,
+                    'curriculums/missatge.html', {
+                    }
+                )
+
+            else:
+                # DEBUG: mostrem directament l'enllaç
+                return renderResponse(
+                    request,
+                    'curriculums/codi.html', {
+                        'lnk': lnk,
+                    }
+                )
+
     return renderResponse(
         request,
         'curriculums/index.html', {
@@ -151,20 +182,19 @@ def file_is_valid(content):
 
     return True
 
-def processar_docent(request, cr, f):
+def processar_docent(request, cr):
+    f = SegonPasForm_Docents(request.POST, request.FILES)
     if f.is_valid():
         dta = f.cleaned_data
-
         cr.nom = dta['nom']
         cr.llinatges = dta['llinatges']
         cr.poblacio = dta['pob']
         cr.telefon = dta['tel']
 
-        # TODO: també mirar com podem posar una grandària màxima pel fitxer
-        # TODO: i que el fitxer sigui de tipus PDF, odt... (que no hi pugui haver .exes...)
+        # Comprovem que el fitxer és vàlid (grandària, mimetype...)
         file = dta['currfile']
         if file_is_valid(file):
-            print "---file valid"
+            # print "---file valid"
             cr.file = file
             cr.ref1 = dta['ref1']
             cr.ref1_email = dta['ref1_email']
@@ -173,19 +203,20 @@ def processar_docent(request, cr, f):
             cr.ref3 = dta['ref3']
             cr.ref3_email = dta['ref3_email']
 
-            tu1 = getTitolUniversitari(dta['titol1'], dta['tit1'], dta['uni1'], dta['dta1'])
-            tu2 = getTitolUniversitari(dta['titol2'], dta['tit2'], dta['uni2'], dta['dta2'])
-            tu3 = getTitolUniversitari(dta['titol3'], dta['tit3'], dta['uni3'], dta['dta3'])
+            cr.titol1_generic = dta['titol1']
+            cr.titol1_nom = dta['tit1']
+            cr.titol1_uni = dta['uni1']
+            cr.titol1_data = dta['dta1']
 
-            if tu1 is not None:
-                tu1.save()
-                cr.titol1 = tu1
-            if tu2 is not None:
-                tu2.save()
-                cr.titol2 = tu2
-            if tu3 is not None:
-                tu3.save()
-                cr.titol3 = tu3
+            cr.titol2_generic = dta['titol2']
+            cr.titol2_nom = dta['tit2']
+            cr.titol2_uni = dta['uni2']
+            cr.titol2_data = dta['dta2']
+
+            cr.titol3_generic = dta['titol3']
+            cr.titol3_nom = dta['tit3']
+            cr.titol3_uni = dta['uni3']
+            cr.titol3_data = dta['dta3']
 
             try:
                 cr.save()
@@ -195,14 +226,11 @@ def processar_docent(request, cr, f):
                 )
             except Exception as e:
                 print e
-
                 # Error gravant el currículum. Esborrar dades...
-                if tu1 is not None: tu1.delete()
-                if tu2 is not None: tu2.delete()
-                if tu3 is not None: tu3.delete()
+                # Feedback a l'usuari???
 
     # TODO: Mostrar errors
-    print f
+    # print f
     return redirect('curr-primerpas')
 
 def processar_nodocent(cr, f):
@@ -215,8 +243,7 @@ def final(request):
         cr = Curriculum.objects.get(codi_edicio=codi)
         if not tooLate(cr):
             if cr.categoria == 'D':
-                f = SegonPasForm_Docents(request.POST, request.FILES)
-                return processar_docent(request, cr, f)
+                return processar_docent(request, cr)
             elif cr.categoria == 'N':
                 f = SegonPasForm_NoDocents(request.POST, request.FILES)
                 return processar_nodocent(cr, f)

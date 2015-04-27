@@ -10,6 +10,8 @@ urlpatterns = patterns('',
 	(r'^final$', 'curriculums.views_frontend.final'),
 
 	# URLS BACK-END
-	(r'^backend/', 'curriculums.views_backend.index'),
+	(r'^backend/$', 'curriculums.views_backend.index'),
+	(r'^backend/download/(\d+)$', 'curriculums.views_backend.download'),
+	(r'^backend/show/(\d+)$', 'curriculums.views_backend.show'),
 
 )
