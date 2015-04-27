@@ -89,7 +89,7 @@ def primerPas(request):
             cr.codi_data = datetime.datetime.now()
             cr.save()
 
-            lnk = "http://%s/curriculums/next?codi=%s" % (settings.CURR_SERVER, codi)
+            lnk = "%s/curriculums/next?codi=%s" % (settings.CURR_SERVER, codi)
 
             if settings.CURR_SEND_EMAIL:
                 # Enviem un email i mostrem un missatge a l'usuari perquè continui
