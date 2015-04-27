@@ -182,6 +182,12 @@ def file_is_valid(content):
 
     return True
 
+# Comprovem que el currículum per docent està correcte
+def isvalid_docent(cr):
+    #Aquí cal comprovar que no falten paràmetres...
+    return True
+
+
 def processar_docent(request, cr):
     f = SegonPasForm_Docents(request.POST, request.FILES)
     if f.is_valid():
@@ -219,18 +225,22 @@ def processar_docent(request, cr):
             cr.titol3_data = dta['dta3']
 
             try:
+                if not isvalid_docent(cr):
+                    raise "Paràmetres CR no vàlids"
+
                 cr.save()
                 return renderResponse(
                     request,
                     'curriculums/final.html', {}
                 )
             except Exception as e:
-                print e
-                # Error gravant el currículum. Esborrar dades...
                 # Feedback a l'usuari???
+                return HttpResponse("ERROR: " + str(e))
+
 
     # TODO: Mostrar errors
-    # print f
+    print f.errors
+    return HttpResponse("ERROR!!" + str(f.errors))
     return redirect('curr-primerpas')
 
 def processar_nodocent(cr, f):
