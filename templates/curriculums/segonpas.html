@@ -18,7 +18,10 @@
         <link rel="stylesheet" href="/static/curriculums/css/styles.css">
     </head>
     <body>
-        <h1 style="text-align: center"> EL TEU CURRICULUM {{ cr.email }} </h1>
+        <div id="header">
+            <img src="/static/curriculums/img/logo_esliceu.png" alt="Logo Es Liceu">
+            <h1> EL MEU CURRICULUM ({{ cr.email }}) </h1>
+        </div>
 
         <div class="form-esliceu">
             <form action="/curriculums/final" enctype="multipart/form-data" method="POST">
