@@ -39,8 +39,7 @@ def removeUTF(text):
 @permission_required('curriculums.veure_curriculums_docents')
 def download(request, idc):
     cr = Curriculum.objects.get(id=idc)
-    # Hi pot haver problemes si el nom del fitxer té caràcters UTF
-    # Convendria passar a ascii
+    # Passem els caràcters del fitxer a ascii
     filename = cr.file.name.split('/')[-1]
     filename = removeUTF(filename)
 
