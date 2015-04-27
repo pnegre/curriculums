@@ -7,23 +7,21 @@ body{
     max-width: 840px;
     margin: 0 auto;
     padding: 0px;
-    height: 100px;
+    text-align: center;
 }
 
 #header img{
     vertical-align: middle;
-    float: left;
 }
 
 #header h1{
     font-family: "Open Sans";
-    font-weight: 400;
+    font-weight: 100;
     margin: 0;
     padding: 0;
-    font-size: 20pt;
-    float: left;
+    font-size: 2.5em;
     position: relative;
-    top: 44px;
+    text-align: center;
 }
 
 .form-esliceu{
@@ -64,8 +62,8 @@ body{
     font-size: 16px;
     margin: 0;
     outline: 0;
-    padding: 7px;
-    width: 100%;
+    padding: 7px 0 7px 2%;
+    width: 98%;
     background-color: #e8eeef;
     color:#8a97a0;
     margin-bottom: 30px;
@@ -148,4 +146,15 @@ body{
 
 #ref1, #ref2, #ref3 {
     display: none;
+}
+
+/* Errors de validació */
+input.error{
+    border: solid 1px #c23737 !important;
+    margin-bottom: 0px !important;
+}
+label.error{
+    font-size: 11px;
+    color: #c23737;
+    margin-bottom: 12px;
 }
