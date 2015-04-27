@@ -25,7 +25,7 @@ def renderResponse(request,tmpl,dic):
 
 @permission_required('curriculums.veure_curriculums_docents')
 def index(request):
-    curriculums = Curriculum.objects.all()
+    curriculums = Curriculum.objects.filter(valid=True)
     return renderResponse(
         request,
         'curriculums/backend/llista.html', {

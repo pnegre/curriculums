@@ -228,6 +228,7 @@ def processar_docent(request, cr):
                 if not isvalid_docent(cr):
                     raise "Paràmetres CR no vàlids"
 
+                cr.valid = True
                 cr.save()
                 return renderResponse(
                     request,

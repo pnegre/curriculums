@@ -47,6 +47,9 @@ class Curriculum(models.Model):
     observacions = models.CharField(max_length=1000, blank=True, null=True)
     entrevistat = models.BooleanField(default=False)
 
+    # Indica si el currículum és vàlid (l'usuari ha executat el 2on pas)
+    valid = models.BooleanField(default=False)
+
     # Codi per editar el curriculum
     codi_edicio = models.CharField(max_length=500)
     # Data de creació del codi
