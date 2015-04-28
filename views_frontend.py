@@ -9,6 +9,7 @@ from django.core.mail import send_mail
 from django.template import RequestContext
 from django.conf import settings
 from django.core.mail import send_mail
+from django.views.decorators.csrf import csrf_protect
 
 from django import forms
 
@@ -85,6 +86,7 @@ def generarCodi(email):
     codi_sha.update(email)
     return codi_sha.hexdigest()
 
+@csrf_protect
 def primerPas(request):
     if request.POST:
         f = PrimerPasForm(request.POST)
@@ -149,6 +151,7 @@ def tooLate(cr):
         return True
     return False
 
+@csrf_protect
 def segonPas(request):
     codi = request.GET.get('codi')
     try:
@@ -190,6 +193,7 @@ def file_is_valid(content):
     return True
 
 
+@csrf_protect
 def processar_candidat(request, cr, f):
     if f.is_valid():
         dta = f.cleaned_data

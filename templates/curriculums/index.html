@@ -23,6 +23,7 @@
 
         <div class="form-esliceu">
             <form method="post">
+                {% csrf_token %}
                 <fieldset>
                     <legend><span class="number">1</span> Indica'ns el teu correu electrònic</legend>
                     <input type="email" name="email" placeholder="E-mail">
