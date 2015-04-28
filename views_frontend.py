@@ -173,8 +173,8 @@ def segonPas(request):
                         'catlaborals': catlaborals,
                     }
                 )
-    except:
-        pass
+    except Exception as e:
+        return HttpResponse("ERROR!!" + str(e))
 
     # TODO: Mostrar errors
     return HttpResponse("ERROR!!")
