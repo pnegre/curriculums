@@ -117,6 +117,8 @@ def primerPas(request):
                         'lnk': lnk,
                     }
                 )
+        else:
+            return HttpResponse("ERROR!!" + str(f.errors))
 
     return renderResponse(
         request,
@@ -158,7 +160,7 @@ def segonPas(request):
         pass
 
     # TODO: Mostrar errors
-    return redirect('curr-primerpas')
+    return HttpResponse("ERROR!!")
 
 def getTitolUniversitari(gen, nom, uni, data):
     try:
@@ -240,12 +242,10 @@ def processar_docent(request, cr):
 
 
     # TODO: Mostrar errors
-    print f.errors
     return HttpResponse("ERROR!!" + str(f.errors))
-    return redirect('curr-primerpas')
 
-def processar_nodocent(cr, f):
-    pass
+def processar_nodocent(request, cr):
+    return HttpResponse("Encara no hem implementat currículums per no docents")
 
 
 def final(request):
@@ -256,8 +256,7 @@ def final(request):
             if cr.categoria == 'D':
                 return processar_docent(request, cr)
             elif cr.categoria == 'N':
-                f = SegonPasForm_NoDocents(request.POST, request.FILES)
-                return processar_nodocent(cr, f)
+                return processar_nodocent(request, cr)
 
     # TODO: Mostrar errors
-    return redirect('curr-primerpas')
+    return HttpResponse("ERROR!!")
