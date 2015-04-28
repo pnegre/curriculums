@@ -59,6 +59,23 @@ class SegonPasForm_Docents(forms.Form):
 
     currfile = forms.FileField()
 
+class SegonPasForm_NoDocents(forms.Form):
+    nom = forms.CharField()
+    llinatges = forms.CharField()
+    codi_edicio = forms.CharField()
+    tel = forms.CharField()
+    pob = forms.CharField()
+    catlaboral = forms.ModelChoiceField(queryset=CategoriaLaboralND.objects.all())
+
+    ref1 = forms.CharField(required=False)
+    ref1_email = forms.CharField(required=False)
+    ref2 = forms.CharField(required=False)
+    ref2_email = forms.CharField(required=False)
+    ref3 = forms.CharField(required=False)
+    ref3_email = forms.CharField(required=False)
+
+    currfile = forms.FileField()
+
 def generarCodi(email):
     # Generem codi a partir de l'hora actual, mirant els microseconds...
     codi_sha = hashlib.sha512()
@@ -190,8 +207,7 @@ def isvalid_docent(cr):
     return True
 
 
-def processar_docent(request, cr):
-    f = SegonPasForm_Docents(request.POST, request.FILES)
+def processar_candidat(request, cr, f):
     if f.is_valid():
         dta = f.cleaned_data
         cr.nom = dta['nom']
@@ -211,20 +227,26 @@ def processar_docent(request, cr):
             cr.ref3 = dta['ref3']
             cr.ref3_email = dta['ref3_email']
 
-            cr.titol1_generic = dta['titol1']
-            cr.titol1_nom = dta['tit1']
-            cr.titol1_uni = dta['uni1']
-            cr.titol1_data = dta['dta1']
+            if cr.categoria == 'D':
+                cr.titol1_generic = dta['titol1']
+                cr.titol1_nom = dta['tit1']
+                cr.titol1_uni = dta['uni1']
+                cr.titol1_data = dta['dta1']
 
-            cr.titol2_generic = dta['titol2']
-            cr.titol2_nom = dta['tit2']
-            cr.titol2_uni = dta['uni2']
-            cr.titol2_data = dta['dta2']
+                cr.titol2_generic = dta['titol2']
+                cr.titol2_nom = dta['tit2']
+                cr.titol2_uni = dta['uni2']
+                cr.titol2_data = dta['dta2']
 
-            cr.titol3_generic = dta['titol3']
-            cr.titol3_nom = dta['tit3']
-            cr.titol3_uni = dta['uni3']
-            cr.titol3_data = dta['dta3']
+                cr.titol3_generic = dta['titol3']
+                cr.titol3_nom = dta['tit3']
+                cr.titol3_uni = dta['uni3']
+                cr.titol3_data = dta['dta3']
+            elif cr.categoria == 'N':
+                cr.categoria_laboral_nodocent = dta['catlaboral']
+            else:
+                # ERROR
+                return HttpResponse("ERROR!!")
 
             try:
                 if not isvalid_docent(cr):
@@ -244,9 +266,6 @@ def processar_docent(request, cr):
     # TODO: Mostrar errors
     return HttpResponse("ERROR!!" + str(f.errors))
 
-def processar_nodocent(request, cr):
-    return HttpResponse("Encara no hem implementat currículums per no docents")
-
 
 def final(request):
     if request.POST:
@@ -254,9 +273,11 @@ def final(request):
         cr = Curriculum.objects.get(codi_edicio=codi)
         if not tooLate(cr):
             if cr.categoria == 'D':
-                return processar_docent(request, cr)
+                f = SegonPasForm_Docents(request.POST, request.FILES)
+                return processar_candidat(request, cr, f)
             elif cr.categoria == 'N':
-                return processar_nodocent(request, cr)
+                f = SegonPasForm_NoDocents(request.POST, request.FILES)
+                return processar_candidat(request, cr, f)
 
     # TODO: Mostrar errors
     return HttpResponse("ERROR!!")

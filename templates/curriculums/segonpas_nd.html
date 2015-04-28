@@ -36,6 +36,7 @@
                     <div id="titol1">
                         <label>Lloc de feina a què aspires:</label>
                         <select name="catlaboral">
+                            <option disabled selected> -- Selecciona una opció -- </option>
                             {% for c in catlaborals %}
                             <option value="{{ c.id }}"> {{c.nom}} </option>
                             {% endfor %}
