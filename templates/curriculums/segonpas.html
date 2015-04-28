@@ -29,11 +29,11 @@
                 <input type="hidden" name="codi_edicio" value="{{ cr.codi_edicio }}"/>
                 <fieldset>
                     <legend><span class="number">1</span> Informació del candidat </legend>
-                    <input type="text" name="nom" id="nom" placeholder="Nom">
-                    <input type="text" name="llinatges" id="llinatges" placeholder="Llinatges">
+                    <input type="text" name="nom" id="nom" placeholder="Nom" value="{{ cr.nom|default_if_none:'' }}">
+                    <input type="text" name="llinatges" id="llinatges" placeholder="Llinatges" value="{{ cr.llinatges|default_if_none:'' }}">
                     <!-- <input type="email" name="email" placeholder="E-Mail" value="{{ email }}"> -->
-                    <input type="text" name="tel" id="tel" placeholder="Telèfon">
-                    <input type="text" name="pob" id="pob" placeholder="Població">
+                    <input type="text" name="tel" id="tel" placeholder="Telèfon" value="{{ cr.poblacio|default_if_none:'' }}">
+                    <input type="text" name="pob" id="pob" placeholder="Població" value="{{ cr.telefon|default_if_none:'' }}">
                     <!-- <label for="motiu"> Per què vols fer feina a "ES LICEU"? </label>
                     <textarea name="motiu"> </textarea> -->
                 </fieldset>
@@ -47,14 +47,16 @@
                             {% for f in families %}
                             <optgroup label="{{ f.nom }}">
                                 {% for t in f.titolgeneric_set.all %}
-                                <option value="{{ t.id }}"> {{t.nom}} </option>
+                                <option value="{{ t.id }}"
+                                    {% if t.id == cr.titol1_generic.id %} selected {% endif %}
+                                > {{t.nom}} </option>
                                 {% endfor %}
                             </optgroup>
                             {% endfor %}
                         </select>
-                        <input type="text" name="tit1" id="tit1" placeholder="Titulació i especialitat">
-                        <input type="text" name="uni1" id="uni1" placeholder="Universitat">
-                        <input type="text" name="dta1" id="dta1" class="data" placeholder="Data d'obtenció del títol">
+                        <input type="text" name="tit1" id="tit1" placeholder="Titulació i especialitat" value="{{ cr.titol1_nom|default_if_none:'' }}">
+                        <input type="text" name="uni1" id="uni1" placeholder="Universitat" value="{{ cr.titol1_uni|default_if_none:'' }}">
+                        <input type="text" name="dta1" id="dta1" class="data" placeholder="Data d'obtenció del títol" value="{{ cr.titol1_data|default_if_none:''|date:'Y-m-d' }}">
                     </div>
 
                     <div id="titol2">
@@ -64,14 +66,16 @@
                             {% for f in families %}
                             <optgroup label="{{ f.nom }}">
                                 {% for t in f.titolgeneric_set.all %}
-                                <option value="{{ t.id }}"> {{t.nom}} </option>
+                                <option value="{{ t.id }}"
+                                    {% if t.id == cr.titol2_generic.id %} selected {% endif %}
+                                > {{t.nom}} </option>
                                 {% endfor %}
                             </optgroup>
                             {% endfor %}
                         </select>
-                        <input type="text" name="tit2" id="tit2" placeholder="Titulació i especialitat">
-                        <input type="text" name="uni2" id="uni2" placeholder="Universitat">
-                        <input type="text" name="dta2" id="dta2" class="data" placeholder="Data d'obtenció del títol">
+                        <input type="text" name="tit2" id="tit2" placeholder="Titulació i especialitat" value="{{ cr.titol2_nom|default_if_none:'' }}">
+                        <input type="text" name="uni2" id="uni2" placeholder="Universitat" value="{{ cr.titol2_uni|default_if_none:'' }}">
+                        <input type="text" name="dta2" id="dta2" class="data" placeholder="Data d'obtenció del títol" value="{{ cr.titol2_data|default_if_none:''|date:'Y-m-d' }}">
                     </div>
 
                     <div id="titol3">
@@ -81,14 +85,16 @@
                             {% for f in families %}
                             <optgroup label="{{ f.nom }}">
                                 {% for t in f.titolgeneric_set.all %}
-                                <option value="{{ t.id }}"> {{t.nom}} </option>
+                                <option value="{{ t.id }}"
+                                    {% if t.id == cr.titol3_generic.id %} selected {% endif %}
+                                > {{t.nom}} </option>
                                 {% endfor %}
                             </optgroup>
                             {% endfor %}
                         </select>
-                        <input type="text" name="tit3" id="tit3" placeholder="Titulació i especialitat">
-                        <input type="text" name="uni3" id="uni3" placeholder="Universitat">
-                        <input type="text" name="dta3" id="dta3" class="data" placeholder="Data d'obtenció del títol">
+                        <input type="text" name="tit3" id="tit3" placeholder="Titulació i especialitat" value="{{ cr.titol3_nom|default_if_none:'' }}">
+                        <input type="text" name="uni3" id="uni3" placeholder="Universitat" value="{{ cr.titol3_uni|default_if_none:'' }}">
+                        <input type="text" name="dta3" id="dta3" class="data" placeholder="Data d'obtenció del títol" value="{{ cr.titol3_data|default_if_none:''|date:'Y-m-d' }}">
                     </div>
 
                     <input type="button" name="mes" id="butmes" value="Vull afegir un altre títol"/>
@@ -98,19 +104,19 @@
                     <legend><span class="number">3</span> Referències </legend>
                     <div id="ref1">
                         <label> Primera persona a qui podem adreçar-nos per demanar referències </label>
-                        <input type="text" name="ref1" id="ref1_contact" placeholder="Persona de referència 1">
-                        <input type="text" name="ref1_email" id="ref1_email" placeholder="E-Mail">
+                        <input type="text" name="ref1" id="ref1_contact" placeholder="Persona de referència 1" value="{{ cr.ref1|default_if_none:'' }}">
+                        <input type="text" name="ref1_email" id="ref1_email" placeholder="E-Mail" value="{{ cr.ref1_email|default_if_none:'' }}">
                     </div>
                     <div id="ref2">
                         <label> Segona persona a qui podem adreçar-nos per demanar referències </label>
-                        <input type="text" name="ref2" id="ref2_contact" placeholder="Persona de referència 2">
-                        <input type="text" name="ref2_email" id="ref2_email" placeholder="E-Mail">
+                        <input type="text" name="ref2" id="ref2_contact" placeholder="Persona de referència 2"  value="{{ cr.ref2|default_if_none:'' }}">
+                        <input type="text" name="ref2_email" id="ref2_email" placeholder="E-Mail" value="{{ cr.ref2_email|default_if_none:'' }}">
                     </div>
 
                     <div id =ref3>
                         <label> Tercera persona a qui podem adreçar-nos per demanar referències </label>
-                        <input type="text" name="ref3" id="ref3_contact" placeholder="Persona de referència 3">
-                        <input type="text" name="ref3_email" id="ref3_email" placeholder="E-Mail">
+                        <input type="text" name="ref3" id="ref3_contact" placeholder="Persona de referència 3"  value="{{ cr.ref3|default_if_none:'' }}">
+                        <input type="text" name="ref3_email" id="ref3_email" placeholder="E-Mail" value="{{ cr.ref3_email|default_if_none:'' }}">
                     </div>
                     <input type="button" name="mes" id="butref" value="Afegir referència"/>
                 </fieldset>
@@ -118,6 +124,11 @@
                 <fieldset>
                     <legend><span class="number">4</span> Currículum </legend>
                     <label> Adjunta el teu currículum: </label>
+
+                    {% if cr.file %}
+                        Advertència: Ja disposes d'un currículum a la nostra base de dades, que s'eliminarà en enviar el present<br/><br/>
+                    {% endif %}
+
                     <div class="fileUpload btn btn-primary" style="margin-bottom: 30px">
                         <span>Sel·lecciona el fitxer...</span>
                         <input type="file" name="currfile" id="id_currfile" class="upload"/>

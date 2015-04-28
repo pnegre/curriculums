@@ -129,13 +129,10 @@ def primerPas(request):
                 )
 
             else:
-                # DEBUG: mostrem directament l'enllaç
-                return renderResponse(
-                    request,
-                    'curriculums/codi.html', {
-                        'lnk': lnk,
-                    }
-                )
+                # DEBUG: Fem directament el redirect. En un entorn de producció,
+                # S'ha d'enviar un email amb el link (controlar amb settings.CURR_SEND_EMAIL al settings.py principal)
+                return redirect(lnk)
+
         else:
             return HttpResponse("ERROR!!" + str(f.errors))
 
@@ -176,8 +173,8 @@ def segonPas(request):
                         'catlaborals': catlaborals,
                     }
                 )
-    except:
-        pass
+    except Exception as e:
+        return HttpResponse("ERROR!!" + str(e))
 
     # TODO: Mostrar errors
     return HttpResponse("ERROR!!")
