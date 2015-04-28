@@ -203,7 +203,6 @@ def processar_candidat(request, cr, f):
         file = dta['currfile']
         if file_is_valid(file):
             # print "---file valid"
-            cr.file = file
             cr.ref1 = dta['ref1']
             cr.ref1_email = dta['ref1_email']
             cr.ref2 = dta['ref2']
@@ -234,6 +233,13 @@ def processar_candidat(request, cr, f):
 
             try:
                 cr.valid = True
+
+                # Esborrem el vell currículum (si ja existia)
+                if cr.file:
+                    cr.file.delete()
+
+                # Assignem el nou fitxer i gravem    
+                cr.file = file
                 cr.save()
                 return renderResponse(
                     request,
