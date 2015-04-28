@@ -179,12 +179,6 @@ def segonPas(request):
     # TODO: Mostrar errors
     return HttpResponse("ERROR!!")
 
-def getTitolUniversitari(gen, nom, uni, data):
-    try:
-        t = TitolUniversitari(nom=nom, titolgeneric=gen, uni=uni, data=data)
-        return t
-    except:
-        return None
 
 def file_is_valid(content):
     content_type = content.content_type.split('/')[0]
@@ -193,17 +187,6 @@ def file_is_valid(content):
     if content._size > int(MAX_UPLOAD_SIZE):
         return False
 
-    # if content_type in CONTENT_TYPES:
-    #     if content._size > int(MAX_UPLOAD_SIZE):
-    #         return False
-    # else:
-    #     return False
-
-    return True
-
-# Comprovem que el currículum per docent està correcte
-def isvalid_docent(cr):
-    #Aquí cal comprovar que no falten paràmetres...
     return True
 
 
@@ -249,9 +232,6 @@ def processar_candidat(request, cr, f):
                 return HttpResponse("ERROR!!")
 
             try:
-                if not isvalid_docent(cr):
-                    raise "Paràmetres CR no vàlids"
-
                 cr.valid = True
                 cr.save()
                 return renderResponse(
