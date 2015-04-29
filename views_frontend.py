@@ -193,49 +193,42 @@ def file_is_valid(content):
 @csrf_protect
 def processar_candidat(request, cr, f):
     if f.is_valid():
-        dta = f.cleaned_data
-        cr.nom = dta['nom']
-        cr.llinatges = dta['llinatges']
-        cr.poblacio = dta['pob']
-        cr.telefon = dta['tel']
-
-        cr.ref1 = dta['ref1']
-        cr.ref1_email = dta['ref1_email']
-        cr.ref2 = dta['ref2']
-        cr.ref2_email = dta['ref2_email']
-        cr.ref3 = dta['ref3']
-        cr.ref3_email = dta['ref3_email']
-
-        if cr.categoria == 'D':
-            cr.titol1_generic = dta['titol1']
-            cr.titol1_nom = dta['tit1']
-            cr.titol1_uni = dta['uni1']
-            cr.titol1_data = dta['dta1']
-
-            cr.titol2_generic = dta['titol2']
-            cr.titol2_nom = dta['tit2']
-            cr.titol2_uni = dta['uni2']
-            cr.titol2_data = dta['dta2']
-
-            cr.titol3_generic = dta['titol3']
-            cr.titol3_nom = dta['tit3']
-            cr.titol3_uni = dta['uni3']
-            cr.titol3_data = dta['dta3']
-        elif cr.categoria == 'N':
-            cr.categoria_laboral_nodocent = dta['catlaboral']
-        else:
-            # ERROR
-            return HttpResponse("ERROR!!")
-
         try:
+            dta = f.cleaned_data
+            cr.nom = dta['nom']
+            cr.llinatges = dta['llinatges']
+            cr.poblacio = dta['pob']
+            cr.telefon = dta['tel']
 
-            # Comprovem que el fitxer és vàlid (grandària, mimetype...)
+            cr.ref1 = dta['ref1']
+            cr.ref1_email = dta['ref1_email']
+            cr.ref2 = dta['ref2']
+            cr.ref2_email = dta['ref2_email']
+            cr.ref3 = dta['ref3']
+            cr.ref3_email = dta['ref3_email']
+
+            if cr.categoria == 'D':
+                cr.titol1_generic = dta['titol1']
+                cr.titol1_nom = dta['tit1']
+                cr.titol1_uni = dta['uni1']
+                cr.titol1_data = dta['dta1']
+
+                cr.titol2_generic = dta['titol2']
+                cr.titol2_nom = dta['tit2']
+                cr.titol2_uni = dta['uni2']
+                cr.titol2_data = dta['dta2']
+
+                cr.titol3_generic = dta['titol3']
+                cr.titol3_nom = dta['tit3']
+                cr.titol3_uni = dta['uni3']
+                cr.titol3_data = dta['dta3']
+            elif cr.categoria == 'N':
+                cr.categoria_laboral_nodocent = dta['catlaboral']
+            else:
+                raise Exception("Error en categoria")
+
             file = dta['currfile']
 
-            # if file_is_valid(file):
-
-            print "-------------------", file
-            print "-------------------", cr.file
             if file is None:
                 if not cr.file:
                     # ERROR: No tenim fitxer del currículum i tampoc ens ho proporcionen al formulari
@@ -243,10 +236,15 @@ def processar_candidat(request, cr, f):
 
             else:
                 # Ens proporcionen fitxer al formulari.
-                # Si ja en teníem, l'esborrem.
-                if cr.file:
-                    cr.file.delete()
-                cr.file = file
+                # Comprovem que el fitxer és vàlid (grandària, mimetype...)
+                if file_is_valid(file):
+                    if cr.file:
+                        # Si ja en teníem, l'esborrem.
+                        cr.file.delete()
+                    cr.file = file
+
+                else:
+                    raise Exception("Fitxer no acceptat")
 
             # Enmmagatzemem l'objecte a la base de dades
             cr.valid = True
@@ -255,10 +253,10 @@ def processar_candidat(request, cr, f):
                 request,
                 'curriculums/final.html', {}
             )
+
         except Exception as e:
             # Feedback a l'usuari???
             return HttpResponse("ERROR: " + str(e))
-
 
     # TODO: Mostrar errors
     return HttpResponse("ERROR!!" + str(f.errors))
