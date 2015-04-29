@@ -156,7 +156,7 @@ def segonPas(request):
         if not tooLate(cr):
             if cr.categoria == 'D':
                 # Docent
-                families = FamiliaTitol.objects.all()
+                families = FamiliaTitol.objects.all().order_by('ordre_numeric')
                 return renderResponse(
                     request,
                     'curriculums/segonpas.html', {
@@ -238,7 +238,7 @@ def processar_candidat(request, cr, f):
                 if cr.file:
                     cr.file.delete()
 
-                # Assignem el nou fitxer i gravem    
+                # Assignem el nou fitxer i gravem
                 cr.file = file
                 cr.save()
                 return renderResponse(

@@ -8,6 +8,7 @@ import storage as stor
 
 class FamiliaTitol(models.Model):
     nom = models.CharField(max_length=500)
+    ordre_numeric = models.IntegerField()
 
     def __unicode__(self):
         return self.nom
