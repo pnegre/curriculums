@@ -58,7 +58,7 @@ class SegonPasForm_Docents(forms.Form):
     ref3 = forms.CharField(required=False)
     ref3_email = forms.CharField(required=False)
 
-    currfile = forms.FileField()
+    currfile = forms.FileField(required=False)
 
 class SegonPasForm_NoDocents(forms.Form):
     nom = forms.CharField()
@@ -199,55 +199,65 @@ def processar_candidat(request, cr, f):
         cr.poblacio = dta['pob']
         cr.telefon = dta['tel']
 
-        # Comprovem que el fitxer és vàlid (grandària, mimetype...)
-        file = dta['currfile']
-        if file_is_valid(file):
-            # print "---file valid"
-            cr.ref1 = dta['ref1']
-            cr.ref1_email = dta['ref1_email']
-            cr.ref2 = dta['ref2']
-            cr.ref2_email = dta['ref2_email']
-            cr.ref3 = dta['ref3']
-            cr.ref3_email = dta['ref3_email']
+        cr.ref1 = dta['ref1']
+        cr.ref1_email = dta['ref1_email']
+        cr.ref2 = dta['ref2']
+        cr.ref2_email = dta['ref2_email']
+        cr.ref3 = dta['ref3']
+        cr.ref3_email = dta['ref3_email']
 
-            if cr.categoria == 'D':
-                cr.titol1_generic = dta['titol1']
-                cr.titol1_nom = dta['tit1']
-                cr.titol1_uni = dta['uni1']
-                cr.titol1_data = dta['dta1']
+        if cr.categoria == 'D':
+            cr.titol1_generic = dta['titol1']
+            cr.titol1_nom = dta['tit1']
+            cr.titol1_uni = dta['uni1']
+            cr.titol1_data = dta['dta1']
 
-                cr.titol2_generic = dta['titol2']
-                cr.titol2_nom = dta['tit2']
-                cr.titol2_uni = dta['uni2']
-                cr.titol2_data = dta['dta2']
+            cr.titol2_generic = dta['titol2']
+            cr.titol2_nom = dta['tit2']
+            cr.titol2_uni = dta['uni2']
+            cr.titol2_data = dta['dta2']
 
-                cr.titol3_generic = dta['titol3']
-                cr.titol3_nom = dta['tit3']
-                cr.titol3_uni = dta['uni3']
-                cr.titol3_data = dta['dta3']
-            elif cr.categoria == 'N':
-                cr.categoria_laboral_nodocent = dta['catlaboral']
+            cr.titol3_generic = dta['titol3']
+            cr.titol3_nom = dta['tit3']
+            cr.titol3_uni = dta['uni3']
+            cr.titol3_data = dta['dta3']
+        elif cr.categoria == 'N':
+            cr.categoria_laboral_nodocent = dta['catlaboral']
+        else:
+            # ERROR
+            return HttpResponse("ERROR!!")
+
+        try:
+
+            # Comprovem que el fitxer és vàlid (grandària, mimetype...)
+            file = dta['currfile']
+
+            # if file_is_valid(file):
+
+            print "-------------------", file
+            print "-------------------", cr.file
+            if file is None:
+                if not cr.file:
+                    # ERROR: No tenim fitxer del currículum i tampoc ens ho proporcionen al formulari
+                    raise Exception("Fitxer requerit")
+
             else:
-                # ERROR
-                return HttpResponse("ERROR!!")
-
-            try:
-                cr.valid = True
-
-                # Esborrem el vell currículum (si ja existia)
+                # Ens proporcionen fitxer al formulari.
+                # Si ja en teníem, l'esborrem.
                 if cr.file:
                     cr.file.delete()
-
-                # Assignem el nou fitxer i gravem
                 cr.file = file
-                cr.save()
-                return renderResponse(
-                    request,
-                    'curriculums/final.html', {}
-                )
-            except Exception as e:
-                # Feedback a l'usuari???
-                return HttpResponse("ERROR: " + str(e))
+
+            # Enmmagatzemem l'objecte a la base de dades
+            cr.valid = True
+            cr.save()
+            return renderResponse(
+                request,
+                'curriculums/final.html', {}
+            )
+        except Exception as e:
+            # Feedback a l'usuari???
+            return HttpResponse("ERROR: " + str(e))
 
 
     # TODO: Mostrar errors
