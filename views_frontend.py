@@ -132,9 +132,8 @@ def primerPas(request):
                 # DEBUG: Fem directament el redirect. En un entorn de producció,
                 # S'ha d'enviar un email amb el link (controlar amb settings.CURR_SEND_EMAIL al settings.py principal)
                 return redirect(lnk)
-
         else:
-            return HttpResponse("ERROR!!" + str(f.errors))
+            raise Exception("ERROR!!" + str(f.errors))
 
     return renderResponse(
         request,
@@ -193,73 +192,68 @@ def file_is_valid(content):
 @csrf_protect
 def processar_candidat(request, cr, f):
     if f.is_valid():
-        try:
-            dta = f.cleaned_data
-            cr.nom = dta['nom']
-            cr.llinatges = dta['llinatges']
-            cr.poblacio = dta['pob']
-            cr.telefon = dta['tel']
+        dta = f.cleaned_data
+        cr.nom = dta['nom']
+        cr.llinatges = dta['llinatges']
+        cr.poblacio = dta['pob']
+        cr.telefon = dta['tel']
 
-            cr.ref1 = dta['ref1']
-            cr.ref1_email = dta['ref1_email']
-            cr.ref2 = dta['ref2']
-            cr.ref2_email = dta['ref2_email']
-            cr.ref3 = dta['ref3']
-            cr.ref3_email = dta['ref3_email']
+        cr.ref1 = dta['ref1']
+        cr.ref1_email = dta['ref1_email']
+        cr.ref2 = dta['ref2']
+        cr.ref2_email = dta['ref2_email']
+        cr.ref3 = dta['ref3']
+        cr.ref3_email = dta['ref3_email']
 
-            if cr.categoria == 'D':
-                cr.titol1_generic = dta['titol1']
-                cr.titol1_nom = dta['tit1']
-                cr.titol1_uni = dta['uni1']
-                cr.titol1_data = dta['dta1']
+        if cr.categoria == 'D':
+            cr.titol1_generic = dta['titol1']
+            cr.titol1_nom = dta['tit1']
+            cr.titol1_uni = dta['uni1']
+            cr.titol1_data = dta['dta1']
 
-                cr.titol2_generic = dta['titol2']
-                cr.titol2_nom = dta['tit2']
-                cr.titol2_uni = dta['uni2']
-                cr.titol2_data = dta['dta2']
+            cr.titol2_generic = dta['titol2']
+            cr.titol2_nom = dta['tit2']
+            cr.titol2_uni = dta['uni2']
+            cr.titol2_data = dta['dta2']
 
-                cr.titol3_generic = dta['titol3']
-                cr.titol3_nom = dta['tit3']
-                cr.titol3_uni = dta['uni3']
-                cr.titol3_data = dta['dta3']
-            elif cr.categoria == 'N':
-                cr.categoria_laboral_nodocent = dta['catlaboral']
+            cr.titol3_generic = dta['titol3']
+            cr.titol3_nom = dta['tit3']
+            cr.titol3_uni = dta['uni3']
+            cr.titol3_data = dta['dta3']
+        elif cr.categoria == 'N':
+            cr.categoria_laboral_nodocent = dta['catlaboral']
+        else:
+            raise Exception("Error en categoria")
+
+        file = dta['currfile']
+
+        if file is None:
+            if not cr.file:
+                # ERROR: No tenim fitxer del currículum i tampoc ens ho proporcionen al formulari
+                raise Exception("Fitxer requerit")
+
+        else:
+            # Ens proporcionen fitxer al formulari.
+            # Comprovem que el fitxer és vàlid (grandària, mimetype...)
+            if file_is_valid(file):
+                if cr.file:
+                    # Si ja en teníem, l'esborrem.
+                    cr.file.delete()
+                cr.file = file
+
             else:
-                raise Exception("Error en categoria")
+                raise Exception("Fitxer no acceptat")
 
-            file = dta['currfile']
-
-            if file is None:
-                if not cr.file:
-                    # ERROR: No tenim fitxer del currículum i tampoc ens ho proporcionen al formulari
-                    raise Exception("Fitxer requerit")
-
-            else:
-                # Ens proporcionen fitxer al formulari.
-                # Comprovem que el fitxer és vàlid (grandària, mimetype...)
-                if file_is_valid(file):
-                    if cr.file:
-                        # Si ja en teníem, l'esborrem.
-                        cr.file.delete()
-                    cr.file = file
-
-                else:
-                    raise Exception("Fitxer no acceptat")
-
-            # Enmmagatzemem l'objecte a la base de dades
-            cr.valid = True
-            cr.save()
-            return renderResponse(
-                request,
-                'curriculums/final.html', {}
-            )
-
-        except Exception as e:
-            # Feedback a l'usuari???
-            return HttpResponse("ERROR: " + str(e))
+        # Enmmagatzemem l'objecte a la base de dades
+        cr.valid = True
+        cr.save()
+        return renderResponse(
+            request,
+            'curriculums/final.html', {}
+        )
 
     # TODO: Mostrar errors
-    return HttpResponse("ERROR!!" + str(f.errors))
+    raise Exception("ERROR!!" + str(f.errors))
 
 
 def final(request):
@@ -274,5 +268,8 @@ def final(request):
                 f = SegonPasForm_NoDocents(request.POST, request.FILES)
                 return processar_candidat(request, cr, f)
 
+        else:
+            raise Exception("Link no vàlid")
+
     # TODO: Mostrar errors
-    return HttpResponse("ERROR!!")
+    raise Exception("Esperàvem POST")
