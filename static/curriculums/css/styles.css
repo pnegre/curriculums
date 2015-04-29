@@ -122,22 +122,9 @@ body{
     background: #921413;
 }
 
-/*.fileUpload {
-    position: relative;
-    overflow: hidden;
-    margin: 10px;
+#agree_wrapper{
+    margin: 10px 0 20px 0;
 }
-.fileUpload input.upload {
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 0;
-    padding: 0;
-    font-size: 20px;
-    cursor: pointer;
-    opacity: 0;
-    filter: alpha(opacity=0);
-}*/
 
 
 #titol2, #titol3, #ref1, #ref2, #ref3 {
@@ -157,4 +144,17 @@ label.error{
     font-size: 11px;
     color: #c23737;
     margin-bottom: 12px;
+}
+
+.alert{
+    background-color: #fcf8e3;
+    color: #c09853;
+    border: 1px solid #fbeed5;
+    width: 90%;
+    padding: 5px 20px;
+    margin: 15px auto;
+}
+
+.alert img{
+    vertical-align: middle;
 }
