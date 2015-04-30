@@ -202,7 +202,9 @@ $(document).ready(function () {
         monthNamesShort: ["Gen", "Feb", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Des"],
         nextText: "Més tard",
         prevText: "Més prest",
-        currentText: "Ara"
+        currentText: "Ara",
+        changeMonth: true,
+        changeYear: true
     });
 
 
@@ -400,9 +402,6 @@ $(document).ready(function () {
                         return false;
                     }
                 }
-            },
-            submitHandler: function (form) {
-                $(form).submit();
             }
         });
     }
