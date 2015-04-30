@@ -399,8 +399,7 @@ $(document).ready(function () {
                         }
                         return false;
                     }
-                },
-                agree: "required"
+                }
             },
             submitHandler: function (form) {
                 $(form).submit();
@@ -415,12 +414,12 @@ $(document).ready(function () {
         if (!t2.is(":visible")) {
             t2.show(0, function () {
                 $(".select2").select2();
-                validator.form();
+                //validator.form();
             });
         } else if (!t3.is(":visible")) {
             t3.show(0, function () {
                 $(".select2").select2();
-                validator.form();
+                //validator.form();
             });
             $("#butmes").hide();
         }
@@ -438,7 +437,7 @@ $(document).ready(function () {
             r3.show();
             $("#butref").hide();
         }
-        validator.form();
+        //validator.form();
     });
 });
         </script>

@@ -137,7 +137,7 @@ body{
 
 /* Errors de validació */
 input.error{
-    border: solid 1px #c23737 !important;
+    border: solid 1px #c23737 !important; 
     margin-bottom: 0px !important;
 }
 label.error{
