@@ -167,7 +167,7 @@ def segonPas(request):
             catlaborals = CategoriaLaboralND.objects.all()
             return renderResponse(
                 request,
-                'curriculums/segonpas_nd.html', {
+                'curriculums/segonpas.html', {
                     'cr': cr,
                     'tipus_curr': 'N',
                     'catlaborals': catlaborals,
