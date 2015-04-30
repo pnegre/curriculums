@@ -150,33 +150,32 @@ def tooLate(cr):
 @csrf_protect
 def segonPas(request):
     codi = request.GET.get('codi')
-    try:
-        cr = Curriculum.objects.get(codi_edicio=codi)
-        if not tooLate(cr):
-            if cr.categoria == 'D':
-                # Docent
-                families = FamiliaTitol.objects.all().order_by('ordre_numeric')
-                return renderResponse(
-                    request,
-                    'curriculums/segonpas.html', {
-                        'cr': cr,
-                        'families': families,
-                } )
-            elif cr.categoria == 'N':
-                # No docent
-                catlaborals = CategoriaLaboralND.objects.all()
-                return renderResponse(
-                    request,
-                    'curriculums/segonpas_nd.html', {
-                        'cr': cr,
-                        'catlaborals': catlaborals,
-                    }
-                )
-    except Exception as e:
-        return HttpResponse("ERROR!!" + str(e))
+    cr = Curriculum.objects.get(codi_edicio=codi)
+    if not tooLate(cr):
+        if cr.categoria == 'D':
+            # Docent
+            families = FamiliaTitol.objects.all().order_by('ordre_numeric')
+            return renderResponse(
+                request,
+                'curriculums/segonpas.html', {
+                    'cr': cr,
+                    'tipus_curr': 'D',
+                    'families': families,
+            } )
+        elif cr.categoria == 'N':
+            # No docent
+            catlaborals = CategoriaLaboralND.objects.all()
+            return renderResponse(
+                request,
+                'curriculums/segonpas_nd.html', {
+                    'cr': cr,
+                    'tipus_curr': 'N',
+                    'catlaborals': catlaborals,
+                }
+            )
 
     # TODO: Mostrar errors
-    return HttpResponse("ERROR!!")
+    raise Exception("ERROR")
 
 
 def file_is_valid(content):

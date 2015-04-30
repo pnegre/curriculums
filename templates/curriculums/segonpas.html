@@ -13,7 +13,7 @@
 
         <!-- SELECT 2 -->
         <link rel="stylesheet" href="/static/curriculums/js/select2/dist/css/select2.css">
-        
+
         <!-- UNIFORM -->
         <link rel="stylesheet" href="/static/curriculums/js/uniform/themes/default/css/uniform.default.css">
 
@@ -41,6 +41,7 @@
                     <textarea name="motiu"> </textarea> -->
                 </fieldset>
 
+                {% if tipus_curr == 'D' %}
                 <fieldset>
                     <legend><span class="number">2</span> Dades acadèmiques </legend>
                     <div id="titol1">
@@ -103,6 +104,25 @@
                     <input type="button" name="mes" id="butmes" value="Vull afegir un altre títol"/>
                     <!--div id="butmes">Vull afegir un altre títol</div-->
                 </fieldset>
+
+                {% else %}
+
+                <fieldset>
+                    <legend><span class="number">2</span> Categoria laboral </legend>
+                    <div id="titol1">
+                        <label>Lloc de feina a què aspires:</label>
+                        <select name="catlaboral">
+                            <option disabled selected> -- Selecciona una opció -- </option>
+                            {% for c in catlaborals %}
+                            <option value="{{ c.id }}"> {{c.nom}} </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                </fieldset>
+
+                {% endif %}
+
                 <fieldset>
                     <legend><span class="number">3</span> Referències </legend>
                     <div id="ref1">
@@ -157,10 +177,10 @@
 
         <!-- SELECT 2 -->
         <script src="/static/curriculums/js/select2/dist/js/select2.min.js" type="text/javascript"></script>
-        
+
         <!-- UNIFORM -->
         <script src="/static/curriculums/js/uniform/jquery.uniform.min.js" type="text/javascript"></script>
-        
+
         <script type="text/javascript">
 
 $(document).ready(function () {
