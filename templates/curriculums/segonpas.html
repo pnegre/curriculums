@@ -52,8 +52,8 @@
                             <optgroup label="{{ f.nom }}">
                                 {% for t in f.titolgeneric_set.all %}
                                 <option value="{{ t.id }}"
-                                    {% if t.id == cr.titol1_generic.id %} selected {% endif %}
-                                > {{t.nom}} </option>
+                                        {% if t.id == cr.titol1_generic.id %} selected {% endif %}
+                                        > {{t.nom}} </option>
                                 {% endfor %}
                             </optgroup>
                             {% endfor %}
@@ -71,8 +71,8 @@
                             <optgroup label="{{ f.nom }}">
                                 {% for t in f.titolgeneric_set.all %}
                                 <option value="{{ t.id }}"
-                                    {% if t.id == cr.titol2_generic.id %} selected {% endif %}
-                                > {{t.nom}} </option>
+                                        {% if t.id == cr.titol2_generic.id %} selected {% endif %}
+                                        > {{t.nom}} </option>
                                 {% endfor %}
                             </optgroup>
                             {% endfor %}
@@ -90,8 +90,8 @@
                             <optgroup label="{{ f.nom }}">
                                 {% for t in f.titolgeneric_set.all %}
                                 <option value="{{ t.id }}"
-                                    {% if t.id == cr.titol3_generic.id %} selected {% endif %}
-                                > {{t.nom}} </option>
+                                        {% if t.id == cr.titol3_generic.id %} selected {% endif %}
+                                        > {{t.nom}} </option>
                                 {% endfor %}
                             </optgroup>
                             {% endfor %}
@@ -161,10 +161,13 @@
 
                 <fieldset>
                     <legend><span class="number">5</span> Finalitza </legend>
-                    <div id="agree_wrapper"><input type="checkbox" id="agree"> Autoritzo a que Es Liceu Som Coop tracti les meves dades personals.</div>
-                    <input type="submit" value="Envia-ho" />
+                    <div id="agree_wrapper">
+                        <input type="checkbox" id="agree" name="agree" title="És obligatori acceptar la política per a continuar.">
+                        <label style='display:initial;'>Autoritzo a que Es Liceu Som Coop tracti les meves dades personals.</label>
+                    </div>
                 </fieldset>
 
+                <input type="submit" value="Envia-ho" />
             </form>
         </div>
 
@@ -185,6 +188,7 @@
 
 $(document).ready(function () {
     $(".select2").select2();
+    
     $("input:checkbox, input:file").uniform({
         fileButtonHtml: 'Selecciona...',
         fileDefaultHtml: 'Cap fitxer seleccionat'
@@ -211,7 +215,7 @@ $(document).ready(function () {
 
     //Validacions
     if ($.fn.validate) {
-        var validator = $("#formulari").validate({
+        $("#formulari").validate({
             rules: {
                 nom: "required",
                 llinatges: "required",
@@ -333,74 +337,77 @@ $(document).ready(function () {
                         }
                     }
                 },
-                ref1_contact:{
-                    required: function(){
+                ref1_contact: {
+                    required: function () {
                         var ref = $("#ref1_contact").val();
                         var ref_email = $("#ref1_email").val();
 
-                        if(ref || ref_email){
+                        if (ref || ref_email) {
                             return true;
                         }
                         return false;
                     }
                 },
-                ref1_email:{
+                ref1_email: {
                     email: true,
-                    required: function(){
+                    required: function () {
                         var ref = $("#ref1_contact").val();
                         var ref_email = $("#ref1_email").val();
 
-                        if(ref || ref_email){
+                        if (ref || ref_email) {
                             return true;
                         }
                         return false;
                     }
                 },
-                ref2_contact:{
-                    required: function(){
+                ref2_contact: {
+                    required: function () {
                         var ref = $("#ref2_contact").val();
                         var ref_email = $("#ref2_email").val();
 
-                        if(ref || ref_email){
+                        if (ref || ref_email) {
                             return true;
                         }
                         return false;
                     }
                 },
-                ref2_email:{
+                ref2_email: {
                     email: true,
-                    required: function(){
+                    required: function () {
                         var ref = $("#ref2_contact").val();
                         var ref_email = $("#ref2_email").val();
 
-                        if(ref || ref_email){
+                        if (ref || ref_email) {
                             return true;
                         }
                         return false;
                     }
                 },
-                ref3_contact:{
-                    required: function(){
+                ref3_contact: {
+                    required: function () {
                         var ref = $("#ref3_contact").val();
                         var ref_email = $("#ref3_email").val();
 
-                        if(ref || ref_email){
+                        if (ref || ref_email) {
                             return true;
                         }
                         return false;
                     }
                 },
-                ref3_email:{
+                ref3_email: {
                     email: true,
-                    required: function(){
+                    required: function () {
                         var ref = $("#ref3_contact").val();
                         var ref_email = $("#ref3_email").val();
 
-                        if(ref || ref_email){
+                        if (ref || ref_email) {
                             return true;
                         }
                         return false;
                     }
+                },
+                agree: {
+                    required: true
                 }
             }
         });
@@ -413,12 +420,10 @@ $(document).ready(function () {
         if (!t2.is(":visible")) {
             t2.show(0, function () {
                 $(".select2").select2();
-                //validator.form();
             });
         } else if (!t3.is(":visible")) {
             t3.show(0, function () {
                 $(".select2").select2();
-                //validator.form();
             });
             $("#butmes").hide();
         }
@@ -436,7 +441,6 @@ $(document).ready(function () {
             r3.show();
             $("#butref").hide();
         }
-        //validator.form();
     });
 });
         </script>

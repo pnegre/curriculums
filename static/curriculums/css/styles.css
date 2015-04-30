@@ -146,6 +146,10 @@ label.error{
     margin-bottom: 12px;
 }
 
+#agree-error{
+    width: 240px;
+}
+
 .alert{
     background-color: #fcf8e3;
     color: #c09853;
