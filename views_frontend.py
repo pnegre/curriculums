@@ -98,7 +98,7 @@ def primerPas(request):
             cr = None
             try:
                 # Comprovem que l'adreça email ja existeix...
-                cr = Curriculum.objects.get(email=email)
+                cr = Curriculum.objects.get(email=email,categoria=feina)
             except:
                 # Si no existeix, creem un objecte nou
                 cr = Curriculum(email=email, categoria=feina, codi_edicio=codi)
