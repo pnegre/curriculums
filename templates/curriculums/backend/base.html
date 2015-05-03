@@ -7,19 +7,19 @@
 	<script type="text/javascript" src="https://cdn.datatables.net/1.10.6/js/jquery.dataTables.min.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.6/css/jquery.dataTables.css">
-	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+	<!-- <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"> -->
 
 	{% block currheader %}
 	{% endblock %}
 
 	<style>
 
-		body {
-			margin: 8px;
-		}
-
-		#div1 {
+		#main_div_curriculums {
 			margin: 10px;
+		}
+		#vistacurriculum td {
+			padding: 7px;
+			border: 1px solid black;
 		}
 
 	</style>
@@ -29,7 +29,7 @@
 
 {% block basebody %}
 
-<div id="div1">
+<div id="main_div_curriculums">
 
 	{% block currbody %}
 	{% endblock %}

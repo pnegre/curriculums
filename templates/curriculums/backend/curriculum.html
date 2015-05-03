@@ -1,20 +1,11 @@
 {% extends "curriculums/backend/base.html" %}
 
-{% block currheader %}
-
-<style>
-	#vistacurriculum td {
-		padding: 7px;
-	}
-</style>
-
-{% endblock %}
 
 {% block currbody %}
 
 	<h1> Vista d'un curriculum </h1>
 
-	<table border="1" id="vistacurriculum">
+	<table id="vistacurriculum">
 		<tbody>
 
 			<tr><td>Nom</td><td>{{cr.nom}}</td></tr>
