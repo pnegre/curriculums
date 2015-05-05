@@ -113,7 +113,7 @@ def primerPas(request):
             if settings.CURR_SEND_EMAIL:
                 # Enviem un email i mostrem un missatge a l'usuari perquè continui
                 txtEmail = unicode("Això és un missatge automàtic. No cal que responeu.\n\n" +
-                    "Hem rebut la teva sol·ŀicitud per introduir el teu currículum \n" +
+                    "Hem rebut la teva sol·ŀicitud per introduir el teu currículum. \n\n" +
                     "Fes clic en el següent enllaç per continuar: %s", 'utf-8')
                 txt = txtEmail % (unicode(lnk))
                 send_mail('[Es Liceu] Sol·licitud per enviar el currículum',
