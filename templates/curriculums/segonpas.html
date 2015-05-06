@@ -444,6 +444,19 @@ $(document).ready(function () {
             $("#butref").hide();
         }
     });
+
+    $("#buteliminar").click(function() {
+        var cf = confirm("Segur que vols esborrar les dades dels nostres servidors?");
+        if (cf) {
+            var cod = $("input[name='codi_edicio']").val();
+            // alert(cod);
+            $.post("/curriculums/delete", { codi_edicio: cod }, function(result) {
+                alert("FET!");
+            })
+        }
+
+
+    });
 });
         </script>
     </body>
