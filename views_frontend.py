@@ -280,4 +280,13 @@ def final(request):
 # Eliminem usuari, es crida quan l'aspirant vol eliminar les seves dades
 # del nostre sistema
 def eliminaUsuari(request):
-    raise Exception("No implementat")
+    if request.POST:
+        codi = request.POST.get('codi_edicio')
+        print codi
+        cr = Curriculum.objects.get(codi_edicio=codi)
+        if not tooLate(cr):
+            cr.delete()
+            return HttpResponse("Eliminat")
+
+    # No ha anat bé l'eliminació
+    raise Exception("Error")
