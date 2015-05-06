@@ -132,6 +132,7 @@ def primerPas(request):
                 # DEBUG: Fem directament el redirect. En un entorn de producció,
                 # S'ha d'enviar un email amb el link (controlar amb settings.CURR_SEND_EMAIL al settings.py principal)
                 return redirect(lnk)
+
         else:
             raise Exception("ERROR!!" + str(f.errors))
 
