@@ -115,7 +115,7 @@ def primerPas(request):
                 txtEmail = unicode("Això és un missatge automàtic. No cal que responeu.\n\n" +
                     "Hem rebut la teva sol·ŀicitud per introduir el currículum. \n\n" +
                     "T'enviem un enllaç perquè puguis completar el procés d'inscripció. " +
-                    "Aquest només serà vàlid durant 24 hores.\n\n" + "
+                    "Aquest només serà vàlid durant 24 hores.\n\n" +
                     "Fes clic en el següent enllaç per continuar: %s", 'utf-8')
                 txt = txtEmail % (unicode(lnk))
                 send_mail('[Es Liceu] Sol·licitud per enviar el currículum',
