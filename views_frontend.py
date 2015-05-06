@@ -253,7 +253,10 @@ def processar_candidat(request, cr, f):
         cr.save()
         return renderResponse(
             request,
-            'curriculums/final.html', {}
+            'curriculums/missatge.html', {
+                'miss_title': 'Sol·licitud acceptada.',
+                'miss_body': 'Hem rebut el teu currículum. Gràcies.'
+            }
         )
 
     # TODO: Mostrar errors

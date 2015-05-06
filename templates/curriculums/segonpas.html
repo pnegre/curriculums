@@ -449,12 +449,12 @@ $(document).ready(function () {
         var cf = confirm("Segur que vols esborrar les dades dels nostres servidors?");
         if (cf) {
             var cod = $("input[name='codi_edicio']").val();
-            // alert(cod);
+            // Fem el post per eliminar l'usuari
+            // TODO: hauríem d'avisar a l'aspirant si no hem pogut eliminar les dades...
             $.post("/curriculums/delete", { codi_edicio: cod }, function(result) {
                 window.location.replace("/curriculums/missatge");
             })
         }
-
 
     });
 });
