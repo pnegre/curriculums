@@ -275,3 +275,9 @@ def final(request):
 
     # TODO: Mostrar errors
     raise Exception("Esperàvem POST")
+
+
+# Eliminem usuari, es crida quan l'aspirant vol eliminar les seves dades
+# del nostre sistema
+def eliminaUsuari(request):
+    raise Exception("No implementat")

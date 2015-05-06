@@ -8,6 +8,7 @@ urlpatterns = patterns('',
 	(r'^$', 'curriculums.views_frontend.primerPas', {}, 'curr-primerpas'),
 	(r'^next$', 'curriculums.views_frontend.segonPas'),
 	(r'^final$', 'curriculums.views_frontend.final'),
+	(r'^delete$', 'curriculums.views_frontend.eliminaUsuari'),
 
 	# URLS BACK-END
 	(r'^backend/$', 'curriculums.views_backend.index'),
