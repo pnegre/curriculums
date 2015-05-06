@@ -451,7 +451,7 @@ $(document).ready(function () {
             var cod = $("input[name='codi_edicio']").val();
             // alert(cod);
             $.post("/curriculums/delete", { codi_edicio: cod }, function(result) {
-                alert("FET!");
+                window.location.replace("/curriculums/missatge");
             })
         }
 

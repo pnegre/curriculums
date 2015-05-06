@@ -127,6 +127,8 @@ def primerPas(request):
                 return renderResponse(
                     request,
                     'curriculums/missatge.html', {
+                        'miss_title': 'Hem enregistrat la teva petició. Consulta el teu e-mail per continuar.',
+                        'miss_body': "Si no veus el missatge que t'hem enviat, consulta a la carpeta de correu brossa. ",
                     }
                 )
 
@@ -285,8 +287,21 @@ def eliminaUsuari(request):
         print codi
         cr = Curriculum.objects.get(codi_edicio=codi)
         if not tooLate(cr):
+            if cr.file:
+                # Esborrem l'arxiu si existeix
+                cr.file.delete()
             cr.delete()
             return HttpResponse("Eliminat")
 
     # No ha anat bé l'eliminació
     raise Exception("Error")
+
+
+def missatgeEliminat(request):
+    return renderResponse(
+        request,
+        'curriculums/missatge.html', {
+            'miss_title': 'Dades eliminades',
+            'miss_body': 'Les teves dades s\'han eliminat del nostre servidor',
+        }
+    )
