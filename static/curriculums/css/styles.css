@@ -3,6 +3,16 @@ body{
     font-weight: 100;
 }
 
+a{
+    color: #c23737 !important;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+a:hover{
+    color: #921413 !important;
+}
+
 #header{
     max-width: 840px;
     margin: 0 auto;
@@ -161,4 +171,13 @@ label.error{
 
 .alert img{
     vertical-align: middle;
+}
+
+#buteliminar{
+    margin: 0 auto;
+    text-align: center;
+    color: #c23737;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 10px;
 }
