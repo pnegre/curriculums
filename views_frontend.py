@@ -26,6 +26,14 @@ MAX_UPLOAD_SIZE = "5242880"
 def renderResponse(request,tmpl,dic):
     return render_to_response(tmpl, dic, context_instance=RequestContext(request))
 
+def showMsg(request, m1, m2):
+    return renderResponse(
+        request,
+        'curriculums/missatge.html', {
+            'miss_title': m1,
+            'miss_body': m2,
+        }
+    )
 
 
 class PrimerPasForm(forms.Form):
@@ -124,12 +132,9 @@ def primerPas(request):
                     [cr.email],
                     fail_silently=False)
 
-                return renderResponse(
-                    request,
-                    'curriculums/missatge.html', {
-                        'miss_title': 'Hem enregistrat la teva petició. Consulta el teu e-mail per continuar.',
-                        'miss_body': "Si no veus el missatge que t'hem enviat, consulta a la carpeta de correu brossa. ",
-                    }
+                return showMsg(request,
+                    'Hem enregistrat la teva petició. Consulta el teu e-mail per continuar.',
+                    "Si no veus el missatge que t'hem enviat, consulta a la carpeta de correu brossa. "
                 )
 
             else:
@@ -138,7 +143,8 @@ def primerPas(request):
                 return redirect(lnk)
 
         else:
-            raise Exception("ERROR!!" + str(f.errors))
+            return showMsg(request, "Error!", "Camps requerits")
+            # raise Exception("ERROR!!" + str(f.errors))
 
     return renderResponse(
         request,
@@ -179,8 +185,7 @@ def segonPas(request):
                 }
             )
 
-    # TODO: Mostrar errors
-    raise Exception("ERROR")
+    return showMsg(request, "ERROR", "Error en la categoria")
 
 
 def file_is_valid(content):
@@ -227,14 +232,14 @@ def processar_candidat(request, cr, f):
         elif cr.categoria == 'N':
             cr.categoria_laboral_nodocent = dta['catlaboral']
         else:
-            raise Exception("Error en categoria")
+            return showMsg(request, "ERROR", "Error en la categoria")
 
         file = dta['currfile']
 
         if file is None:
             if not cr.file:
                 # ERROR: No tenim fitxer del currículum i tampoc ens ho proporcionen al formulari
-                raise Exception("Fitxer requerit")
+                return showMsg(request, "ERROR", "Fitxer requerit")
 
         else:
             # Ens proporcionen fitxer al formulari.
@@ -246,7 +251,7 @@ def processar_candidat(request, cr, f):
                 cr.file = file
 
             else:
-                raise Exception("Fitxer no acceptat")
+                return showMsg(request, "ERROR", "Fitxer no acceptat")
 
         # Enmmagatzemem l'objecte a la base de dades
         cr.valid = True
@@ -260,7 +265,8 @@ def processar_candidat(request, cr, f):
         )
 
     # TODO: Mostrar errors
-    raise Exception("ERROR!!" + str(f.errors))
+    return showMsg(request, "ERROR", "Error en l'enviament del formulari")
+    # raise Exception("ERROR!!" + str(f.errors))
 
 
 def final(request):
@@ -276,10 +282,9 @@ def final(request):
                 return processar_candidat(request, cr, f)
 
         else:
-            raise Exception("Link no vàlid")
+            return showMsg(request, "ERROR", "L'enllaç ha expirat")
 
-    # TODO: Mostrar errors
-    raise Exception("Esperàvem POST")
+    return showMsg(request, "ERROR", "Esperàvem POST")
 
 
 # Eliminem usuari, es crida quan l'aspirant vol eliminar les seves dades
