@@ -290,6 +290,9 @@ def final(request):
 # Eliminem usuari, es crida quan l'aspirant vol eliminar les seves dades
 # del nostre sistema
 def eliminaUsuari(request):
+    # TODO: si eliminiem un currículum, hem d'anar alerta perquè també
+    # hem d'eliminar totes les entrades de la taula "Preferits" que apunten
+    # cap a aquest currículum
     if request.POST:
         codi = request.POST.get('codi_edicio')
         print codi
