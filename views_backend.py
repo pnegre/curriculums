@@ -23,9 +23,21 @@ import storage as stor
 def renderResponse(request,tmpl,dic):
     return render_to_response(tmpl, dic, context_instance=RequestContext(request))
 
+
 @permission_required('curriculums.veure_curriculums_docents')
 def index(request):
-    curriculums = Curriculum.objects.filter(valid=True)
+    crs = Curriculum.objects.filter(valid=True)
+    curriculums = []
+    for c in crs:
+        try:
+            p = Preferits.objects.get(usuari=request.user, curriculum=c)
+            c.preferit = True
+        except Preferits.DoesNotExist:
+            c.preferit = False
+            pass
+
+        curriculums.append(c)
+
     return renderResponse(
         request,
         'curriculums/backend/llista.html', {

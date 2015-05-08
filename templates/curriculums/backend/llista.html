@@ -18,11 +18,12 @@
 
 	<table id="tcurriculums" class="cell-border order-column" cellspacing="0">
 		<thead>
-			<tr><td>Llinatges, nom</td><td>Categoria</td><td>Títols</td><td>Referències</td><td>Fitxer</td></tr>
+			<tr><td>Llinatges, nom</td><td>Preferit</td><td>Categoria</td><td>Títols</td><td>Referències</td><td>Fitxer</td></tr>
 		</thead>
 		<tbody>
 			{% for c in curriculums %}
 			<tr><td> <a href="/curriculums/backend/show/{{c.id}}">{{ c.llinatges }}, {{ c.nom }} </a> </td>
+				<td> {{ c.preferit }} </td>
 				<td>
 					{% if c.categoria == 'D' %} Docent {% else %} No Docent {% endif %}
 				</td>
