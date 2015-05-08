@@ -182,8 +182,6 @@ label.error{
     font-size: 10px;
 }
 
-//ERROR SELECT2
-
 #id_currfile-error{
     position: absolute;
     top: 30px;
