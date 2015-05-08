@@ -23,14 +23,13 @@ import storage as stor
 def renderResponse(request,tmpl,dic):
     return render_to_response(tmpl, dic, context_instance=RequestContext(request))
 
-
-@permission_required('curriculums.veure_curriculums_docents')
-def index(request):
+# Torna els currículums, afegint un atribut si son preferits
+def getCurriculumsPreferits(user):
     crs = Curriculum.objects.filter(valid=True)
     curriculums = []
     for c in crs:
         try:
-            p = Preferits.objects.get(usuari=request.user, curriculum=c)
+            p = Preferits.objects.get(usuari=user, curriculum=c)
             c.preferit = True
         except Preferits.DoesNotExist:
             c.preferit = False
@@ -38,6 +37,16 @@ def index(request):
 
         curriculums.append(c)
 
+    return curriculums
+
+
+def removeUTF(text):
+    return ''.join([i if ord(i) < 128 else '_' for i in text])
+
+
+@permission_required('curriculums.veure_curriculums_docents')
+def index(request):
+    curriculums = getCurriculumsPreferits(request.user)
     return renderResponse(
         request,
         'curriculums/backend/llista.html', {
@@ -45,8 +54,6 @@ def index(request):
         }
     )
 
-def removeUTF(text):
-    return ''.join([i if ord(i) < 128 else '_' for i in text])
 
 @permission_required('curriculums.veure_curriculums_docents')
 def download(request, idc):
