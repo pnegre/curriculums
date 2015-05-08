@@ -31,7 +31,8 @@
 	<h1> Vista d'un curriculum </h1>
 
 	<div id="marca_preferit">
-	<input type="checkbox" id="checkbox_preferit"/> Preferit
+	<input type="checkbox" id="checkbox_preferit"
+		{% if cr.preferit %} checked="True" {% endif %}	/> Preferit
 	</div>
 
 	<table id="vistacurriculum">

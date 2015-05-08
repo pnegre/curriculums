@@ -23,20 +23,21 @@ import storage as stor
 def renderResponse(request,tmpl,dic):
     return render_to_response(tmpl, dic, context_instance=RequestContext(request))
 
+
+def getCurrPref(cr, user):
+    try:
+        p = Preferits.objects.get(usuari=user, curriculum=cr)
+        cr.preferit = True
+    except Preferits.DoesNotExist:
+        cr.preferit = False
+
+    return cr
+
+
 # Torna els currículums, afegint un atribut si son preferits
 def getCurriculumsPreferits(user):
     crs = Curriculum.objects.filter(valid=True)
-    curriculums = []
-    for c in crs:
-        try:
-            p = Preferits.objects.get(usuari=user, curriculum=c)
-            c.preferit = True
-        except Preferits.DoesNotExist:
-            c.preferit = False
-            pass
-
-        curriculums.append(c)
-
+    curriculums = [ getCurrPref(c, user) for c in crs]
     return curriculums
 
 
@@ -71,6 +72,8 @@ def download(request, idc):
 @permission_required('curriculums.veure_curriculums_docents')
 def show(request, idc):
     cr = Curriculum.objects.get(id=idc)
+    cr = getCurrPref(cr, request.user)
+    
     return renderResponse(
         request,
         'curriculums/backend/curriculum.html', {
