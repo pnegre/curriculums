@@ -15,9 +15,9 @@
 		$("#checkbox_preferit").click(function() {
 			var v = $(this);
 			if (v.is(":checked")) {
-				$.get("/curriculums/backend/setPref/y");
+				$.get("/curriculums/backend/setPref/{{cr.id}}/y");
 			} else {
-				$.get("/curriculums/backend/setPref/n");
+				$.get("/curriculums/backend/setPref/{{cr.id}}/n");
 			}
 		})
 	})
