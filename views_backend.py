@@ -77,3 +77,9 @@ def show(request, idc):
             'cr': cr,
         }
     )
+
+
+@permission_required('curriculums.veure_curriculums_docents')
+def setPreferit(request, yn):
+    print yn
+    return HttpResponse()

@@ -9,13 +9,30 @@
 	}
 </style>
 
+<script>
+
+	$(document).ready(function() {
+		$("#checkbox_preferit").click(function() {
+			var v = $(this);
+			if (v.is(":checked")) {
+				$.get("/curriculums/backend/setPref/y");
+			} else {
+				$.get("/curriculums/backend/setPref/n");
+			}
+		})
+	})
+
+</script>
+
 {% endblock %}
 
 {% block currbody %}
 
 	<h1> Vista d'un curriculum </h1>
 
-	<input type="checkbox"> Marcar com a preferit
+	<div id="marca_preferit">
+	<input type="checkbox" id="checkbox_preferit"/> Marcar com a preferit
+	</div>
 
 	<table id="vistacurriculum">
 		<tbody>
