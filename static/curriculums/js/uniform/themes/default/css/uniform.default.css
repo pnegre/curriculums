@@ -196,7 +196,8 @@ div.uploader {
   width: 190px;
   cursor: pointer;
   position: relative;
-  overflow: hidden; }
+  /*overflow: hidden;*/ 
+}
   div.uploader span.action {
     background-position: right -409px;
     height: 28px;

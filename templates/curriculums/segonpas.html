@@ -46,8 +46,8 @@
                     <legend><span class="number">2</span> Dades acadèmiques </legend>
                     <div id="titol1">
                         <label>Titulació:</label>
-                        <select name="titol1" id="titol1" class="select2">
-                            <option disabled selected> -- Selecciona una opció -- </option>
+                        <select name="titol1" id="titol1" class="select2" data-error="#errtitol1">
+                            <option  value=""> -- Selecciona una opció -- </option>
                             {% for f in families %}
                             <optgroup label="{{ f.nom }}">
                                 {% for t in f.titolgeneric_set.all %}
@@ -66,7 +66,7 @@
                     <div id="titol2">
                         <label>Titulació:</label>
                         <select name="titol2" id="titol2" class="select2">
-                            <option disabled selected> -- Selecciona una opció -- </option>
+                            <option value=""> -- Selecciona una opció -- </option>
                             {% for f in families %}
                             <optgroup label="{{ f.nom }}">
                                 {% for t in f.titolgeneric_set.all %}
@@ -85,7 +85,7 @@
                     <div id="titol3">
                         <label>Titulació:</label>
                         <select name="titol3" id="titol3" class="select2">
-                            <option disabled selected> -- Selecciona una opció -- </option>
+                            <option value=""> -- Selecciona una opció -- </option>
                             {% for f in families %}
                             <optgroup label="{{ f.nom }}">
                                 {% for t in f.titolgeneric_set.all %}
@@ -149,13 +149,13 @@
                     <label> Adjunta el teu currículum: </label>
 
                     {% if cr.file %}
-                    <div class="alert">
+                    <div class="alert" id="alertcurriculum">
                         <img src="/static/curriculums/img/exclamation.png" alt="exclamació">&nbsp;&nbsp;Ja disposes d'un currículum a la nostra base de dades, que s'eliminarà en enviar el present
                     </div>
                     {% endif %}
 
                     <div class="" style="width: 190px; margin: 0 auto 30px auto;">
-                        <input type="file" name="currfile" id="id_currfile" class="upload"/>
+                        <input type="file" name="currfile" id="id_currfile" class="upload" data-error="#errorcurrfile"/>
                     </div>
                 </fieldset>
 
@@ -167,10 +167,8 @@
                     </div>
                 </fieldset>
 
-                
+
                 <input type="submit" value="Envia-ho" style="margin-top: 25px;" />
-                <!--span id="buteliminar">Vull esborrar totes les meves dades a Es Liceu Som Coop</span-->
-                <!--input type="button" name="buteliminar" id="buteliminar" value="Vull eliminar les meves dades" style="width: auto;"/-->
                 <div style="text-align: center;"><a id="buteliminar">Vull esborrar totes les meves dades a Es Liceu Som Coop</a></div>
 
             </form>
@@ -191,276 +189,286 @@
 
         <script type="text/javascript">
 
-$(document).ready(function () {
-    $(".select2").select2();
+                    $(document).ready(function () {
+                        $(".select2").select2();
 
-    $("input:checkbox, input:file").uniform({
-        fileButtonHtml: 'Selecciona...',
-        fileDefaultHtml: 'Cap fitxer seleccionat'
-    });
+                        $("input:checkbox, input:file").uniform({
+                            fileButtonHtml: 'Selecciona...',
+                            fileDefaultHtml: 'Cap fitxer seleccionat'
+                        });
 
-    $(".data").datepicker({
-        showAnim: "fadeIn",
-        dateFormat: "yy-mm-dd", //Format client
-        altFormat: "yy-mm-dd", //Format servidor
-        dayNames: ["Diumenge", "Dilluns", "Dimarts", "Dimecres", "Dijous", "Divendres", "Dissabte"],
-        dayNamesMin: ["Dg", "Dl", "Dm", "Dc", "Dj", "Dv", "Ds"],
-        dayNamesShort: ["Dg", "Dl", "Dm", "Dc", "Dj", "Dv", "Ds"],
-        firstDay: 1, //1 = Dilluns
-        monthNames: ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"],
-        monthNamesShort: ["Gen", "Feb", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Des"],
-        nextText: "Més tard",
-        prevText: "Més prest",
-        currentText: "Ara",
-        changeMonth: true,
-        changeYear: true
-    });
+                        $(".data").datepicker({
+                            showAnim: "fadeIn",
+                            dateFormat: "yy-mm-dd", //Format client
+                            altFormat: "yy-mm-dd", //Format servidor
+                            dayNames: ["Diumenge", "Dilluns", "Dimarts", "Dimecres", "Dijous", "Divendres", "Dissabte"],
+                            dayNamesMin: ["Dg", "Dl", "Dm", "Dc", "Dj", "Dv", "Ds"],
+                            dayNamesShort: ["Dg", "Dl", "Dm", "Dc", "Dj", "Dv", "Ds"],
+                            firstDay: 1, //1 = Dilluns
+                            monthNames: ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"],
+                            monthNamesShort: ["Gen", "Feb", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Des"],
+                            nextText: "Més tard",
+                            prevText: "Més prest",
+                            currentText: "Ara",
+                            changeMonth: true,
+                            changeYear: true
+                        });
 
 
+                        //Validacions
+                        if ($.fn.validate) {
+                            $("#formulari").validate({
+                                ignore: 'input[type=hidden]',
+                                rules: {
+                                    nom: "required",
+                                    llinatges: "required",
+                                    tel: "required",
+                                    pob: "required",
+                                    titol1: "required",
+                                    tit1: "required",
+                                    uni1: "required",
+                                    dta1: "required",
+                                    titol2: {
+                                        required: function () {
+                                            var titol2 = $("#titol2").val();
+                                            var tit2 = $("#tit2").val();
+                                            var uni2 = $("#uni2").val();
+                                            var dta2 = $("#dta2").val();
 
-    //Validacions
-    if ($.fn.validate) {
-        $("#formulari").validate({
-            rules: {
-                nom: "required",
-                llinatges: "required",
-                tel: "required",
-                pob: "required",
-                titol1: "required",
-                tit1: "required",
-                uni1: "required",
-                dta1: "required",
-                titol2: {
-                    required: function () {
-                        var titol2 = $("#titol2").val();
-                        var tit2 = $("#tit2").val();
-                        var uni2 = $("#uni2").val();
-                        var dta2 = $("#dta2").val();
+                                            if (titol2 || tit2 || uni2 || dta2) {
+                                                return true;
+                                            } else {
+                                                return false;
+                                            }
+                                        }
+                                    },
+                                    tit2: {
+                                        required: function () {
+                                            var titol2 = $("#titol2").val();
+                                            var tit2 = $("#tit2").val();
+                                            var uni2 = $("#uni2").val();
+                                            var dta2 = $("#dta2").val();
 
-                        if (titol2 || tit2 || uni2 || dta2) {
-                            return true;
-                        } else {
-                            return false;
+                                            if (titol2 || tit2 || uni2 || dta2) {
+                                                return true;
+                                            } else {
+                                                return false;
+                                            }
+                                        }
+                                    },
+                                    uni2: {
+                                        required: function () {
+                                            var titol2 = $("#titol2").val();
+                                            var tit2 = $("#tit2").val();
+                                            var uni2 = $("#uni2").val();
+                                            var dta2 = $("#dta2").val();
+
+                                            if (titol2 || tit2 || uni2 || dta2) {
+                                                return true;
+                                            } else {
+                                                return false;
+                                            }
+                                        }
+                                    },
+                                    dta2: {
+                                        required: function () {
+                                            var titol2 = $("#titol2").val();
+                                            var tit2 = $("#tit2").val();
+                                            var uni2 = $("#uni2").val();
+                                            var dta2 = $("#dta2").val();
+
+                                            if (titol2 || tit2 || uni2 || dta2) {
+                                                return true;
+                                            } else {
+                                                return false;
+                                            }
+                                        }
+                                    },
+                                    titol3: {
+                                        required: function () {
+                                            var titol3 = $("#titol3").val();
+                                            var tit3 = $("#tit3").val();
+                                            var uni3 = $("#uni3").val();
+                                            var dta3 = $("#dta3").val();
+
+                                            if (titol3 || tit3 || uni3 || dta3) {
+                                                return true;
+                                            } else {
+                                                return false;
+                                            }
+                                        }
+                                    },
+                                    tit3: {
+                                        required: function () {
+                                            var titol3 = $("#titol3").val();
+                                            var tit3 = $("#tit3").val();
+                                            var uni3 = $("#uni3").val();
+                                            var dta3 = $("#dta3").val();
+
+                                            if (titol3 || tit3 || uni3 || dta3) {
+                                                return true;
+                                            } else {
+                                                return false;
+                                            }
+                                        }
+                                    },
+                                    uni3: {
+                                        required: function () {
+                                            var titol3 = $("#titol3").val();
+                                            var tit3 = $("#tit3").val();
+                                            var uni3 = $("#uni3").val();
+                                            var dta3 = $("#dta3").val();
+
+                                            if (titol3 || tit3 || uni3 || dta3) {
+                                                return true;
+                                            } else {
+                                                return false;
+                                            }
+                                        }
+                                    },
+                                    dta3: {
+                                        required: function () {
+                                            var titol3 = $("#titol3").val();
+                                            var tit3 = $("#tit3").val();
+                                            var uni3 = $("#uni3").val();
+                                            var dta3 = $("#dta3").val();
+
+                                            if (titol3 || tit3 || uni3 || dta3) {
+                                                return true;
+                                            } else {
+                                                return false;
+                                            }
+                                        }
+                                    },
+                                    ref1_contact: {
+                                        required: function () {
+                                            var ref = $("#ref1_contact").val();
+                                            var ref_email = $("#ref1_email").val();
+
+                                            if (ref || ref_email) {
+                                                return true;
+                                            }
+                                            return false;
+                                        }
+                                    },
+                                    ref1_email: {
+                                        email: true,
+                                        required: function () {
+                                            var ref = $("#ref1_contact").val();
+                                            var ref_email = $("#ref1_email").val();
+
+                                            if (ref || ref_email) {
+                                                return true;
+                                            }
+                                            return false;
+                                        }
+                                    },
+                                    ref2_contact: {
+                                        required: function () {
+                                            var ref = $("#ref2_contact").val();
+                                            var ref_email = $("#ref2_email").val();
+
+                                            if (ref || ref_email) {
+                                                return true;
+                                            }
+                                            return false;
+                                        }
+                                    },
+                                    ref2_email: {
+                                        email: true,
+                                        required: function () {
+                                            var ref = $("#ref2_contact").val();
+                                            var ref_email = $("#ref2_email").val();
+
+                                            if (ref || ref_email) {
+                                                return true;
+                                            }
+                                            return false;
+                                        }
+                                    },
+                                    ref3_contact: {
+                                        required: function () {
+                                            var ref = $("#ref3_contact").val();
+                                            var ref_email = $("#ref3_email").val();
+
+                                            if (ref || ref_email) {
+                                                return true;
+                                            }
+                                            return false;
+                                        }
+                                    },
+                                    ref3_email: {
+                                        email: true,
+                                        required: function () {
+                                            var ref = $("#ref3_contact").val();
+                                            var ref_email = $("#ref3_email").val();
+
+                                            if (ref || ref_email) {
+                                                return true;
+                                            }
+                                            return false;
+                                        }
+                                    },
+                                    agree: {
+                                        required: true
+                                    },
+                                    currfile:{
+                                        required: function(){
+                                            if($("#alertcurriculum").length){
+                                                return true;
+                                            } else {
+                                                return false;
+                                            }
+                                        }
+                                    }
+                                }
+                            });
                         }
-                    }
-                },
-                tit2: {
-                    required: function () {
-                        var titol2 = $("#titol2").val();
-                        var tit2 = $("#tit2").val();
-                        var uni2 = $("#uni2").val();
-                        var dta2 = $("#dta2").val();
-
-                        if (titol2 || tit2 || uni2 || dta2) {
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    }
-                },
-                uni2: {
-                    required: function () {
-                        var titol2 = $("#titol2").val();
-                        var tit2 = $("#tit2").val();
-                        var uni2 = $("#uni2").val();
-                        var dta2 = $("#dta2").val();
-
-                        if (titol2 || tit2 || uni2 || dta2) {
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    }
-                },
-                dta2: {
-                    required: function () {
-                        var titol2 = $("#titol2").val();
-                        var tit2 = $("#tit2").val();
-                        var uni2 = $("#uni2").val();
-                        var dta2 = $("#dta2").val();
-
-                        if (titol2 || tit2 || uni2 || dta2) {
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    }
-                },
-                titol3: {
-                    required: function () {
-                        var titol3 = $("#titol3").val();
-                        var tit3 = $("#tit3").val();
-                        var uni3 = $("#uni3").val();
-                        var dta3 = $("#dta3").val();
-
-                        if (titol3 || tit3 || uni3 || dta3) {
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    }
-                },
-                tit3: {
-                    required: function () {
-                        var titol3 = $("#titol3").val();
-                        var tit3 = $("#tit3").val();
-                        var uni3 = $("#uni3").val();
-                        var dta3 = $("#dta3").val();
-
-                        if (titol3 || tit3 || uni3 || dta3) {
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    }
-                },
-                uni3: {
-                    required: function () {
-                        var titol3 = $("#titol3").val();
-                        var tit3 = $("#tit3").val();
-                        var uni3 = $("#uni3").val();
-                        var dta3 = $("#dta3").val();
-
-                        if (titol3 || tit3 || uni3 || dta3) {
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    }
-                },
-                dta3: {
-                    required: function () {
-                        var titol3 = $("#titol3").val();
-                        var tit3 = $("#tit3").val();
-                        var uni3 = $("#uni3").val();
-                        var dta3 = $("#dta3").val();
-
-                        if (titol3 || tit3 || uni3 || dta3) {
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    }
-                },
-                ref1_contact: {
-                    required: function () {
-                        var ref = $("#ref1_contact").val();
-                        var ref_email = $("#ref1_email").val();
-
-                        if (ref || ref_email) {
-                            return true;
-                        }
-                        return false;
-                    }
-                },
-                ref1_email: {
-                    email: true,
-                    required: function () {
-                        var ref = $("#ref1_contact").val();
-                        var ref_email = $("#ref1_email").val();
-
-                        if (ref || ref_email) {
-                            return true;
-                        }
-                        return false;
-                    }
-                },
-                ref2_contact: {
-                    required: function () {
-                        var ref = $("#ref2_contact").val();
-                        var ref_email = $("#ref2_email").val();
-
-                        if (ref || ref_email) {
-                            return true;
-                        }
-                        return false;
-                    }
-                },
-                ref2_email: {
-                    email: true,
-                    required: function () {
-                        var ref = $("#ref2_contact").val();
-                        var ref_email = $("#ref2_email").val();
-
-                        if (ref || ref_email) {
-                            return true;
-                        }
-                        return false;
-                    }
-                },
-                ref3_contact: {
-                    required: function () {
-                        var ref = $("#ref3_contact").val();
-                        var ref_email = $("#ref3_email").val();
-
-                        if (ref || ref_email) {
-                            return true;
-                        }
-                        return false;
-                    }
-                },
-                ref3_email: {
-                    email: true,
-                    required: function () {
-                        var ref = $("#ref3_contact").val();
-                        var ref_email = $("#ref3_email").val();
-
-                        if (ref || ref_email) {
-                            return true;
-                        }
-                        return false;
-                    }
-                },
-                agree: {
-                    required: true
-                }
-            }
-        });
-    }
 
 
-    $("#butmes").click(function () {
-        var t2 = $("#titol2");
-        var t3 = $("#titol3");
-        if (!t2.is(":visible")) {
-            t2.show(0, function () {
-                $(".select2").select2();
-            });
-        } else if (!t3.is(":visible")) {
-            t3.show(0, function () {
-                $(".select2").select2();
-            });
-            $("#butmes").hide();
-        }
-    });
 
-    $("#butref").click(function () {
-        var r1 = $("#ref1");
-        var r2 = $("#ref2");
-        var r3 = $("#ref3");
-        if (!r1.is(":visible")) {
-            r1.show();
-        } else if (!r2.is(":visible")) {
-            r2.show();
-        } else if (!r3.is(":visible")) {
-            r3.show();
-            $("#butref").hide();
-        }
-    });
+                        $("#butmes").click(function () {
+                            var t2 = $("#titol2");
+                            var t3 = $("#titol3");
+                            if (!t2.is(":visible")) {
+                                t2.show(0, function () {
+                                    $(".select2").select2();
+                                });
+                            } else if (!t3.is(":visible")) {
+                                t3.show(0, function () {
+                                    $(".select2").select2();
+                                });
+                                $("#butmes").hide();
+                            }
+                        });
 
-    $("#buteliminar").click(function() {
-        var cf = confirm("Segur que vols esborrar les dades dels nostres servidors?");
-        if (cf) {
-            var cod = $("input[name='codi_edicio']").val();
-            // Fem el post per eliminar l'usuari
-            // TODO: hauríem d'avisar a l'aspirant si no hem pogut eliminar les dades...
-            $.post("/curriculums/delete", { codi_edicio: cod }, function(result) {
-                window.location.replace("/curriculums/missatge");
-            })
-        }
+                        $("#butref").click(function () {
+                            var r1 = $("#ref1");
+                            var r2 = $("#ref2");
+                            var r3 = $("#ref3");
+                            if (!r1.is(":visible")) {
+                                r1.show();
+                            } else if (!r2.is(":visible")) {
+                                r2.show();
+                            } else if (!r3.is(":visible")) {
+                                r3.show();
+                                $("#butref").hide();
+                            }
+                        });
 
-    });
-});
+                        $("#buteliminar").click(function () {
+                            var cf = confirm("Segur que vols esborrar les dades dels nostres servidors?");
+                            if (cf) {
+                                var cod = $("input[name='codi_edicio']").val();
+                                // Fem el post per eliminar l'usuari
+                                // TODO: hauríem d'avisar a l'aspirant si no hem pogut eliminar les dades...
+                                $.post("/curriculums/delete", {codi_edicio: cod}, function (result) {
+                                    window.location.replace("/curriculums/missatge");
+                                })
+                            }
+
+                        });
+                    });
         </script>
     </body>
 

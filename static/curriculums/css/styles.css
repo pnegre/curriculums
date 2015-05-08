@@ -181,3 +181,15 @@ label.error{
     cursor: pointer;
     font-size: 10px;
 }
+
+//ERROR SELECT2
+
+#id_currfile-error{
+    position: absolute;
+    top: 30px;
+}
+
+#titol1-error, #titol2-error,#titol3-error{
+    position: relative;
+    top: 66px;
+}
