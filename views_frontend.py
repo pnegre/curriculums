@@ -121,12 +121,12 @@ def primerPas(request):
             feina = f.cleaned_data['feina']
             codi = generarCodi(email)
 
+            # Agafem l'objecte "curriculum" amb l'email que ens han proporcionat
+            # des de la BBDD. Si no existeix, el creem.
             cr = None
             try:
-                # Comprovem que l'adreça email ja existeix...
                 cr = Curriculum.objects.get(email=email,categoria=feina)
-            except:
-                # Si no existeix, creem un objecte nou
+            except Curriculum.DoesNotExist:
                 cr = Curriculum(email=email, categoria=feina, codi_edicio=codi)
 
             cr.data_inicial = datetime.datetime.now()
