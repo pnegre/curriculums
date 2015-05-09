@@ -24,6 +24,8 @@ def renderResponse(request,tmpl,dic):
     return render_to_response(tmpl, dic, context_instance=RequestContext(request))
 
 
+# Afegeix l'atribut "preferit" a l'objecte Currículum,
+# si el currículum és dins la taula Preferits per aquest usuari
 def getCurrPref(cr, user):
     try:
         p = Preferits.objects.get(usuari=user, curriculum=cr)
@@ -33,18 +35,12 @@ def getCurrPref(cr, user):
 
     return cr
 
-
-# Torna els currículums, afegint un atribut si son preferits
-# def getCurriculumsPreferits(user):
-#     crs = Curriculum.objects.filter(valid=True)
-#     curriculums = [ getCurrPref(c, user) for c in crs]
-#     return curriculums
-
-
+# Funció molt simple que elimina els caràcters no ascii
 def removeUTF(text):
     return ''.join([i if ord(i) < 128 else '_' for i in text])
 
 
+# Vista dels currículums (tots)
 @permission_required('curriculums.veure_curriculums_docents')
 def index(request):
     crs = Curriculum.objects.filter(valid=True)
@@ -55,13 +51,10 @@ def index(request):
         }
     )
 
+# Vista dels currículums preferits per l'usuari que s'ha autenticat
 @permission_required('curriculums.veure_curriculums_docents')
 def showPreferits(request):
-    crs = []
-    prf = Preferits.objects.all()
-    for p in prf:
-        crs.append(p.curriculum)
-
+    crs = [ p.curriculum for p in Preferits.objects.all() ]
     return renderResponse(
         request,
         'curriculums/backend/llista.html', {
@@ -69,6 +62,7 @@ def showPreferits(request):
         }
     )
 
+# Funció que es crida quan es vol baixa el fitxer d'un currículum
 @permission_required('curriculums.veure_curriculums_docents')
 def download(request, idc):
     cr = Curriculum.objects.get(id=idc)
@@ -82,11 +76,12 @@ def download(request, idc):
     return response
 
 
+# Mostra un currículum, afegeix l'atribut "preferit" per poder
+# inicialitzar la checkbox de preferit.
 @permission_required('curriculums.veure_curriculums_docents')
 def show(request, idc):
     cr = Curriculum.objects.get(id=idc)
     cr = getCurrPref(cr, request.user)
-
     return renderResponse(
         request,
         'curriculums/backend/curriculum.html', {
@@ -94,7 +89,9 @@ def show(request, idc):
         }
     )
 
-
+# AJAX (de fet és un GET) que es crida per javascript per posar un currículum
+# dins preferits per l'usuari autenticat
+# TODO: errors
 @permission_required('curriculums.veure_curriculums_docents')
 def setPreferit(request, idc, yn):
     cr = Curriculum.objects.get(id=idc)
