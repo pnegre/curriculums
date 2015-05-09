@@ -35,10 +35,10 @@ def getCurrPref(cr, user):
 
 
 # Torna els currículums, afegint un atribut si son preferits
-def getCurriculumsPreferits(user):
-    crs = Curriculum.objects.filter(valid=True)
-    curriculums = [ getCurrPref(c, user) for c in crs]
-    return curriculums
+# def getCurriculumsPreferits(user):
+#     crs = Curriculum.objects.filter(valid=True)
+#     curriculums = [ getCurrPref(c, user) for c in crs]
+#     return curriculums
 
 
 def removeUTF(text):
@@ -47,14 +47,27 @@ def removeUTF(text):
 
 @permission_required('curriculums.veure_curriculums_docents')
 def index(request):
-    curriculums = getCurriculumsPreferits(request.user)
+    crs = Curriculum.objects.filter(valid=True)
     return renderResponse(
         request,
         'curriculums/backend/llista.html', {
-            'curriculums': curriculums,
+            'curriculums': crs,
         }
     )
 
+@permission_required('curriculums.veure_curriculums_docents')
+def showPreferits(request):
+    crs = []
+    prf = Preferits.objects.all()
+    for p in prf:
+        crs.append(p.curriculum)
+
+    return renderResponse(
+        request,
+        'curriculums/backend/llista.html', {
+            'curriculums': crs,
+        }
+    )
 
 @permission_required('curriculums.veure_curriculums_docents')
 def download(request, idc):
@@ -73,7 +86,7 @@ def download(request, idc):
 def show(request, idc):
     cr = Curriculum.objects.get(id=idc)
     cr = getCurrPref(cr, request.user)
-    
+
     return renderResponse(
         request,
         'curriculums/backend/curriculum.html', {
