@@ -27,6 +27,7 @@ MAX_UPLOAD_SIZE = "5242880"
 def renderResponse(request,tmpl,dic):
     return render_to_response(tmpl, dic, context_instance=RequestContext(request))
 
+# Mostra missatge d'error/warning
 def showMsg(request, m1, m2):
     return renderResponse(
         request,
@@ -37,10 +38,12 @@ def showMsg(request, m1, m2):
     )
 
 
+# Formulari django per primera pantalla
 class PrimerPasForm(forms.Form):
     email = forms.CharField()
     feina = forms.CharField()
 
+# Formulari django per segona pantalla (docents)
 class SegonPasForm_Docents(forms.Form):
     nom = forms.CharField()
     llinatges = forms.CharField()
@@ -86,6 +89,7 @@ class SegonPasForm_Docents(forms.Form):
         return cleaned_data
 
 
+# Formulari django per segona pantalla (docents)
 class SegonPasForm_NoDocents(forms.Form):
     nom = forms.CharField()
     llinatges = forms.CharField()
@@ -103,6 +107,7 @@ class SegonPasForm_NoDocents(forms.Form):
 
     currfile = forms.FileField()
 
+# Genera codi sha512 a partir de la data, email i cadena aleatòria (per link temporal)
 def generarCodi(email):
     # Generem codi a partir de l'hora actual, mirant els microseconds...
     codi_sha = hashlib.sha512()
@@ -112,6 +117,7 @@ def generarCodi(email):
     codi_sha.update(email)
     return codi_sha.hexdigest()
 
+# Vista de la primera pantalla (es demana email i tipus de feina)
 @csrf_protect
 def primerPas(request):
     if request.POST:
@@ -176,6 +182,7 @@ def tooLate(cr):
         return True
     return False
 
+# Vista de la segona pantalla (es demana la resta de dades al candidat)
 @csrf_protect
 def segonPas(request):
     codi = request.GET.get('codi')
@@ -205,7 +212,8 @@ def segonPas(request):
 
     return showMsg(request, "ERROR", "Error en la categoria")
 
-
+# Procediment que mira si el fitxer que l'aspirant ha pujat és vàlid
+# (es comprova grandària, mime...)
 def file_is_valid(content):
     content_type = content.content_type.split('/')[0]
     # Falta comprovar el content_type, però s'han de fer experiments perquè
@@ -215,7 +223,7 @@ def file_is_valid(content):
 
     return True
 
-
+# Processem candidat
 @csrf_protect
 def processar_candidat(request, cr, f):
     if f.is_valid():
@@ -286,7 +294,8 @@ def processar_candidat(request, cr, f):
     return showMsg(request, "ERROR", "Error en l'enviament del formulari")
     # raise Exception("ERROR!!" + str(f.errors))
 
-
+# Es crida al final, quan es fa el POST amb les dades definitives
+# de l'aspirant
 def final(request):
     if request.POST:
         codi = request.POST.get('codi_edicio')
@@ -325,7 +334,8 @@ def eliminaUsuari(request):
     # No ha anat bé l'eliminació
     raise Exception("Error")
 
-
+# Vista molt simple que es limita a mostrar un missatge perquè l'aspirant
+# vegi que les seves dades s'han eliminades del servidor
 def missatgeEliminat(request):
     return renderResponse(
         request,
