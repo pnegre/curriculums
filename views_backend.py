@@ -54,7 +54,7 @@ def index(request):
 # Vista dels currículums preferits per l'usuari que s'ha autenticat
 @permission_required('curriculums.veure_curriculums_docents')
 def showPreferits(request):
-    crs = [ p.curriculum for p in Preferits.objects.all() ]
+    crs = [ p.curriculum for p in Preferits.objects.filter(usuari=request.user) ]
     return renderResponse(
         request,
         'curriculums/backend/llista.html', {
