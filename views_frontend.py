@@ -2,20 +2,16 @@
 
 import hashlib, datetime, random
 
-from django.shortcuts import render_to_response, get_object_or_404, redirect
-from django.http import HttpResponse, HttpResponseRedirect
-from django.utils import simplejson
+from django.shortcuts import render_to_response, redirect
+from django.http import HttpResponse
 from django.core.mail import send_mail
 from django.template import RequestContext
 from django.conf import settings
-from django.core.mail import send_mail
 from django.views.decorators.csrf import csrf_protect
 from django.core.validators import validate_email
 from django import forms
 
-from curriculums.models import *
-
-import storage as stor
+from curriculums.models import Curriculum, TitolGeneric, CategoriaLaboralND, FamiliaTitol
 
 MAX_UPLOAD_SIZE = "5242880"
 
@@ -213,7 +209,7 @@ def segonPas(request):
 # Procediment que mira si el fitxer que l'aspirant ha pujat és vàlid
 # (es comprova grandària, mime...)
 def file_is_valid(content):
-    content_type = content.content_type.split('/')[0]
+    # content_type = content.content_type.split('/')[0]
     # Falta comprovar el content_type, però s'han de fer experiments perquè
     # alguns navegadors no ho fan standard...
     if content._size > int(MAX_UPLOAD_SIZE):
@@ -258,9 +254,9 @@ def processar_candidat(request, cr, f):
         else:
             return showMsg(request, "ERROR", "Error en la categoria")
 
-        file = dta['currfile']
+        fle = dta['currfile']
 
-        if file is None:
+        if fle is None:
             if not cr.file:
                 # ERROR: No tenim fitxer del currículum i tampoc ens ho proporcionen al formulari
                 return showMsg(request, "ERROR", "Fitxer requerit")
@@ -268,11 +264,11 @@ def processar_candidat(request, cr, f):
         else:
             # Ens proporcionen fitxer al formulari.
             # Comprovem que el fitxer és vàlid (grandària, mimetype...)
-            if file_is_valid(file):
+            if file_is_valid(fle):
                 if cr.file:
                     # Si ja en teníem, l'esborrem.
                     cr.file.delete()
-                cr.file = file
+                cr.file = fle
 
             else:
                 return showMsg(request, "ERROR", "Fitxer no acceptat")
@@ -288,7 +284,6 @@ def processar_candidat(request, cr, f):
             }
         )
 
-    # TODO: Mostrar errors
     return showMsg(request, "ERROR", "Error en l'enviament del formulari. Revisa la informació introduida.")
     # raise Exception("ERROR!!" + str(f.errors))
 
@@ -314,9 +309,9 @@ def final(request):
 # Eliminem usuari, es crida quan l'aspirant vol eliminar les seves dades
 # del nostre sistema
 def eliminaUsuari(request):
-    # TODO: si eliminiem un currículum, hem d'anar alerta perquè també
-    # hem d'eliminar totes les entrades de la taula "Preferits" que apunten
-    # cap a aquest currículum
+    # Quan eliminem un currículum, django s'encarrega d'eliminar també els objectes
+    # d'altres taules que en fan referència (per exemple, a la taula Preferits).
+    # No fa falta que ens ocupem...
     if request.POST:
         codi = request.POST.get('codi_edicio')
         print codi
