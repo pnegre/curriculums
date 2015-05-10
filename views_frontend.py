@@ -37,7 +37,6 @@ def showMsg(request, m1, m2):
         }
     )
 
-
 # Formulari django per primera pantalla
 class PrimerPasForm(forms.Form):
     email = forms.CharField()
@@ -87,7 +86,6 @@ class SegonPasForm_Docents(forms.Form):
             raise ValidationError("Necessitem tots els camps de títol3")
 
         return cleaned_data
-
 
 # Formulari django per segona pantalla (docents)
 class SegonPasForm_NoDocents(forms.Form):
@@ -312,7 +310,6 @@ def final(request):
             return showMsg(request, "ERROR", "L'enllaç ha expirat")
 
     return showMsg(request, "ERROR", "Esperàvem POST")
-
 
 # Eliminem usuari, es crida quan l'aspirant vol eliminar les seves dades
 # del nostre sistema

@@ -90,7 +90,6 @@ class Curriculum(models.Model):
     def __unicode__(self):
         return self.email
 
-
 class Preferits(models.Model):
     curriculum = models.ForeignKey(Curriculum)
     usuari = models.ForeignKey(User)
