@@ -10,7 +10,6 @@ from django.template import RequestContext
 from django.conf import settings
 from django.core.mail import send_mail
 from django.views.decorators.csrf import csrf_protect
-from django.core.exceptions import *
 from django.core.validators import validate_email
 from django import forms
 
@@ -78,12 +77,12 @@ class SegonPasForm_Docents(forms.Form):
         titol2, tit2, uni2, dta2 = cleaned_data['titol2'], cleaned_data['tit2'], \
             cleaned_data['uni2'], cleaned_data['dta2']
         if (titol2 or tit2 or uni2 or dta2) and not (titol2 and tit2 and uni2 and dta2):
-            raise ValidationError("Necessitem tots els camps de títol2")
+            raise forms.ValidationError("Necessitem tots els camps de títol2")
 
         titol3, tit3, uni3, dta3 = cleaned_data['titol3'], cleaned_data['tit3'], \
             cleaned_data['uni3'], cleaned_data['dta3']
         if (titol3 or tit3 or uni3 or dta3) and not (titol3 and tit3 and uni3 and dta3):
-            raise ValidationError("Necessitem tots els camps de títol3")
+            raise forms.ValidationError("Necessitem tots els camps de títol3")
 
         return cleaned_data
 
@@ -290,8 +289,8 @@ def processar_candidat(request, cr, f):
         )
 
     # TODO: Mostrar errors
-    # return showMsg(request, "ERROR", "Error en l'enviament del formulari")
-    raise Exception("ERROR!!" + str(f.errors))
+    return showMsg(request, "ERROR", "Error en l'enviament del formulari. Revisa la informació introduida.")
+    # raise Exception("ERROR!!" + str(f.errors))
 
 # Es crida al final, quan es fa el POST amb les dades definitives
 # de l'aspirant
