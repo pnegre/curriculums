@@ -59,6 +59,8 @@ def showPreferits(request):
 # Funció que es crida quan es vol baixar el fitxer d'un currículum
 @permission_required('curriculums.veure_curriculums_docents')
 def download(request, idc):
+    # No emprem la variable request en aquesta funció
+    del request
     cr = Curriculum.objects.get(id=idc)
     # Passem els caràcters del fitxer a ascii
     filename = cr.file.name.split('/')[-1]
