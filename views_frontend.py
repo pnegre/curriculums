@@ -11,14 +11,13 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.views.decorators.csrf import csrf_protect
 from django.core.exceptions import *
-
+from django.core.validators import validate_email
 from django import forms
 
 from curriculums.models import *
 
 import storage as stor
 
-CONTENT_TYPES = ['image', 'video', 'application/pdf']
 MAX_UPLOAD_SIZE = "5242880"
 
 # Quan treiem les pàgines amb RequestContext, fem visibles a la template
@@ -39,8 +38,8 @@ def showMsg(request, m1, m2):
 
 # Formulari django per primera pantalla
 class PrimerPasForm(forms.Form):
-    email = forms.CharField()
-    feina = forms.CharField()
+    email = forms.CharField(validators=[validate_email])
+    feina = forms.ChoiceField([('D', 'Docent'), ('N', 'No Docent')])
 
 # Formulari django per segona pantalla (docents)
 class SegonPasForm_Docents(forms.Form):
