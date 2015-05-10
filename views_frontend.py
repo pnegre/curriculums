@@ -43,30 +43,31 @@ class PrimerPasForm(forms.Form):
 
 # Formulari django per segona pantalla (docents)
 class SegonPasForm_Docents(forms.Form):
-    nom = forms.CharField()
-    llinatges = forms.CharField()
-    codi_edicio = forms.CharField()
-    tel = forms.CharField()
-    pob = forms.CharField()
+    nom = forms.CharField(max_length=200)
+    llinatges = forms.CharField(max_length=200)
+    codi_edicio = forms.CharField(max_length=200)
+    tel = forms.CharField(max_length=200)
+    pob = forms.CharField(max_length=200)
+
     titol1 = forms.ModelChoiceField(queryset=TitolGeneric.objects.all())
-    tit1 = forms.CharField()
-    uni1 = forms.CharField()
+    tit1 = forms.CharField(max_length=200)
+    uni1 = forms.CharField(max_length=200)
     dta1 = forms.DateField()
     titol2 = forms.ModelChoiceField(queryset=TitolGeneric.objects.all(), required=False)
-    tit2 = forms.CharField(required=False)
-    uni2 = forms.CharField(required=False)
+    tit2 = forms.CharField(required=False, max_length=200)
+    uni2 = forms.CharField(required=False, max_length=200)
     dta2 = forms.DateField(required=False)
     titol3 = forms.ModelChoiceField(queryset=TitolGeneric.objects.all(), required=False)
-    tit3 = forms.CharField(required=False)
-    uni3 = forms.CharField(required=False)
+    tit3 = forms.CharField(required=False, max_length=200)
+    uni3 = forms.CharField(required=False, max_length=200)
     dta3 = forms.DateField(required=False)
 
-    ref1 = forms.CharField(required=False)
-    ref1_email = forms.CharField(required=False)
-    ref2 = forms.CharField(required=False)
-    ref2_email = forms.CharField(required=False)
-    ref3 = forms.CharField(required=False)
-    ref3_email = forms.CharField(required=False)
+    ref1 = forms.CharField(required=False, max_length=200)
+    ref1_email = forms.CharField(required=False, validators=[validate_email])
+    ref2 = forms.CharField(required=False, max_length=200)
+    ref2_email = forms.CharField(required=False, validators=[validate_email])
+    ref3 = forms.CharField(required=False, max_length=200)
+    ref3_email = forms.CharField(required=False, validators=[validate_email])
 
     currfile = forms.FileField(required=False)
 
@@ -88,21 +89,22 @@ class SegonPasForm_Docents(forms.Form):
 
 # Formulari django per segona pantalla (docents)
 class SegonPasForm_NoDocents(forms.Form):
-    nom = forms.CharField()
-    llinatges = forms.CharField()
-    codi_edicio = forms.CharField()
-    tel = forms.CharField()
-    pob = forms.CharField()
+    nom = forms.CharField(max_length=200)
+    llinatges = forms.CharField(max_length=200)
+    codi_edicio = forms.CharField(max_length=200)
+    tel = forms.CharField(max_length=200)
+    pob = forms.CharField(max_length=200)
+
     catlaboral = forms.ModelChoiceField(queryset=CategoriaLaboralND.objects.all())
 
-    ref1 = forms.CharField(required=False)
-    ref1_email = forms.CharField(required=False)
-    ref2 = forms.CharField(required=False)
-    ref2_email = forms.CharField(required=False)
-    ref3 = forms.CharField(required=False)
-    ref3_email = forms.CharField(required=False)
+    ref1 = forms.CharField(required=False, max_length=200)
+    ref1_email = forms.CharField(required=False, validators=[validate_email])
+    ref2 = forms.CharField(required=False, max_length=200)
+    ref2_email = forms.CharField(required=False, validators=[validate_email])
+    ref3 = forms.CharField(required=False, max_length=200)
+    ref3_email = forms.CharField(required=False, validators=[validate_email])
 
-    currfile = forms.FileField()
+    currfile = forms.FileField(required=False)
 
 # Genera codi sha512 a partir de la data, email i cadena aleatòria (per link temporal)
 def generarCodi(email):
@@ -288,8 +290,8 @@ def processar_candidat(request, cr, f):
         )
 
     # TODO: Mostrar errors
-    return showMsg(request, "ERROR", "Error en l'enviament del formulari")
-    # raise Exception("ERROR!!" + str(f.errors))
+    # return showMsg(request, "ERROR", "Error en l'enviament del formulari")
+    raise Exception("ERROR!!" + str(f.errors))
 
 # Es crida al final, quan es fa el POST amb les dades definitives
 # de l'aspirant
