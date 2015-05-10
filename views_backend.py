@@ -1,21 +1,15 @@
 # -*- coding: utf-8 -*-
 
-import os
 
-from django.shortcuts import render_to_response, get_object_or_404, redirect
-from django.http import HttpResponse, HttpResponseRedirect
-from django.utils import simplejson
-from django.core.mail import send_mail
+from django.shortcuts import render_to_response
+from django.http import HttpResponse
 from django.template import RequestContext
-from django.core.servers.basehttp import FileWrapper
 
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import permission_required
 
-from django import forms
 
-from curriculums.models import *
+from curriculums.models import Preferits, Curriculum
 
-import storage as stor
 
 # Quan treiem les pàgines amb RequestContext, fem visibles a la template
 # algunes variables que no estarien disponibles.
@@ -28,7 +22,7 @@ def renderResponse(request,tmpl,dic):
 # si el currículum és dins la taula Preferits per aquest usuari
 def getCurrPref(cr, user):
     try:
-        p = Preferits.objects.get(usuari=user, curriculum=cr)
+        Preferits.objects.get(usuari=user, curriculum=cr)
         cr.preferit = True
     except Preferits.DoesNotExist:
         cr.preferit = False
@@ -62,7 +56,7 @@ def showPreferits(request):
         }
     )
 
-# Funció que es crida quan es vol baixa el fitxer d'un currículum
+# Funció que es crida quan es vol baixar el fitxer d'un currículum
 @permission_required('curriculums.veure_curriculums_docents')
 def download(request, idc):
     cr = Curriculum.objects.get(id=idc)
