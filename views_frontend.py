@@ -309,7 +309,7 @@ def final(request):
         else:
             return showMsg(request, "ERROR", "L'enllaç ha expirat")
 
-    return showMsg(request, "ERROR", "Esperàvem POST")
+    return showMsg(request, "ERROR", "Error inesperat en processar el formulari.")
 
 # Eliminem usuari, es crida quan l'aspirant vol eliminar les seves dades
 # del nostre sistema
@@ -329,7 +329,7 @@ def eliminaUsuari(request):
             return HttpResponse("Eliminat")
 
     # No ha anat bé l'eliminació
-    raise Exception("Error")
+    raise Exception("Error eliminant l'usuari. No hauria de passar...")
 
 # Vista molt simple que es limita a mostrar un missatge perquè l'aspirant
 # vegi que les seves dades s'han eliminades del servidor
