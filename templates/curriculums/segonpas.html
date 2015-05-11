@@ -111,7 +111,7 @@
                     <legend><span class="number">2</span> Categoria laboral </legend>
                     <div id="titol1">
                         <label>Lloc de feina a què aspires:</label>
-                        <select name="catlaboral">
+                        <select name="catlaboral" id="catlaboral" class="select2">
                             <option disabled selected> -- Selecciona una opció -- </option>
                             {% for c in catlaborals %}
                             <option value="{{ c.id }}"> {{c.nom}} </option>
@@ -420,7 +420,11 @@
                                                 return true;
                                             }
                                         }
+                                    },
+                                    catlaboral:{
+                                        required: true
                                     }
+                                    
                                 }
                             });
                         }
