@@ -2,36 +2,101 @@
 
 {% block currheader %}
 
-	<script>
+<script>
 
-	   $(document).ready(function() {
-           $("#tcurriculums").DataTable();
-       })
+    $(document).ready(function () {
+        $("#tcurriculums").dataTable({
+            "language": {
+                "aria": {
+                    "sortAscending": ": ordena de manera ascendent",
+                    "sortDescending": ": ordena de manera descendent"
+                },
+                "emptyTable": "Sense dades",
+                "info": "Mostrant _START_ a _END_ de _TOTAL_ registres",
+                "infoEmpty": "Registre no trobat",
+                "infoFiltered": "(filtrat de _MAX_ registres total)",
+                "lengthMenu": "Mostrar _MENU_ registres",
+                "search": "Cerca:",
+                "zeroRecords": "No s'han trobat resultats.",
+                "paginate": {
+                    "previous": "Anterior",
+                    "next": "Següent"
+                }
+            },
+            "aaSorting": [[0, 'asc']],
+            "sDom": "<'dt_header'<'row-fluid'<'span6'l><'span6'T>>r>t<'dt_footer'<'row-fluid'<'span6'i><'span6'p>>>",
+            "aoColumnDefs": [{"bSortable": false, "aTargets": [4]}],
+            "oTableTools": {
+                "sSwfPath": "/static/curriculums/js/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
+                "aButtons": [
+                    {
+                        "sExtends": "copy",
+                        "sButtonText": 'Copiar'
+                    },
+                    {
+                        "sExtends": "csv",
+                        "sButtonText": 'CSV'
+                    },
+                    {
+                        "sExtends": "xls",
+                        "sButtonText": 'Excel'
+                    },
+                    {
+                        "sExtends": "pdf",
+                        "sButtonText": 'PDF'
+                    },
+                    {
+                        "sExtends": "print",
+                        "sButtonText": 'Imprimir'
+                    }
+                ]
+            },
+            "aoColumns": [
+                null,
+                null,
+                null,
+                null,
+                null
+            ]
+        }).columnFilter({
+            aoColumns: [
+                {type: "text"},
+                {type: "select"},
+                {type: "text"},
+                {type: "text"},
+                null
+            ]
 
-	</script>
+        });
+    });
+
+</script>
 
 {% endblock %}
 
 {% block currbody %}
 
-	<h1> Vista dels currículums </h1>
+<h1> Vista dels currículums </h1>
 
-	<table id="tcurriculums" class="cell-border order-column" cellspacing="0">
-		<thead>
-			<tr><td>Llinatges, nom</td><td>Categoria</td><td>Títols</td><td>Referències</td><td>Fitxer</td></tr>
-		</thead>
-		<tbody>
-			{% for c in curriculums %}
-			<tr><td> <a href="/curriculums/backend/show/{{c.id}}">{{ c.llinatges }}, {{ c.nom }} </a> </td>
-				<td>
-					{% if c.categoria == 'D' %} Docent {% else %} No Docent {% endif %}
-				</td>
-				<td> {{ c.titol1_nom }} ({{c.titol1_generic.nom}}), {{ c.titol2_nom }} ({{c.titol2_generic.nom}}), {{ c.titol3_nom }} ({{c.titol3_generic.nom}}) </td>
-				<td> {{c.ref1}} ({{c.ref1_email}}), {{c.ref2}} ({{c.ref2_email}}), {{c.ref3}} ({{c.ref3_email}}) </td>
-				<td> <a href="download/{{c.id}}"> link </a> </td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+<table id="tcurriculums" class="cell-border order-column" cellspacing="0">
+    <thead>
+        <tr><th>Llinatges, nom</th><th>Categoria</th><th>Títols</th><th>Referències</th><th>Fitxer</th></tr>
+    </thead>
+    <tbody>
+        {% for c in curriculums %}
+        <tr><td> <a href="/curriculums/backend/show/{{c.id}}">{{ c.llinatges }}, {{ c.nom }} </a> </td>
+            <td>
+                {% if c.categoria == 'D' %} P. Docent {% else %} No Docent {% endif %}
+            </td>
+            <td> {{ c.titol1_nom }} ({{c.titol1_generic.nom}}), {{ c.titol2_nom }} ({{c.titol2_generic.nom}}), {{ c.titol3_nom }} ({{c.titol3_generic.nom}}) </td>
+            <td> {{c.ref1}} ({{c.ref1_email}}), {{c.ref2}} ({{c.ref2_email}}), {{c.ref3}} ({{c.ref3_email}}) </td>
+            <td style="text-align: center;"><a href="download/{{c.id}}"><img src="/static/curriculums/img/pin.png" alt="Descarrega" style="width: 22px;"></a> </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr><th>Llinatges, nom</th><th>Categoria</th><th>Títols</th><th>Referències</th><th>Fitxer</th></tr>
+    </tfoot>
+</table>
 
 {% endblock %}
