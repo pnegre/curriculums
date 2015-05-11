@@ -3,24 +3,60 @@
 {% block currheader %}
 
 <style>
-	#vistacurriculum td {
-		padding: 7px;
-		border: 1px solid black;
-	}
+    #vistacurriculum td {
+        padding: 7px;
+        border: 1px solid black;
+    }
 </style>
 
 <script>
 
-	$(document).ready(function() {
-		$("#checkbox_preferit").click(function() {
-			var v = $(this);
-			if (v.is(":checked")) {
-				$.get("/curriculums/backend/setPref/{{cr.id}}/y");
-			} else {
-				$.get("/curriculums/backend/setPref/{{cr.id}}/n");
-			}
-		})
-	})
+    $(document).ready(function () {
+        $('#vistacurriculum').dataTable({
+            "aaSorting": [],
+            "sDom": "<'dt_header'<'row-fluid'<'span6'l><'span6'T>>r>t<'dt_footer'<'row-fluid'<'span6'i><'span6'p>>>",
+            "aoColumnDefs": [{"bSortable": false, "aTargets": [0, 1]}],
+            "oTableTools": {
+                "sSwfPath": "/static/curriculums/js/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
+                "aButtons": [
+                    {
+                        "sExtends": "copy",
+                        "sButtonText": 'Copiar'
+                    },
+                    {
+                        "sExtends": "csv",
+                        "sButtonText": 'CSV'
+                    },
+                    {
+                        "sExtends": "xls",
+                        "sButtonText": 'Excel'
+                    },
+                    {
+                        "sExtends": "pdf",
+                        "sButtonText": 'PDF'
+                    },
+                    {
+                        "sExtends": "print",
+                        "sButtonText": 'Imprimir'
+                    }
+                ]
+            },
+            "bFilter": false,
+            "bSearchable": false,
+            "bInfo": false,
+            "bLengthChange": false,
+            "bPaginate": false
+        });
+
+        $("#checkbox_preferit").click(function () {
+            var v = $(this);
+            if (v.is(":checked")) {
+                $.get("/curriculums/backend/setPref/{{cr.id}}/y");
+            } else {
+                $.get("/curriculums/backend/setPref/{{cr.id}}/n");
+            }
+        });
+    });
 
 </script>
 
@@ -28,53 +64,53 @@
 
 {% block currbody %}
 
-	<h1> Vista d'un curriculum </h1>
+<h1> Vista d'un curriculum </h1>
 
-	<div id="marca_preferit">
-	<input type="checkbox" id="checkbox_preferit"
-		{% if cr.preferit %} checked="True" {% endif %}	/> Preferit
-	</div>
+<div id="marca_preferit">
+    <input type="checkbox" id="checkbox_preferit"
+           {% if cr.preferit %} checked="True" {% endif %}	/> Preferit
+</div>
 
-	<table id="vistacurriculum">
-		<tbody>
+<table id="vistacurriculum" class="table stripe">
+    <tbody>
 
-			<tr><td>E-Mail</td><td>{{cr.email}}</td></tr>
-			<tr><td>Nom</td><td>{{cr.nom}}</td></tr>
-			<tr><td>Llinatges</td><td>{{cr.llinatges}}</td></tr>
-			<tr><td>Població</td><td>{{cr.poblacio}}</td></tr>
-			<tr><td>Telèfon</td><td>{{cr.telefon}}</td></tr>
+        <tr><td>E-Mail</td><td>{{cr.email}}</td></tr>
+        <tr><td>Nom</td><td>{{cr.nom}}</td></tr>
+        <tr><td>Llinatges</td><td>{{cr.llinatges}}</td></tr>
+        <tr><td>Població</td><td>{{cr.poblacio}}</td></tr>
+        <tr><td>Telèfon</td><td>{{cr.telefon}}</td></tr>
 
-			{% if cr.categoria == 'D' %}
+        {% if cr.categoria == 'D' %}
 
-			<tr><td>Tito11 genèric</td><td>{{cr.titol1_generic.nom}}</td></tr>
-			<tr><td>Titol1 nom</td><td>{{cr.titol1_nom}}</td></tr>
-			<tr><td>Titol1 universitat</td><td>{{cr.titol1_uni}}</td></tr>
-			<tr><td>Titol1 data obtenció</td><td>{{cr.titol1_data}}</td></tr>
+        <tr><td>Tito11 genèric</td><td>{{cr.titol1_generic.nom}}</td></tr>
+        <tr><td>Titol1 nom</td><td>{{cr.titol1_nom}}</td></tr>
+        <tr><td>Titol1 universitat</td><td>{{cr.titol1_uni}}</td></tr>
+        <tr><td>Titol1 data obtenció</td><td>{{cr.titol1_data}}</td></tr>
 
-			<tr><td>Titol2 genèric</td><td>{{cr.titol2_generic.nom}}</td></tr>
-			<tr><td>Titol2 nom</td><td>{{cr.titol2_nom}}</td></tr>
-			<tr><td>Titol2 universitat</td><td>{{cr.titol2_uni}}</td></tr>
-			<tr><td>Titol2 data obtenció</td><td>{{cr.titol2_data}}</td></tr>
+        <tr><td>Titol2 genèric</td><td>{{cr.titol2_generic.nom}}</td></tr>
+        <tr><td>Titol2 nom</td><td>{{cr.titol2_nom}}</td></tr>
+        <tr><td>Titol2 universitat</td><td>{{cr.titol2_uni}}</td></tr>
+        <tr><td>Titol2 data obtenció</td><td>{{cr.titol2_data}}</td></tr>
 
-			<tr><td>Titol3 genèric</td><td>{{cr.titol3_generic.nom}}</td></tr>
-			<tr><td>Titol3 nom</td><td>{{cr.titol3_nom}}</td></tr>
-			<tr><td>Titol3 universitat</td><td>{{cr.titol3_uni}}</td></tr>
-			<tr><td>Titol3 data obtenció</td><td>{{cr.titol3_data}}</td></tr>
+        <tr><td>Titol3 genèric</td><td>{{cr.titol3_generic.nom}}</td></tr>
+        <tr><td>Titol3 nom</td><td>{{cr.titol3_nom}}</td></tr>
+        <tr><td>Titol3 universitat</td><td>{{cr.titol3_uni}}</td></tr>
+        <tr><td>Titol3 data obtenció</td><td>{{cr.titol3_data}}</td></tr>
 
-			{% else %}
+        {% else %}
 
-			<tr><td>Categoria laboral</td><td>{{cr.categoria_laboral_nodocent}}</td></tr>
+        <tr><td>Categoria laboral</td><td>{{cr.categoria_laboral_nodocent}}</td></tr>
 
-			{% endif %}
+        {% endif %}
 
-			<tr><td>Ref1</td><td>{{cr.ref1}} ({{cr.ref1_email}})</td></tr>
-			<tr><td>Ref2</td><td>{{cr.ref2}} ({{cr.ref2_email}})</td></tr>
-			<tr><td>Ref3</td><td>{{cr.ref3}} ({{cr.ref3_email}})</td></tr>
+        <tr><td>Ref1</td><td>{{cr.ref1}} ({{cr.ref1_email}})</td></tr>
+        <tr><td>Ref2</td><td>{{cr.ref2}} ({{cr.ref2_email}})</td></tr>
+        <tr><td>Ref3</td><td>{{cr.ref3}} ({{cr.ref3_email}})</td></tr>
 
-			<tr><td>Currículum</td><td> <a href="/curriculums/backend/download/{{cr.id}}"> link </a></td></tr>
+        <tr><td>Currículum</td><td> <a href="/curriculums/backend/download/{{cr.id}}"> link </a></td></tr>
 
-		</tbody>
-	</table>
+    </tbody>
+</table>
 
 
 {% endblock %}
