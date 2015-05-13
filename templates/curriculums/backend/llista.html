@@ -70,10 +70,12 @@
                 null,
                 null,
                 null,
+                null,
                 null
             ]
         }).columnFilter({
             aoColumns: [
+                {type: "select"},
                 {type: "text"},
                 {type: "select"},
                 {type: "text"},
@@ -94,11 +96,13 @@
 
 <table id="tcurriculums" class="table stripe fixedWidth" cellspacing="0">
     <thead>
-        <tr><th>Llinatges, nom</th><th>Categoria</th><th>Títols</th><th>Referències</th><th>Fitxer</th></tr>
+        <tr><th>Preferit</th><th>Llinatges, nom</th><th>Categoria</th><th>Títols</th><th>Referències</th><th>Fitxer</th></tr>
     </thead>
     <tbody>
         {% for c in curriculums %}
-        <tr><td> <a href="/curriculums/backend/show/{{c.id}}">{{ c.llinatges }}, {{ c.nom }} </a> </td>
+        <tr>
+            <td>{{c.preferit}}</td>
+            <td> <a href="/curriculums/backend/show/{{c.id}}">{{ c.llinatges }}, {{ c.nom }} </a> </td>
             <td>
                 {% if c.categoria == 'D' %} P. Docent {% else %} No Docent {% endif %}
             </td>
@@ -109,7 +113,7 @@
         {% endfor %}
     </tbody>
     <tfoot>
-        <tr><th>Llinatges, nom</th><th>Categoria</th><th>Títols</th><th>Referències</th><th>Fitxer</th></tr>
+        <tr><th>Preferit</th><th>Llinatges, nom</th><th>Categoria</th><th>Títols</th><th>Referències</th><th>Fitxer</th></tr>
     </tfoot>
 </table>
 
