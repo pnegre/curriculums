@@ -129,7 +129,7 @@
         {% for c in curriculums %}
         <tr>
             <!-- Per marcar com a preferit: get a  /curriculums/backend/setPref/{{cr.id}}/(y|n) -->
-            <td>{% if c.preferit %}<span style="display:none;">Preferits</span><img src="/static/curriculums/img/like.png" alt="like" style="cursor: pointer" onclick="preferit({{c.id}}, 'n');">{% else %}<span style="display:none;">No Pref.</span><img src="/static/curriculums/img/like2.png" alt="dontlike" style="cursor: pointer" onclick="preferit({{c.id}}, 'y');">{% endif %}</td>
+            <td style="text-align: center;">{% if c.preferit %}<span style="display:none;">Preferits</span><img src="/static/curriculums/img/like.png" alt="like" style="cursor: pointer" onclick="preferit({{c.id}}, 'n');">{% else %}<span style="display:none;">No Pref.</span><img src="/static/curriculums/img/like2.png" alt="dontlike" style="cursor: pointer" onclick="preferit({{c.id}}, 'y');">{% endif %}</td>
             <td> <a currid="{{c.id}}" href="#" class="veurecurr">{{ c.llinatges }}, {{ c.nom }} </a> </td>
             <td>
                 {% if c.categoria == 'D' %} P. Docent {% else %} No Docent {% endif %}
