@@ -10,99 +10,107 @@
 </style>
 
 
-<script>
+<script type="text/javascript">
+    function preferit(id, option){
+        $.ajax({
+                url: "/curriculums/backend/setPref/" + id + '/' + option,
+                data: {},
+                type: "GET",
+                complete: function(resposta){
+                location.reload();
+                }
+        });
+    }
 
     $(document).ready(function () {
 
-        $(".veurecurr").click(function() {
-            var currid=$(this).attr("currid");
+    $(".veurecurr").click(function() {
+    var currid = $(this).attr("currid");
             $("#dialog").load("/curriculums/backend/show/" + currid).dialog({
-                modal: true,
-                width: 700
-            });
-        });
-
-        $("#tcurriculums").dataTable({
-            "language": {
-                "aria": {
-                    "sortAscending": ": ordena de manera ascendent",
-                    "sortDescending": ": ordena de manera descendent"
-                },
-                "emptyTable": "Sense dades",
-                "info": "Mostrant _START_ a _END_ de _TOTAL_ registres",
-                "infoEmpty": "Registre no trobat",
-                "infoFiltered": "(filtrat de _MAX_ registres total)",
-                "lengthMenu": "Mostrar _MENU_ registres",
-                "search": "Cerca:",
-                "zeroRecords": "No s'han trobat resultats.",
-                "paginate": {
-                    "previous": "Anterior",
+    modal: true,
+            width: 700
+    });
+    });
+            $("#tcurriculums").dataTable({
+    "language": {
+    "aria": {
+    "sortAscending": ": ordena de manera ascendent",
+            "sortDescending": ": ordena de manera descendent"
+    },
+            "emptyTable": "Sense dades",
+            "info": "Mostrant _START_ a _END_ de _TOTAL_ registres",
+            "infoEmpty": "Registre no trobat",
+            "infoFiltered": "(filtrat de _MAX_ registres total)",
+            "lengthMenu": "Mostrar _MENU_ registres",
+            "search": "Cerca:",
+            "zeroRecords": "No s'han trobat resultats.",
+            "paginate": {
+            "previous": "Anterior",
                     "next": "Següent"
-                }
-            },
+            }
+    },
             "bStateSave": true,
             "iCookieDuration": 365 * 60 * 60 * 24, //1 any
             "aaSorting": [[0, 'asc']],
             "sDom": "<'dt_header'<'row-fluid'<'span6'l><'span6'T>>r>t<'dt_footer'<'row-fluid'<'span6'i><'span6'p>>>",
             "aoColumnDefs": [{"bSortable": false, "aTargets": [4]}],
             "oTableTools": {
-                "sSwfPath": "/static/curriculums/js/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
-                "aButtons": [
+            "sSwfPath": "/static/curriculums/js/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
+                    "aButtons": [
                     {
-                        "sExtends": "copy",
-                        "sButtonText": 'Copiar',
-                        "oSelectorOpts": {
+                    "sExtends": "copy",
+                            "sButtonText": 'Copiar',
+                            "oSelectorOpts": {
                             page: 'current'
-                        }
+                            }
                     },
                     {
-                        "sExtends": "csv",
-                        "sButtonText": 'CSV',
-                        "oSelectorOpts": {
+                    "sExtends": "csv",
+                            "sButtonText": 'CSV',
+                            "oSelectorOpts": {
                             page: 'current'
-                        }
+                            }
                     },
                     {
-                        "sExtends": "xls",
-                        "sButtonText": 'Excel',
-                        "oSelectorOpts": {
+                    "sExtends": "xls",
+                            "sButtonText": 'Excel',
+                            "oSelectorOpts": {
                             page: 'current'
-                        }
+                            }
                     },
                     {
-                        "sExtends": "pdf",
-                        "sButtonText": 'PDF',
-                        "oSelectorOpts": {
+                    "sExtends": "pdf",
+                            "sButtonText": 'PDF',
+                            "oSelectorOpts": {
                             page: 'current'
-                        }
+                            }
                     },
                     {
-                        "sExtends": "print",
-                        "sButtonText": 'Imprimir'
+                    "sExtends": "print",
+                            "sButtonText": 'Imprimir'
                     }
-                ]
+                    ]
             },
             "aoColumns": [
-                null,
-                null,
-                null,
-                null,
-                null,
-                null
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
             ]
-        }).columnFilter({
-            aoColumns: [
-                {type: "select"},
-                {type: "text"},
-                {type: "select"},
-                {type: "select", values: [ 'Gecko', 'Trident', 'KHTML', 'Misc', 'Presto', 'Webkit', 'Tasman']},
-                {type: "text"},
-                null
-            ]
+    }).columnFilter({
+    aoColumns: [
+    {type: "select", values: ['Preferits', 'No Pref.']},
+    {type: "text"},
+    {type: "select"},
+    {type: "select", values: [ 'Gecko', 'Trident', 'KHTML', 'Misc', 'Presto', 'Webkit', 'Tasman']},
+    {type: "text"},
+            null
+    ]
 
-        });
     });
-
+    });
 </script>
 
 {% endblock %}
@@ -121,7 +129,7 @@
         {% for c in curriculums %}
         <tr>
             <!-- Per marcar com a preferit: get a  /curriculums/backend/setPref/{{cr.id}}/(y|n) -->
-            <td>{{c.preferit}}</td>
+            <td>{% if c.preferit %}<span style="display:none;">Preferits</span><img src="/static/curriculums/img/like.png" alt="like" style="cursor: pointer" onclick="preferit({{c.id}}, 'n');">{% else %}<span style="display:none;">No Pref.</span><img src="/static/curriculums/img/like2.png" alt="dontlike" style="cursor: pointer" onclick="preferit({{c.id}}, 'y');">{% endif %}</td>
             <td> <a currid="{{c.id}}" href="#" class="veurecurr">{{ c.llinatges }}, {{ c.nom }} </a> </td>
             <td>
                 {% if c.categoria == 'D' %} P. Docent {% else %} No Docent {% endif %}
@@ -136,7 +144,7 @@
         {% endfor %}
     </tbody>
     <tfoot>
-        <tr><th>Preferit</th><th>Llinatges, nom</th><th>Categoria</th><th>Títols</th><th>Referències</th><th>Fitxer</th></tr>
+        <tr><th>Tots</th><th>Llinatges, nom</th><th>Categoria</th><th>Títols</th><th>Referències</th><th>Fitxer</th></tr>
     </tfoot>
 </table>
 
