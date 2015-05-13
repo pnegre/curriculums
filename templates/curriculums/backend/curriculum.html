@@ -1,75 +1,4 @@
-{% extends "curriculums/backend/base.html" %}
 
-{% block currheader %}
-
-<style>
-    #vistacurriculum td {
-        padding: 7px;
-        border: 1px solid black;
-    }
-</style>
-
-<script>
-
-    $(document).ready(function () {
-        $('#vistacurriculum').dataTable({
-            "aaSorting": [],
-            "sDom": "<'dt_header'<'row-fluid'<'span6'l><'span6'T>>r>t<'dt_footer'<'row-fluid'<'span6'i><'span6'p>>>",
-            "aoColumnDefs": [{"bSortable": false, "aTargets": [0, 1]}],
-            "oTableTools": {
-                "sSwfPath": "/static/curriculums/js/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
-                "aButtons": [
-                    {
-                        "sExtends": "copy",
-                        "sButtonText": 'Copiar'
-                    },
-                    {
-                        "sExtends": "csv",
-                        "sButtonText": 'CSV'
-                    },
-                    {
-                        "sExtends": "xls",
-                        "sButtonText": 'Excel'
-                    },
-                    {
-                        "sExtends": "pdf",
-                        "sButtonText": 'PDF'
-                    },
-                    {
-                        "sExtends": "print",
-                        "sButtonText": 'Imprimir'
-                    }
-                ]
-            },
-            "bFilter": false,
-            "bSearchable": false,
-            "bInfo": false,
-            "bLengthChange": false,
-            "bPaginate": false
-        });
-
-        $("#checkbox_preferit").click(function () {
-            var v = $(this);
-            if (v.is(":checked")) {
-                $.get("/curriculums/backend/setPref/{{cr.id}}/y");
-            } else {
-                $.get("/curriculums/backend/setPref/{{cr.id}}/n");
-            }
-        });
-    });
-
-</script>
-
-{% endblock %}
-
-{% block currbody %}
-
-<h1> Vista d'un curriculum </h1>
-
-<div id="marca_preferit">
-    <input type="checkbox" id="checkbox_preferit"
-           {% if cr.preferit %} checked="True" {% endif %}	/> Preferit
-</div>
 
 <table id="vistacurriculum" class="table stripe">
     <tbody>
@@ -111,6 +40,3 @@
 
     </tbody>
 </table>
-
-
-{% endblock %}

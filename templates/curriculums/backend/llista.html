@@ -2,12 +2,21 @@
 
 {% block currheader %}
 
+<style>
+    #vistacurriculum td {
+        padding: 7px;
+        border: 1px solid black;
+    }
+</style>
+
+
 <script>
 
     $(document).ready(function () {
 
         $(".veurecurr").click(function() {
-            $("#dialog").load("/curriculums/backend/show/6").dialog();
+            var currid=$(this).attr("currid");
+            $("#dialog").load("/curriculums/backend/show/" + currid).dialog();
         })
 
         $("#tcurriculums").dataTable({
