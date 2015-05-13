@@ -16,8 +16,11 @@
 
         $(".veurecurr").click(function() {
             var currid=$(this).attr("currid");
-            $("#dialog").load("/curriculums/backend/show/" + currid).dialog();
-        })
+            $("#dialog").load("/curriculums/backend/show/" + currid).dialog({
+                modal: true,
+                width: 700
+            });
+        });
 
         $("#tcurriculums").dataTable({
             "language": {
@@ -92,7 +95,7 @@
                 {type: "select"},
                 {type: "text"},
                 {type: "select"},
-                {type: "text"},
+                {type: "select", values: [ 'Gecko', 'Trident', 'KHTML', 'Misc', 'Presto', 'Webkit', 'Tasman']},
                 {type: "text"},
                 null
             ]
@@ -108,8 +111,7 @@
 
 <h1> Vista dels currículums </h1>
 
-<div id="dialog">
-</div>
+<div id="dialog"></div>
 
 <table id="tcurriculums" class="table stripe fixedWidth" cellspacing="0">
     <thead>
@@ -124,7 +126,7 @@
             <td>
                 {% if c.categoria == 'D' %} P. Docent {% else %} No Docent {% endif %}
             </td>
-            <td> {{ c.titol1_nom }} ({{c.titol1_generic.nom}}), {{ c.titol2_nom }} ({{c.titol2_generic.nom}}), {{ c.titol3_nom }} ({{c.titol3_generic.nom}}) </td>
+            <td><span style="display:none;">Matemàtiques</span> {{ c.titol1_nom }} ({{c.titol1_generic.nom}}), {{ c.titol2_nom }} ({{c.titol2_generic.nom}}), {{ c.titol3_nom }} ({{c.titol3_generic.nom}}) </td>
             <td> {{c.ref1}} ({{c.ref1_email}}), {{c.ref2}} ({{c.ref2_email}}), {{c.ref3}} ({{c.ref3_email}}) </td>
             <td style="text-align: center;"><a href="download/{{c.id}}"><img src="/static/curriculums/img/pin.png" alt="Descarrega" style="width: 22px;"></a> </td>
         </tr>
