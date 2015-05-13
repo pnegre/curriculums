@@ -5,6 +5,11 @@
 <script>
 
     $(document).ready(function () {
+
+        $(".veurecurr").click(function() {
+            $("#dialog").load("/curriculums/backend/show/6").dialog();
+        })
+
         $("#tcurriculums").dataTable({
             "language": {
                 "aria": {
@@ -94,6 +99,9 @@
 
 <h1> Vista dels currículums </h1>
 
+<div id="dialog">
+</div>
+
 <table id="tcurriculums" class="table stripe fixedWidth" cellspacing="0">
     <thead>
         <tr><th>Preferit</th><th>Llinatges, nom</th><th>Categoria</th><th>Títols</th><th>Referències</th><th>Fitxer</th></tr>
@@ -103,7 +111,7 @@
         <tr>
             <!-- Per marcar com a preferit: get a  /curriculums/backend/setPref/{{cr.id}}/(y|n) -->
             <td>{{c.preferit}}</td>
-            <td> <a href="/curriculums/backend/show/{{c.id}}">{{ c.llinatges }}, {{ c.nom }} </a> </td>
+            <td> <a currid="{{c.id}}" href="#" class="veurecurr">{{ c.llinatges }}, {{ c.nom }} </a> </td>
             <td>
                 {% if c.categoria == 'D' %} P. Docent {% else %} No Docent {% endif %}
             </td>
