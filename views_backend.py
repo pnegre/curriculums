@@ -37,7 +37,7 @@ def removeUTF(text):
 # Vista dels currículums (tots)
 @permission_required('curriculums.veure_curriculums_docents')
 def index(request):
-    crs = Curriculum.objects.filter(valid=True)
+    crs = [ getCurrPref(c, request.user) for c in Curriculum.objects.filter(valid=True) ]
     return renderResponse(
         request,
         'curriculums/backend/llista.html', {
@@ -48,7 +48,7 @@ def index(request):
 # Vista dels currículums preferits per l'usuari que s'ha autenticat
 @permission_required('curriculums.veure_curriculums_docents')
 def showPreferits(request):
-    crs = [ p.curriculum for p in Preferits.objects.filter(usuari=request.user) ]
+    crs = [ getCurrPref(p.curriculum, request.user) for p in Preferits.objects.filter(usuari=request.user) ]
     return renderResponse(
         request,
         'curriculums/backend/llista.html', {
