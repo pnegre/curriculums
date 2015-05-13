@@ -8,7 +8,7 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import permission_required
 
 
-from curriculums.models import Preferits, Curriculum
+from curriculums.models import Preferits, Curriculum, FamiliaTitol
 
 
 # Quan treiem les pàgines amb RequestContext, fem visibles a la template
@@ -29,6 +29,8 @@ def getCurrPref(cr, user):
 
     return cr
 
+
+
 # Funció molt simple que elimina els caràcters no ascii
 def removeUTF(text):
     return ''.join([i if ord(i) < 128 else '_' for i in text])
@@ -38,23 +40,25 @@ def removeUTF(text):
 @permission_required('curriculums.veure_curriculums_docents')
 def index(request):
     crs = [ getCurrPref(c, request.user) for c in Curriculum.objects.filter(valid=True) ]
+    fs = FamiliaTitol.objects.all()
     return renderResponse(
         request,
         'curriculums/backend/llista.html', {
             'curriculums': crs,
+            'familiatitol': fs,
         }
     )
 
-# Vista dels currículums preferits per l'usuari que s'ha autenticat
-@permission_required('curriculums.veure_curriculums_docents')
-def showPreferits(request):
-    crs = [ getCurrPref(p.curriculum, request.user) for p in Preferits.objects.filter(usuari=request.user) ]
-    return renderResponse(
-        request,
-        'curriculums/backend/llista.html', {
-            'curriculums': crs,
-        }
-    )
+# # Vista dels currículums preferits per l'usuari que s'ha autenticat
+# @permission_required('curriculums.veure_curriculums_docents')
+# def showPreferits(request):
+#     crs = [ getCurrPref(p.curriculum, request.user) for p in Preferits.objects.filter(usuari=request.user) ]
+#     return renderResponse(
+#         request,
+#         'curriculums/backend/llista.html', {
+#             'curriculums': crs,
+#         }
+#     )
 
 # Funció que es crida quan es vol baixar el fitxer d'un currículum
 @permission_required('curriculums.veure_curriculums_docents')
