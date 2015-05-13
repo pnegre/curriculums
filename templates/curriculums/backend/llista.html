@@ -101,6 +101,7 @@
     <tbody>
         {% for c in curriculums %}
         <tr>
+            <!-- Per marcar com a preferit: get a  /curriculums/backend/setPref/{{cr.id}}/(y|n) -->
             <td>{{c.preferit}}</td>
             <td> <a href="/curriculums/backend/show/{{c.id}}">{{ c.llinatges }}, {{ c.nom }} </a> </td>
             <td>
