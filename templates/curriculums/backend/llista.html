@@ -126,8 +126,11 @@
             <td>
                 {% if c.categoria == 'D' %} P. Docent {% else %} No Docent {% endif %}
             </td>
-            <td><span style="display:none;">Matemàtiques</span> {{ c.titol1_nom }} ({{c.titol1_generic.nom}}), {{ c.titol2_nom }} ({{c.titol2_generic.nom}}), {{ c.titol3_nom }} ({{c.titol3_generic.nom}}) </td>
-            <td> {{c.ref1}} ({{c.ref1_email}}), {{c.ref2}} ({{c.ref2_email}}), {{c.ref3}} ({{c.ref3_email}}) </td>
+            <td>
+                {% if c.titol1_nom %}<span style="display:none;">Matemàtiques</span> {{ c.titol1_nom }} ({{c.titol1_generic.nom}}){% endif %} 
+                {% if c.titol2_nom %}, <span style="display:none;">Matemàtiques</span>{{ c.titol2_nom }} ({{c.titol2_generic.nom}}){% endif %} 
+                {% if c.titol3_nom %}, <span style="display:none;">Matemàtiques</span>{{ c.titol3_nom }} ({{c.titol3_generic.nom}}){% endif %} </td>
+            <td> {% if c.ref1 %}{{c.ref1}} (<a href="mailto:{{c.ref1_email}}">{{c.ref1_email}}</a>){% endif %} {% if c.ref2 %}, {{c.ref2}} (<a href="mailto:{{c.ref2_email}}">{{c.ref2_email}}</a>){% endif %} {% if c.ref3 %}, {{c.ref3}} (<a href="mailto:{{c.ref3_email}}">{{c.ref3_email}}</a>){% endif %} </td>
             <td style="text-align: center;"><a href="download/{{c.id}}"><img src="/static/curriculums/img/pin.png" alt="Descarrega" style="width: 22px;"></a> </td>
         </tr>
         {% endfor %}
