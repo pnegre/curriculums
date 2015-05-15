@@ -97,6 +97,7 @@
                     null,
                     null,
                     null,
+                    null,
                     null
             ]
     }).columnFilter({
@@ -105,6 +106,7 @@
     {type: "text"},
     {type: "select"},
     {type: "select", values: [ {% for f in familiatitol %} '{{ f.nom }}', {% endfor %} ]},
+    {type: "date-range"},
     {type: "text"},
             null
     ]
@@ -123,7 +125,14 @@
 
 <table id="tcurriculums" class="table stripe fixedWidth" cellspacing="0">
     <thead>
-        <tr><th>Preferit</th><th>Llinatges, nom</th><th>Categoria</th><th>Títols</th><th>Referències</th><th>Fitxer</th></tr>
+        <tr><th>Preferit</th>
+            <th>Llinatges, nom</th>
+            <th>Categoria</th>
+            <th>Títols</th>
+            <th>Dates</th>
+            <th>Referències</th>
+            <th>Fitxer</th>
+            </tr>
     </thead>
     <tbody>
         {% for c in curriculums %}
@@ -147,7 +156,10 @@
                 {% if c.titol3_nom %},
                     <span style="display:none;">{{ c.titol3_generic.familia }}</span>
                     {{ c.titol3_nom }} ({{c.titol3_generic.nom}})
-                {% endif %} </td>
+                {% endif %}
+            </td>
+
+            <td> {{ c.titol1_data|date:"d/m/Y" }} </td>
 
             <td> {% if c.ref1 %}{{c.ref1}} (<a href="mailto:{{c.ref1_email}}">{{c.ref1_email}}</a>){% endif %} {% if c.ref2 %}, {{c.ref2}} (<a href="mailto:{{c.ref2_email}}">{{c.ref2_email}}</a>){% endif %} {% if c.ref3 %}, {{c.ref3}} (<a href="mailto:{{c.ref3_email}}">{{c.ref3_email}}</a>){% endif %} </td>
             <td style="text-align: center;"><a href="download/{{c.id}}"><img src="/static/curriculums/img/pin.png" alt="Descarrega" style="width: 22px;"></a> </td>
