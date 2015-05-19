@@ -22,6 +22,8 @@
     });
     }
 
+    {% if categoria == 'D' %}
+
     $.fn.dataTable.ext.search.push(
             function(settings, data, dataIndex) {
             var x = $('#min').val();
@@ -66,6 +68,8 @@
             return false;
         }
     );
+
+    {% endif %}
 
 
             $(document).ready(function () {
@@ -171,9 +175,12 @@
 
 {% block currbody %}
 
-<h1> Vista dels currículums </h1>
+<h1> Currículums </h1>
 
 <div id="dialog"></div>
+
+{% if categoria == 'D' %}
+
 <table border="0" cellspacing="5" cellpadding="5">
     <tbody><tr>
             <td>Data mínima</td>
@@ -184,6 +191,8 @@
             <td><input type="text" id="max" name="max"></td>
         </tr>
     </tbody></table>
+
+{% endif %}
 
 <table id="tcurriculums" class="table stripe fixedWidth" cellspacing="0">
     <thead>
@@ -205,6 +214,7 @@
             <td style="text-align: center;">{% if c.preferit %}<span style="display:none;">Preferits</span><img src="/static/curriculums/img/like.png" alt="like" style="cursor: pointer" onclick="preferit({{c.id}}, 'n');">{% else %}<span style="display:none;">No Pref.</span><img src="/static/curriculums/img/like2.png" alt="dontlike" style="cursor: pointer" onclick="preferit({{c.id}}, 'y');">{% endif %}</td>
             <td> <a currid="{{c.id}}" href="#" class="veurecurr">{{ c.llinatges }}, {{ c.nom }} </a> </td>
 
+            {% if categoria == 'D' %}
             <td>
                 {% if c.titol1_nom %}
                 <span style="display:none;">{{ c.titol1_generic.familia }}</span>
@@ -219,6 +229,11 @@
                 {{c.titol3_generic.nom}} - {{ c.titol3_nom }} ({{ c.titol3_data|date:"d/m/Y" }})
                 {% endif %}
             </td>
+            {% else %}
+            <td>
+                {{ c.categoria_laboral_nodocent.nom }}
+            </td>
+            {% endif %}
 
             <td> {% if c.ref1 %}{{c.ref1}} (<a href="mailto:{{c.ref1_email}}">{{c.ref1_email}}</a>){% endif %} {% if c.ref2 %}<br>{{c.ref2}} (<a href="mailto:{{c.ref2_email}}">{{c.ref2_email}}</a>){% endif %} {% if c.ref3 %}<br>{{c.ref3}} (<a href="mailto:{{c.ref3_email}}">{{c.ref3_email}}</a>){% endif %} </td>
             <td style="text-align: center;"><a href="download/{{c.id}}"><img src="/static/curriculums/img/pin.png" alt="Descarrega" style="width: 22px;"></a> </td>
