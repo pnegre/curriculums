@@ -12,26 +12,102 @@
 
 <script type="text/javascript">
     function preferit(id, option){
-        $.ajax({
-                url: "/curriculums/backend/setPref/" + id + '/' + option,
-                data: {},
-                type: "GET",
-                complete: function(resposta){
-                location.reload();
-                }
-        });
+    $.ajax({
+    url: "/curriculums/backend/setPref/" + id + '/' + option,
+            data: {},
+            type: "GET",
+            complete: function(resposta){
+            location.reload();
+            }
+    });
     }
 
-    $(document).ready(function () {
+    $.fn.dataTable.ext.search.push(
+            function(settings, data, dataIndex) {
+            var x = $('#min').val();
+            var y = $('#max').val();
+            
+            if (x === "" || y === "" || x === "undefined" || y === "undefined" || x === null || y === null){
+                return true;
+            }
 
-    $(".veurecurr").click(function() {
+            //Parser de les dades
+            var dia1 = x.substring(0, 2);
+            var mes1 = x.substring(3, 5);
+            var any1 = x.substring(6, 10);
+            var dia2 = y.substring(0, 2);
+            var mes2 = y.substring(3, 5);
+            var any2 = y.substring(6, 10);
+            //alert(dia1+"-"+mes1+"-"+any1+"-"+hora1+"-"+minut1+"-"+segon1);
+
+            var datamin = new Date(any1, mes1, dia1, 0, 0, 0, 0);
+            var datamax = new Date(any2, mes2, dia2, 0, 0, 0, 0);
+            //Parser del contingut
+            var content = data[3];
+            var regExp = /\(([^)]*)\)/g;
+            var matches = [];
+            var match;
+            while ((match = regExp.exec(content)) != null){
+                matches.push(match[1]);
+            }
+            //alert(matches);
+            
+            for (i = 0; i < matches.length; i++){
+                var dia = matches[i].substring(0, 2);
+                var mes = matches[i].substring(3, 5);
+                var any = matches[i].substring(6, 10);
+                var data = new Date(any, mes, dia, 0, 0, 0, 0);
+                if (data >= datamin && data <= datamax){
+                    return true;
+                }
+            }
+
+            //Si arriba aquí és que no hi ha hagut cap match
+            return false;
+        }
+    );
+    
+    
+            $(document).ready(function () {
+
+    $("#min").datepicker({
+    showAnim: "fadeIn",
+            dateFormat: "dd/mm/yy", //Format client
+            dayNames: ["Diumenge", "Dilluns", "Dimarts", "Dimecres", "Dijous", "Divendres", "Dissabte"],
+            dayNamesMin: ["Dg", "Dl", "Dm", "Dc", "Dj", "Dv", "Ds"],
+            dayNamesShort: ["Dg", "Dl", "Dm", "Dc", "Dj", "Dv", "Ds"],
+            firstDay: 1, //1 = Dilluns
+            monthNames: ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"],
+            monthNamesShort: ["Gen", "Feb", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Des"],
+            nextText: "Més tard",
+            prevText: "Més prest",
+            currentText: "Ara",
+            changeMonth: true,
+            changeYear: true
+    });
+            $("#max").datepicker({
+    showAnim: "fadeIn",
+            dateFormat: "dd/mm/yy", //Format client
+            dayNames: ["Diumenge", "Dilluns", "Dimarts", "Dimecres", "Dijous", "Divendres", "Dissabte"],
+            dayNamesMin: ["Dg", "Dl", "Dm", "Dc", "Dj", "Dv", "Ds"],
+            dayNamesShort: ["Dg", "Dl", "Dm", "Dc", "Dj", "Dv", "Ds"],
+            firstDay: 1, //1 = Dilluns
+            monthNames: ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"],
+            monthNamesShort: ["Gen", "Feb", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Des"],
+            nextText: "Més tard",
+            prevText: "Més prest",
+            currentText: "Ara",
+            changeMonth: true,
+            changeYear: true
+    });
+            $(".veurecurr").click(function() {
     var currid = $(this).attr("currid");
             $("#dialog").load("/curriculums/backend/show/" + currid).dialog({
     modal: true,
             width: 700
     });
     });
-            $("#tcurriculums").dataTable({
+            var taula = $("#tcurriculums").dataTable({
     "language": {
     "aria": {
     "sortAscending": ": ordena de manera ascendent",
@@ -57,34 +133,6 @@
             "oTableTools": {
             "sSwfPath": "/static/curriculums/js/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
                     "aButtons": [
-                    // {
-                    // "sExtends": "copy",
-                    //         "sButtonText": 'Copiar',
-                    //         "oSelectorOpts": {
-                    //         page: 'current'
-                    //         }
-                    // },
-                    // {
-                    // "sExtends": "csv",
-                    //         "sButtonText": 'CSV',
-                    //         "oSelectorOpts": {
-                    //         page: 'current'
-                    //         }
-                    // },
-                    // {
-                    // "sExtends": "xls",
-                    //         "sButtonText": 'Excel',
-                    //         "oSelectorOpts": {
-                    //         page: 'current'
-                    //         }
-                    // },
-                    // {
-                    // "sExtends": "pdf",
-                    //         "sButtonText": 'PDF',
-                    //         "oSelectorOpts": {
-                    //         page: 'current'
-                    //         }
-                    // },
                     {
                     "sExtends": "print",
                             "sButtonText": 'Imprimir'
@@ -92,7 +140,6 @@
                     ]
             },
             "aoColumns": [
-                    null,
                     null,
                     null,
                     null,
@@ -106,14 +153,16 @@
     {type: "text"},
     {type: "select"},
     {type: "select", values: [ {% for f in familiatitol %} '{{ f.nom }}', {% endfor %} ]},
-    {type: "date-range"},
     {type: "text"},
             null
-    ]
+    ]});
+            //taula.column(4).visible( false ); 
 
+// Event listener to the two range filtering inputs to redraw on input
+            $('#min, #max').change(function() {
+    taula.fnDraw();
     });
-    });
-</script>
+    });</script>
 
 {% endblock %}
 
@@ -122,6 +171,16 @@
 <h1> Vista dels currículums </h1>
 
 <div id="dialog"></div>
+<table border="0" cellspacing="5" cellpadding="5">
+    <tbody><tr>
+            <td>Data mínima</td>
+            <td><input type="text" id="min" name="min"></td>
+        </tr>
+        <tr>
+            <td>Data màxima</td>
+            <td><input type="text" id="max" name="max"></td>
+        </tr>
+    </tbody></table>
 
 <table id="tcurriculums" class="table stripe fixedWidth" cellspacing="0">
     <thead>
@@ -129,10 +188,9 @@
             <th>Llinatges, nom</th>
             <th>Categoria</th>
             <th>Títols</th>
-            <th>Dates</th>
             <th>Referències</th>
             <th>Fitxer</th>
-            </tr>
+        </tr>
     </thead>
     <tbody>
         {% for c in curriculums %}
@@ -146,22 +204,20 @@
 
             <td>
                 {% if c.titol1_nom %}
-                    <span style="display:none;"> {{ c.titol1_generic.familia }} </span>
-                    {{ c.titol1_nom }} ({{c.titol1_generic.nom}})
+                <span style="display:none;">{{ c.titol1_generic.familia }}</span>
+                {{c.titol1_generic.nom}} - {{ c.titol1_nom }} ({{ c.titol1_data|date:"d/m/Y" }})
                 {% endif %}
-                {% if c.titol2_nom %},
-                    <span style="display:none;">{{ c.titol2_generic.familia }}</span>
-                    {{ c.titol2_nom }} ({{c.titol2_generic.nom}})
+                {% if c.titol2_nom %}<br>
+                <span style="display:none;">{{ c.titol2_generic.familia }}</span>
+                {{c.titol2_generic.nom}} - {{ c.titol2_nom }} ({{ c.titol2_data|date:"d/m/Y" }})
                 {% endif %}
-                {% if c.titol3_nom %},
-                    <span style="display:none;">{{ c.titol3_generic.familia }}</span>
-                    {{ c.titol3_nom }} ({{c.titol3_generic.nom}})
+                {% if c.titol3_nom %}<br>
+                <span style="display:none;">{{ c.titol3_generic.familia }}</span>
+                {{c.titol3_generic.nom}} - {{ c.titol3_nom }} ({{ c.titol3_data|date:"d/m/Y" }})
                 {% endif %}
             </td>
 
-            <td> {{ c.titol1_data|date:"d/m/Y" }} </td>
-
-            <td> {% if c.ref1 %}{{c.ref1}} (<a href="mailto:{{c.ref1_email}}">{{c.ref1_email}}</a>){% endif %} {% if c.ref2 %}, {{c.ref2}} (<a href="mailto:{{c.ref2_email}}">{{c.ref2_email}}</a>){% endif %} {% if c.ref3 %}, {{c.ref3}} (<a href="mailto:{{c.ref3_email}}">{{c.ref3_email}}</a>){% endif %} </td>
+            <td> {% if c.ref1 %}{{c.ref1}} (<a href="mailto:{{c.ref1_email}}">{{c.ref1_email}}</a>){% endif %} {% if c.ref2 %}<br>{{c.ref2}} (<a href="mailto:{{c.ref2_email}}">{{c.ref2_email}}</a>){% endif %} {% if c.ref3 %}<br>{{c.ref3}} (<a href="mailto:{{c.ref3_email}}">{{c.ref3_email}}</a>){% endif %} </td>
             <td style="text-align: center;"><a href="download/{{c.id}}"><img src="/static/curriculums/img/pin.png" alt="Descarrega" style="width: 22px;"></a> </td>
         </tr>
         {% endfor %}
