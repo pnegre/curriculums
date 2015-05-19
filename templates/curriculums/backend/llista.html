@@ -150,11 +150,16 @@
     aoColumns: [
     {type: "select", values: ['Preferits', 'No Pref.']},
     {type: "text"},
-    {type: "select", values: [ {% for f in familiatitol %} '{{ f.nom }}', {% endfor %} ]},
+
+    {% if categoria == 'D' %}
+        {type: "select", values: [ {% for f in familiatitol %} '{{ f.nom }}', {% endfor %} ]},
+    {% else %}
+        {type: "select", values: [ 'alpha', 'beta', 'gamma' ]},
+    {% endif %}
+
     {type: "text"},
             null
     ]});
-            //taula.column(4).visible( false );
 
 // Event listener to the two range filtering inputs to redraw on input
             $('#min, #max').change(function() {
@@ -184,7 +189,11 @@
     <thead>
         <tr><th>Preferit</th>
             <th>Llinatges, nom</th>
+            {% if categoria == 'D' %}
             <th>Títols</th>
+            {% else %}
+            <th>Categoria laboral</th>
+            {% endif %}
             <th>Referències</th>
             <th>Fitxer</th>
         </tr>
@@ -219,7 +228,11 @@
     <tfoot>
         <tr><th>Tots</th>
             <th>Llinatges, nom</th>
+            {% if categoria == 'D' %}
             <th>Títols</th>
+            {% else %}
+            <th>Categoria laboral</th>
+            {% endif %}
             <th>Referències</th>
             <th>Fitxer</th>
         </tr>
