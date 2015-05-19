@@ -56,6 +56,7 @@ def llista_docents(request):
         'curriculums/backend/llista.html', {
             'curriculums': crs,
             'familiatitol': fs,
+            'categoria': 'D',
         }
     )
 
@@ -69,6 +70,7 @@ def llista_nodocents(request):
         'curriculums/backend/llista.html', {
             'curriculums': crs,
             'familiatitol': fs,
+            'categoria': 'N',
         }
     )
 

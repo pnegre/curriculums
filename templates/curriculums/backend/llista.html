@@ -26,7 +26,7 @@
             function(settings, data, dataIndex) {
             var x = $('#min').val();
             var y = $('#max').val();
-            
+
             if (x === "" || y === "" || x === "undefined" || y === "undefined" || x === null || y === null){
                 return true;
             }
@@ -51,7 +51,7 @@
                 matches.push(match[1]);
             }
             //alert(matches);
-            
+
             for (i = 0; i < matches.length; i++){
                 var dia = matches[i].substring(0, 2);
                 var mes = matches[i].substring(3, 5);
@@ -66,8 +66,8 @@
             return false;
         }
     );
-    
-    
+
+
             $(document).ready(function () {
 
     $("#min").datepicker({
@@ -144,19 +144,17 @@
                     null,
                     null,
                     null,
-                    null,
                     null
             ]
     }).columnFilter({
     aoColumns: [
     {type: "select", values: ['Preferits', 'No Pref.']},
     {type: "text"},
-    {type: "select"},
     {type: "select", values: [ {% for f in familiatitol %} '{{ f.nom }}', {% endfor %} ]},
     {type: "text"},
             null
     ]});
-            //taula.column(4).visible( false ); 
+            //taula.column(4).visible( false );
 
 // Event listener to the two range filtering inputs to redraw on input
             $('#min, #max').change(function() {
@@ -186,7 +184,6 @@
     <thead>
         <tr><th>Preferit</th>
             <th>Llinatges, nom</th>
-            <th>Categoria</th>
             <th>Títols</th>
             <th>Referències</th>
             <th>Fitxer</th>
@@ -198,9 +195,6 @@
             <!-- Per marcar com a preferit: get a  /curriculums/backend/setPref/{{cr.id}}/(y|n) -->
             <td style="text-align: center;">{% if c.preferit %}<span style="display:none;">Preferits</span><img src="/static/curriculums/img/like.png" alt="like" style="cursor: pointer" onclick="preferit({{c.id}}, 'n');">{% else %}<span style="display:none;">No Pref.</span><img src="/static/curriculums/img/like2.png" alt="dontlike" style="cursor: pointer" onclick="preferit({{c.id}}, 'y');">{% endif %}</td>
             <td> <a currid="{{c.id}}" href="#" class="veurecurr">{{ c.llinatges }}, {{ c.nom }} </a> </td>
-            <td>
-                {% if c.categoria == 'D' %} P. Docent {% else %} No Docent {% endif %}
-            </td>
 
             <td>
                 {% if c.titol1_nom %}
@@ -223,7 +217,12 @@
         {% endfor %}
     </tbody>
     <tfoot>
-        <tr><th>Tots</th><th>Llinatges, nom</th><th>Categoria</th><th>Títols</th><th>Referències</th><th>Fitxer</th></tr>
+        <tr><th>Tots</th>
+            <th>Llinatges, nom</th>
+            <th>Títols</th>
+            <th>Referències</th>
+            <th>Fitxer</th>
+        </tr>
     </tfoot>
 </table>
 
