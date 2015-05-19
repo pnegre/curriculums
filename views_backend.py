@@ -36,10 +36,20 @@ def removeUTF(text):
     return ''.join([i if ord(i) < 128 else '_' for i in text])
 
 
-# Vista dels currículums (tots)
+# Vista en blanc
 @permission_required('curriculums.veure_curriculums_docents')
 def index(request):
-    crs = [ getCurrPref(c, request.user) for c in Curriculum.objects.filter(valid=True) ]
+    return renderResponse(
+        request,
+        'curriculums/backend/base.html', {
+        }
+    )
+
+
+# Vista dels currículums (docents)
+@permission_required('curriculums.veure_curriculums_docents')
+def llista_docents(request):
+    crs = [ getCurrPref(c, request.user) for c in Curriculum.objects.filter(valid=True).filter(categoria='D') ]
     fs = FamiliaTitol.objects.all()
     return renderResponse(
         request,
@@ -48,6 +58,21 @@ def index(request):
             'familiatitol': fs,
         }
     )
+
+# Vista dels currículums (no docents)
+@permission_required('curriculums.veure_curriculums_docents')
+def llista_nodocents(request):
+    crs = [ getCurrPref(c, request.user) for c in Curriculum.objects.filter(valid=True).filter(categoria='N') ]
+    fs = FamiliaTitol.objects.all()
+    return renderResponse(
+        request,
+        'curriculums/backend/llista.html', {
+            'curriculums': crs,
+            'familiatitol': fs,
+        }
+    )
+
+
 
 # # Vista dels currículums preferits per l'usuari que s'ha autenticat
 # @permission_required('curriculums.veure_curriculums_docents')
