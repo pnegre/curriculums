@@ -8,7 +8,7 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import permission_required
 
 
-from curriculums.models import Preferits, Curriculum, FamiliaTitol
+from curriculums.models import Preferits, Curriculum, FamiliaTitol, CategoriaLaboralND
 
 
 # Quan treiem les pàgines amb RequestContext, fem visibles a la template
@@ -64,12 +64,12 @@ def llista_docents(request):
 @permission_required('curriculums.veure_curriculums_docents')
 def llista_nodocents(request):
     crs = [ getCurrPref(c, request.user) for c in Curriculum.objects.filter(valid=True).filter(categoria='N') ]
-    fs = FamiliaTitol.objects.all()
+    catlaboral = CategoriaLaboralND.objects.all()
     return renderResponse(
         request,
         'curriculums/backend/llista.html', {
             'curriculums': crs,
-            'familiatitol': fs,
+            'catlaboral': catlaboral,
             'categoria': 'N',
         }
     )

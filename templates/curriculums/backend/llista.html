@@ -158,7 +158,7 @@
     {% if categoria == 'D' %}
         {type: "select", values: [ {% for f in familiatitol %} '{{ f.nom }}', {% endfor %} ]},
     {% else %}
-        {type: "select", values: [ 'alpha', 'beta', 'gamma' ]},
+        {type: "select", values: [ {% for c in catlaboral %} '{{ c.nom }}', {% endfor %} ]},
     {% endif %}
 
     {type: "text"},
