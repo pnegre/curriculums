@@ -11,6 +11,7 @@
 
 
 <script type="text/javascript">
+
     function preferit(id, option){
     $.ajax({
     url: "/curriculums/backend/setPref/" + id + '/' + option,
@@ -107,8 +108,9 @@
             $(".veurecurr").click(function() {
     var currid = $(this).attr("currid");
             $("#dialog").load("/curriculums/backend/show/" + currid).dialog({
-    modal: true,
-            width: 700
+                modal: true,
+                width: 700,
+                position: { my: "center bottom" }
     });
     });
             var taula = $("#tcurriculums").dataTable({

@@ -147,7 +147,7 @@ a:hover{
 
 /* Errors de validació */
 input.error{
-    border: solid 1px #c23737 !important; 
+    border: solid 1px #c23737 !important;
     margin-bottom: 0px !important;
 }
 label.error{
@@ -190,4 +190,14 @@ label.error{
 #titol1-error, #titol2-error,#titol3-error,#catlaboral-error{
     position: relative;
     top: 66px;
+}
+
+#textareaobs {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#submitobs {
+    display: block;
 }

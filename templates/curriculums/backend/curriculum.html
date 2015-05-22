@@ -1,7 +1,7 @@
 <div style="float:right;">
 <a href="/curriculums/backend/download/{{cr.id}}">Descarrega <img src="/static/curriculums/img/pin.png" alt="Descarrega" style="width: 22px;"></a>
 </div>
-<div style="float:left;">
+<div style="float:left; width:100%">
 <h2>{{cr.llinatges}}, {{cr.nom}}</h2>
 
 <h3>Dades de contacte</h3>
@@ -31,4 +31,21 @@
     {% if cr.ref2 %}<li>{{cr.ref2}} (<a href="mailto:{{cr.ref2_email}}">{{cr.ref2_email}}</a>)</li>{% endif %}
     {% if cr.ref3 %}<li>{{cr.ref3}} (<a href="mailto:{{cr.ref3_email}}">{{cr.ref3_email}}</a>)</li>{% endif %}
 </ul>
+
+<h3>Observacions</h3>
+<textarea id="textareaobs">{% if cr.observacions %}{{ observacions }}{% endif %}</textarea>
+<input type="submit" value="Actualitzar" id="submitobs"/>
 </div>
+
+<script type="text/javascript">
+    $("#submitobs").click(function() {
+        console.log("dins click");
+        var obs = $("#textareaobs").val();
+        $.post("/curriculums/backend/actualitzar_observacions/", {
+            'crid': '{{ cr.id }}',
+            'observacions': obs
+        }, function(data) {
+            alert("OK");
+        });
+    });
+</script>

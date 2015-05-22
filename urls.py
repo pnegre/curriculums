@@ -18,5 +18,6 @@ urlpatterns = patterns('',
 	(r'^backend/download/(\d+)$', 'curriculums.views_backend.download'),
 	(r'^backend/show/(\d+)$', 'curriculums.views_backend.show'),
 	(r'^backend/setPref/(\d+)/(y|n)$', 'curriculums.views_backend.setPreferit'),
+	(r'^backend/actualitzar_observacions/', 'curriculums.views_backend.actObservacions'),
 
 )
