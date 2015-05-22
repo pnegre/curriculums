@@ -136,3 +136,9 @@ def setPreferit(request, idc, yn):
             pass
 
     return HttpResponse()
+
+
+@permission_required('curriculums.veure_curriculums_docents')
+def actObservacions(request):
+    if request.method == 'POSt':
+        return HttpResponse()
