@@ -139,10 +139,10 @@ def primerPas(request):
             if settings.CURR_SEND_EMAIL:
                 # Enviem un email i mostrem un missatge a l'usuari perquè continui
                 txtEmail = unicode("Això és un missatge automàtic. No cal que responeu.\n\n" +
-                    "Hem rebut la teva sol·ŀicitud per introduir el currículum. \n\n" +
-                    "T'enviem un enllaç perquè puguis completar el procés d'inscripció. " +
-                    "Aquest només serà vàlid durant 24 hores.\n\n" +
-                    "Fes clic en el següent enllaç per continuar: %s", 'utf-8')
+                    "Hem rebut la seva sol·ŀicitud per introduir el currículum. \n\n" +
+                    "Li hem enviat un enllaç perquè pugui completar el procés d'inscripció a la borsa de currículums. " +
+                    "Aquest enllaç només serà vàlid durant 24 hores.\n\n" +
+                    "Feu clic en el següent enllaç per continuar: %s", 'utf-8')
                 txt = txtEmail % (unicode(lnk))
                 send_mail('[Es Liceu] Sol·licitud per enviar el currículum',
                     txt,
@@ -151,8 +151,8 @@ def primerPas(request):
                     fail_silently=False)
 
                 return showMsg(request,
-                    'Hem enregistrat la teva petició. Consulta el teu e-mail per continuar.',
-                    "Si no veus el missatge que t'hem enviat, consulta a la carpeta de correu brossa. "
+                    'Hem enregistrat la seva petició. Consulti el seu correu electrònic per a continuar.',
+                    "Si no veu el missatge que li hem enviat, consulti la carpeta de correu brossa (SPAM). "
                 )
 
             else:
@@ -162,7 +162,7 @@ def primerPas(request):
 
         else:
             return showMsg(request, "Error!", "Camps requerits")
-            # raise Exception("ERROR!!" + str(f.errors))
+            # raise Exception("ERROR!" + str(f.errors))
 
     return renderResponse(
         request,
@@ -279,12 +279,12 @@ def processar_candidat(request, cr, f):
         return renderResponse(
             request,
             'curriculums/missatge.html', {
-                'miss_title': 'Sol·licitud acceptada.',
-                'miss_body': 'Hem rebut el teu currículum. Gràcies.'
+                'miss_title': 'Sol·licitud Acceptada',
+                'miss_body': 'Hem rebut el seu currículum correctament. Podeu modificar o esborrar el vostre currículum tornant a realitzar el procés.'
             }
         )
 
-    return showMsg(request, "ERROR", "Error en l'enviament del formulari. Revisa la informació introduida.")
+    return showMsg(request, "ERROR", "Error en l'enviament del formulari. Revisa la informació introduïda.")
     # raise Exception("ERROR!!" + str(f.errors))
 
 # Es crida al final, quan es fa el POST amb les dades definitives
