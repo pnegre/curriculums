@@ -33,17 +33,19 @@
 </ul>
 
 <h3>Observacions</h3>
-<textarea id="textareaobs">{% if cr.observacions %}{{ observacions }}{% endif %}</textarea>
+<textarea id="textareaobs">{% if cr.observacions %}{{ cr.observacions }}{% endif %}</textarea>
 <input type="submit" value="Actualitzar" id="submitobs"/>
 </div>
 
 <script type="text/javascript">
+    var csrftoken = getCookie('csrftoken');
+
     $("#submitobs").click(function() {
-        console.log("dins click");
         var obs = $("#textareaobs").val();
         $.post("/curriculums/backend/actualitzar_observacions/", {
             'crid': '{{ cr.id }}',
-            'observacions': obs
+            'observacions': obs,
+            'csrfmiddlewaretoken': csrftoken
         }, function(data) {
             alert("OK");
         });

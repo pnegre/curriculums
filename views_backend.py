@@ -140,5 +140,10 @@ def setPreferit(request, idc, yn):
 
 @permission_required('curriculums.veure_curriculums_docents')
 def actObservacions(request):
-    if request.method == 'POSt':
+    if request.method == 'POST':
+        obs = request.POST.get('observacions')
+        crid = request.POST.get('crid')
+        cr = Curriculum.objects.get(id=crid)
+        cr.observacions = obs;
+        cr.save()
         return HttpResponse()
