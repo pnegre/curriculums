@@ -114,7 +114,9 @@
                         <select name="catlaboral" id="catlaboral" class="select2" multiple>
                             <!-- <option disabled selected> -- Selecciona una opció -- </option> -->
                             {% for c in catlaborals %}
-                            <option value="{{ c.id }}"> {{c.nom}} </option>
+                            <option value="{{ c.id }}"
+                                {% if c in cr.categoria_laboral_nodocent.all %} selected {% endif %}
+                                > {{c.nom}} </option>
                             {% endfor %}
                         </select>
                     </div>
