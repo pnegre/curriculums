@@ -121,21 +121,22 @@ def show(request, idc):
 # TODO: errors
 @permission_required('curriculums.veure_curriculums_docents')
 def setPreferit(request, idc, yn):
-    cr = Curriculum.objects.get(id=idc)
-    if yn == 'y':
-        try:
-            p = Preferits.objects.get(curriculum=cr, usuari=request.user)
-        except Preferits.DoesNotExist:
-            p = Preferits(curriculum=cr, usuari=request.user)
-            p.save()
-    else:
-        try:
-            p = Preferits.objects.get(curriculum=cr, usuari=request.user)
-            p.delete()
-        except Preferits.DoesNotExist:
-            pass
+    if request.method == 'POST':
+        cr = Curriculum.objects.get(id=idc)
+        if yn == 'y':
+            try:
+                p = Preferits.objects.get(curriculum=cr, usuari=request.user)
+            except Preferits.DoesNotExist:
+                p = Preferits(curriculum=cr, usuari=request.user)
+                p.save()
+        else:
+            try:
+                p = Preferits.objects.get(curriculum=cr, usuari=request.user)
+                p.delete()
+            except Preferits.DoesNotExist:
+                pass
 
-    return HttpResponse()
+        return HttpResponse()
 
 
 @permission_required('curriculums.veure_curriculums_docents')

@@ -33,8 +33,10 @@
     function preferit(id, option){
     $.ajax({
     url: "/curriculums/backend/setPref/" + id + '/' + option,
-            data: {},
-            type: "GET",
+            data: {
+                'csrfmiddlewaretoken': getCookie('csrftoken')
+            },
+            type: "POST",
             complete: function(resposta){
             location.reload();
             }
