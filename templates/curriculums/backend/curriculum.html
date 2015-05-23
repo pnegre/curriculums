@@ -21,7 +21,9 @@
 {% else %}
 <h3>Categoria laboral</h3>
 <ul>
-    <li>{{cr.categoria_laboral_nodocent}}</li>
+    {% for c in cr.categoria_laboral_nodocent.all %}
+    <li>{{c.nom}}</li>
+    {% endfor %}
 </ul>
 {% endif %}
 

@@ -253,7 +253,7 @@
             </td>
             {% else %}
             <td>
-                {{ c.categoria_laboral_nodocent.nom }}
+                {% for cat in c.categoria_laboral_nodocent.all %} {{ cat.nom }} {% endfor %}
             </td>
             {% endif %}
 
