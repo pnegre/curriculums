@@ -40,6 +40,13 @@
 <script type="text/javascript">
     var csrftoken = getCookie('csrftoken');
 
+    $("#submitobs").prop( "disabled", true );
+
+    $("#textareaobs").on('change keyup paste', function() {
+        console.log("EPA");
+        $("#submitobs").prop( "disabled", false );
+    });
+
     $("#submitobs").click(function() {
         var obs = $("#textareaobs").val();
         $.post("/curriculums/backend/actualitzar_observacions/", {
@@ -47,7 +54,7 @@
             'observacions': obs,
             'csrfmiddlewaretoken': csrftoken
         }, function(data) {
-            alert("OK");
+            $("#submitobs").prop( "disabled", true );
         });
     });
 </script>
