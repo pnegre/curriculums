@@ -34,7 +34,7 @@
 
 <h3>Observacions</h3>
 <textarea id="textareaobs" rows="10">{% if cr.observacions %}{{ cr.observacions }}{% endif %}</textarea>
-<input type="submit" value="Actualitzar" id="submitobs"/>
+<input type="submit" value="Actualitza" id="submitobs"/>
 </div>
 
 <script type="text/javascript">
@@ -43,8 +43,8 @@
     $("#submitobs").prop( "disabled", true );
 
     $("#textareaobs").on('change keyup paste', function() {
-        console.log("EPA");
         $("#submitobs").prop( "disabled", false );
+        $("#submitobs").val("Actualitza");
     });
 
     $("#submitobs").click(function() {
@@ -55,6 +55,7 @@
             'csrfmiddlewaretoken': csrftoken
         }, function(data) {
             $("#submitobs").prop( "disabled", true );
+            $("#submitobs").val("Canvis desats");
         });
     });
 </script>
