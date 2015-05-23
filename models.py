@@ -41,7 +41,9 @@ class Curriculum(models.Model):
     llinatges = models.CharField(max_length=500, blank=True, null=True)
     poblacio = models.CharField(max_length=500, blank=True, null=True)
     telefon = models.CharField(max_length=500, blank=True, null=True)
-    categoria_laboral_nodocent = models.ForeignKey(CategoriaLaboralND, blank=True, null=True)
+
+    categoria_laboral_nodocent = models.ManyToManyField(CategoriaLaboralND, blank=True, null=True)
+
     file = models.FileField(storage=stor.fs, upload_to='.', blank=True, null=True)
     observacions = models.CharField(max_length=1000, blank=True, null=True)
     entrevistat = models.BooleanField(default=False)

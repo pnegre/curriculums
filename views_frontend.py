@@ -90,7 +90,7 @@ class SegonPasForm_NoDocents(forms.Form):
     tel = forms.CharField(max_length=200)
     pob = forms.CharField(max_length=200)
 
-    catlaboral = forms.ModelChoiceField(queryset=CategoriaLaboralND.objects.all())
+    catlaboral = forms.ModelMultipleChoiceField(queryset=CategoriaLaboralND.objects.all())
 
     ref1 = forms.CharField(required=False, max_length=200)
     ref1_email = forms.CharField(required=False, validators=[validate_email])
