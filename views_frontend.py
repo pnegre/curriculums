@@ -70,13 +70,13 @@ class SegonPasForm_Docents(forms.Form):
     def clean(self):
         cleaned_data = super(SegonPasForm_Docents, self).clean()
 
-        titol2, tit2, uni2, dta2 = cleaned_data['titol2'], cleaned_data['tit2'], \
-            cleaned_data['uni2'], cleaned_data['dta2']
+        titol2, tit2, uni2, dta2 = cleaned_data.get('titol2'), cleaned_data.get('tit2'), \
+            cleaned_data.get('uni2'), cleaned_data.get('dta2')
         if (titol2 or tit2 or uni2 or dta2) and not (titol2 and tit2 and uni2 and dta2):
             raise forms.ValidationError("Necessitem tots els camps de títol2")
 
-        titol3, tit3, uni3, dta3 = cleaned_data['titol3'], cleaned_data['tit3'], \
-            cleaned_data['uni3'], cleaned_data['dta3']
+        titol3, tit3, uni3, dta3 = cleaned_data.get('titol3'), cleaned_data.get('tit3'), \
+            cleaned_data.get('uni3'), cleaned_data.get('dta3')
         if (titol3 or tit3 or uni3 or dta3) and not (titol3 and tit3 and uni3 and dta3):
             raise forms.ValidationError("Necessitem tots els camps de títol3")
 
