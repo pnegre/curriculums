@@ -80,7 +80,7 @@
                         </select>
                         <input type="text" name="tit2" id="tit2" placeholder="Titulació i especialitat" value="{{ cr.titol2_nom|default_if_none:'' }}">
                         <input type="text" name="uni2" id="uni2" placeholder="Universitat" value="{{ cr.titol2_uni|default_if_none:'' }}">
-                        <input type="text" name="dta2_display" id="dta2_display" class="data" placeholder="Data d'obtenció del títol" value="{{ cr.titol1_data|default_if_none:''|date:'d/m/Y' }}" onblur="comprovaDataBuida('dta2_display','dta2')">
+                        <input type="text" name="dta2_display" id="dta2_display" class="data" placeholder="Data d'obtenció del títol" value="{{ cr.titol2_data|default_if_none:''|date:'d/m/Y' }}" onblur="comprovaDataBuida('dta2_display','dta2')">
                         <input type="hidden" name="dta2" id="dta2" value="{{ cr.titol2_data|default_if_none:''|date:'Y-m-d' }}">
                     </div>
 
@@ -100,7 +100,7 @@
                         </select>
                         <input type="text" name="tit3" id="tit3" placeholder="Titulació i especialitat" value="{{ cr.titol3_nom|default_if_none:'' }}">
                         <input type="text" name="uni3" id="uni3" placeholder="Universitat" value="{{ cr.titol3_uni|default_if_none:'' }}">
-                        <input type="text" name="dta3_display" id="dta3_display" class="data" placeholder="Data d'obtenció del títol" value="{{ cr.titol1_data|default_if_none:''|date:'d/m/Y' }}" onblur="comprovaDataBuida('dta3_display','dta3')">
+                        <input type="text" name="dta3_display" id="dta3_display" class="data" placeholder="Data d'obtenció del títol" value="{{ cr.titol3_data|default_if_none:''|date:'d/m/Y' }}" onblur="comprovaDataBuida('dta3_display','dta3')">
                         <input type="hidden" name="dta3" id="dta3" value="{{ cr.titol3_data|default_if_none:''|date:'Y-m-d' }}">
                     </div>
 
