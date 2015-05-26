@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Treballa amb nosaltres - Es Liceu Som Cooperativa</title>
+        <title>Borsa de Currículums - Es Liceu Som Cooperativa</title>
         <meta charset="UTF-8">
         <meta name="description" content="Aplicació interna d\'Es Liceu per a gestionar currículums.">
         <meta name="keywords" content="treball,professor,curriculum,liceu,es liceu">
@@ -60,7 +60,8 @@
                         </select>
                         <input type="text" name="tit1" id="tit1" placeholder="Titulació i especialitat" value="{{ cr.titol1_nom|default_if_none:'' }}">
                         <input type="text" name="uni1" id="uni1" placeholder="Universitat" value="{{ cr.titol1_uni|default_if_none:'' }}">
-                        <input type="text" name="dta1" id="dta1" class="data" placeholder="Data d'obtenció del títol" value="{{ cr.titol1_data|default_if_none:''|date:'Y-m-d' }}">
+                        <input type="text" name="dta1_display" id="dta1_display" class="data" placeholder="Data d'obtenció del títol" value="{{ cr.titol1_data|default_if_none:''|date:'d/m/Y' }}">
+                        <input type="hidden" name="dta1" id="dta1" value="{{ cr.titol1_data|default_if_none:''|date:'Y-m-d' }}">
                     </div>
 
                     <div id="titol2">
@@ -79,7 +80,8 @@
                         </select>
                         <input type="text" name="tit2" id="tit2" placeholder="Titulació i especialitat" value="{{ cr.titol2_nom|default_if_none:'' }}">
                         <input type="text" name="uni2" id="uni2" placeholder="Universitat" value="{{ cr.titol2_uni|default_if_none:'' }}">
-                        <input type="text" name="dta2" id="dta2" class="data" placeholder="Data d'obtenció del títol" value="{{ cr.titol2_data|default_if_none:''|date:'Y-m-d' }}">
+                        <input type="text" name="dta2_display" id="dta2_display" class="data" placeholder="Data d'obtenció del títol" value="{{ cr.titol1_data|default_if_none:''|date:'d/m/Y' }}" onblur="comprovaDataBuida('dta2_display','dta2')">
+                        <input type="hidden" name="dta2" id="dta2" value="{{ cr.titol2_data|default_if_none:''|date:'Y-m-d' }}">
                     </div>
 
                     <div id="titol3">
@@ -98,7 +100,8 @@
                         </select>
                         <input type="text" name="tit3" id="tit3" placeholder="Titulació i especialitat" value="{{ cr.titol3_nom|default_if_none:'' }}">
                         <input type="text" name="uni3" id="uni3" placeholder="Universitat" value="{{ cr.titol3_uni|default_if_none:'' }}">
-                        <input type="text" name="dta3" id="dta3" class="data" placeholder="Data d'obtenció del títol" value="{{ cr.titol3_data|default_if_none:''|date:'Y-m-d' }}">
+                        <input type="text" name="dta3_display" id="dta3_display" class="data" placeholder="Data d'obtenció del títol" value="{{ cr.titol1_data|default_if_none:''|date:'d/m/Y' }}" onblur="comprovaDataBuida('dta3_display','dta3')">
+                        <input type="hidden" name="dta3" id="dta3" value="{{ cr.titol3_data|default_if_none:''|date:'Y-m-d' }}">
                     </div>
 
                     <input type="button" name="mes" id="butmes" value="Vull afegir un altre títol"/>
@@ -168,7 +171,8 @@
                 </fieldset>
 
 
-                <input type="submit" value="Envia-ho" style="margin-top: 25px;" />
+                <!--input type="submit" value="Envia-ho" style="margin-top: 25px;" /-->
+                <input type="button" value="Envia-ho" style="margin-top: 25px;" onclick="envia();" >
                 <div style="text-align: center;"><a id="buteliminar">Vull esborrar totes les meves dades a Es Liceu Som Coop</a></div>
 
             </form>
@@ -189,6 +193,49 @@
 
         <script type="text/javascript">
 
+                    jQuery.validator.addMethod("dataValida", function(value, element) {
+                        try{
+                            
+                            if(this.optional(element)){
+                                return true;
+                            }
+
+                            if(value.length !== 10){
+                                return false;
+                            }
+
+                            var dia1 = value.substring(0, 2);
+                            var mes1 = value.substring(3, 5);
+                            var any1 = value.substring(6, 10);
+
+                            if(isNaN(dia1)||isNaN(mes1)||isNaN(any1)){
+                                return false;
+                            }
+
+                            if(dia1 < 1 || dia1 > 31) return false;
+                            if(mes1 < 1 || mes1 > 12) return false;
+                            if(any1 < 1950 || any1 > 2050) return false;
+
+                            return true;
+                        } catch(e){
+                            return false;
+                        }
+                    }, jQuery.validator.format("Per favor, introdueixi una data vàlida."));
+                    
+                    function envia(){
+                        if($("#formulari").valid()){
+                            $("#formulari").submit();
+                        }
+                    }
+                    
+                    function comprovaDataBuida(data_display, data){
+                        var d = $("#"+data_display).val();
+                        
+                        if(d==="" || d===null || d==="undefined"){
+                            $("#"+data).val('');
+                        }
+                    }
+
                     $(document).ready(function () {
                         $(".select2").select2();
 
@@ -197,9 +244,46 @@
                             fileDefaultHtml: 'Cap fitxer seleccionat'
                         });
 
-                        $(".data").datepicker({
+                        $("#dta1_display").datepicker({
                             showAnim: "fadeIn",
-                            dateFormat: "yy-mm-dd", //Format client
+                            dateFormat: "dd/mm/yy", //Format client
+                            altField: "#dta1", 
+                            altFormat: "yy-mm-dd", //Format servidor
+                            dayNames: ["Diumenge", "Dilluns", "Dimarts", "Dimecres", "Dijous", "Divendres", "Dissabte"],
+                            dayNamesMin: ["Dg", "Dl", "Dm", "Dc", "Dj", "Dv", "Ds"],
+                            dayNamesShort: ["Dg", "Dl", "Dm", "Dc", "Dj", "Dv", "Ds"],
+                            firstDay: 1, //1 = Dilluns
+                            monthNames: ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"],
+                            monthNamesShort: ["Gen", "Feb", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Des"],
+                            nextText: "Més tard",
+                            prevText: "Més prest",
+                            currentText: "Ara",
+                            changeMonth: true,
+                            changeYear: true
+                        });
+                        
+                        $("#dta2_display").datepicker({
+                            showAnim: "fadeIn",
+                            dateFormat: "dd/mm/yy", //Format client
+                            altField: "#dta2", 
+                            altFormat: "yy-mm-dd", //Format servidor
+                            dayNames: ["Diumenge", "Dilluns", "Dimarts", "Dimecres", "Dijous", "Divendres", "Dissabte"],
+                            dayNamesMin: ["Dg", "Dl", "Dm", "Dc", "Dj", "Dv", "Ds"],
+                            dayNamesShort: ["Dg", "Dl", "Dm", "Dc", "Dj", "Dv", "Ds"],
+                            firstDay: 1, //1 = Dilluns
+                            monthNames: ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"],
+                            monthNamesShort: ["Gen", "Feb", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Des"],
+                            nextText: "Més tard",
+                            prevText: "Més prest",
+                            currentText: "Ara",
+                            changeMonth: true,
+                            changeYear: true
+                        });
+                        
+                        $("#dta3_display").datepicker({
+                            showAnim: "fadeIn",
+                            dateFormat: "dd/mm/yy", //Format client
+                            altField: "#dta3", 
                             altFormat: "yy-mm-dd", //Format servidor
                             dayNames: ["Diumenge", "Dilluns", "Dimarts", "Dimecres", "Dijous", "Divendres", "Dissabte"],
                             dayNamesMin: ["Dg", "Dl", "Dm", "Dc", "Dj", "Dv", "Ds"],
@@ -227,13 +311,21 @@
                                     titol1: "required",
                                     tit1: "required",
                                     uni1: "required",
-                                    dta1: "required",
+                                    dta1: {
+                                        date: true,
+                                        required: true
+                                    },
+                                    dta1_display: {
+                                        dataValida: true,
+                                        required: true
+                                    },
                                     titol2: {
                                         required: function () {
                                             var titol2 = $("#titol2").val();
                                             var tit2 = $("#tit2").val();
                                             var uni2 = $("#uni2").val();
                                             var dta2 = $("#dta2").val();
+                                            
 
                                             if (titol2 || tit2 || uni2 || dta2) {
                                                 return true;
@@ -271,6 +363,22 @@
                                         }
                                     },
                                     dta2: {
+                                        date : true,
+                                        required: function () {
+                                            var titol2 = $("#titol2").val();
+                                            var tit2 = $("#tit2").val();
+                                            var uni2 = $("#uni2").val();
+                                            var dta2 = $("#dta2").val();
+
+                                            if (titol2 || tit2 || uni2 || dta2) {
+                                                return true;
+                                            } else {
+                                                return false;
+                                            }
+                                        }
+                                    },
+                                    dta2_display: {
+                                        dataValida: true,
                                         required: function () {
                                             var titol2 = $("#titol2").val();
                                             var tit2 = $("#tit2").val();
@@ -327,6 +435,22 @@
                                         }
                                     },
                                     dta3: {
+                                        date : true,
+                                        required: function () {
+                                            var titol3 = $("#titol3").val();
+                                            var tit3 = $("#tit3").val();
+                                            var uni3 = $("#uni3").val();
+                                            var dta3 = $("#dta3").val();
+
+                                            if (titol3 || tit3 || uni3 || dta3) {
+                                                return true;
+                                            } else {
+                                                return false;
+                                            }
+                                        }
+                                    },
+                                    dta3_display: {
+                                        dataValida: true,
                                         required: function () {
                                             var titol3 = $("#titol3").val();
                                             var tit3 = $("#tit3").val();

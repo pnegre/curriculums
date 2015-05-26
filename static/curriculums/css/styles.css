@@ -158,6 +158,8 @@ label.error{
 
 #agree-error{
     width: 240px;
+    position: relative;
+    top: 25px;
 }
 
 .alert{
