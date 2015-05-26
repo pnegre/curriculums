@@ -13,7 +13,7 @@ from django import forms
 
 from curriculums.models import Curriculum, TitolGeneric, CategoriaLaboralND, FamiliaTitol
 
-MAX_UPLOAD_SIZE = "5242880"
+MAX_UPLOAD_SIZE = "15242880"
 
 # Quan treiem les pàgines amb RequestContext, fem visibles a la template
 # algunes variables que no estarien disponibles.
@@ -169,10 +169,10 @@ def primerPas(request):
         'curriculums/index.html', {
     } )
 
-# Comprovem que no fa més de 1 hora que hem demanat el link
+# Comprovem que no fa més de 1 dia que hem demanat el link
 def tooLate(cr):
     delta_seconds = (datetime.datetime.now() - cr.codi_data).seconds
-    if delta_seconds > 3600:
+    if delta_seconds > 3600*24:
         return True
     return False
 
