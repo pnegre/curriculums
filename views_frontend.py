@@ -22,12 +22,13 @@ def renderResponse(request,tmpl,dic):
     return render_to_response(tmpl, dic, context_instance=RequestContext(request))
 
 # Mostra missatge d'error/warning
-def showMsg(request, m1, m2):
+def showMsg(request, m1, m2, errors=None):
     return renderResponse(
         request,
         'curriculums/missatge.html', {
             'miss_title': m1,
             'miss_body': m2,
+            'errors': errors,
         }
     )
 
@@ -284,7 +285,7 @@ def processar_candidat(request, cr, f):
             }
         )
 
-    return showMsg(request, "ERROR", "Error en l'enviament del formulari. Revisa la informació introduïda.")
+    return showMsg(request, "ERROR", "Error en l'enviament del formulari. Revisa la informació introduïda.", f.errors)
     # raise Exception("ERROR!!" + str(f.errors))
 
 # Es crida al final, quan es fa el POST amb les dades definitives

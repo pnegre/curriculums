@@ -8,6 +8,7 @@
     <div class="form-esliceu">
         <h3 style="text-align: center"> {{ miss_title }}</h3>
         <p style="text-align: center"> {{ miss_body }} </p>
+        {% if errors %} {{ errors }} {% endif %}
         <p style="text-align: center">
         <a href="http://www.esliceu.com">Torna a la web d'ES LICEU</a>
         </p>
