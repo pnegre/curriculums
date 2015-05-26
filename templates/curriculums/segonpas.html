@@ -44,7 +44,7 @@
                 {% if tipus_curr == 'D' %}
                 <fieldset>
                     <legend><span class="number">2</span> Dades acadèmiques </legend>
-                    <div id="titol1">
+                    <div id="titol1wrap">
                         <label>Titulació:</label>
                         <select name="titol1" id="titol1" class="select2" data-error="#errtitol1">
                             <option  value=""> -- Selecciona una opció -- </option>
@@ -64,7 +64,7 @@
                         <input type="hidden" name="dta1" id="dta1" value="{{ cr.titol1_data|default_if_none:''|date:'Y-m-d' }}">
                     </div>
 
-                    <div id="titol2">
+                    <div id="titol2wrap">
                         <label>Titulació:</label>
                         <select name="titol2" id="titol2" class="select2">
                             <option value=""> -- Selecciona una opció -- </option>
@@ -84,7 +84,7 @@
                         <input type="hidden" name="dta2" id="dta2" value="{{ cr.titol2_data|default_if_none:''|date:'Y-m-d' }}">
                     </div>
 
-                    <div id="titol3">
+                    <div id="titol3wrap">
                         <label>Titulació:</label>
                         <select name="titol3" id="titol3" class="select2">
                             <option value=""> -- Selecciona una opció -- </option>
@@ -237,6 +237,62 @@
                     }
 
                     $(document).ready(function () {
+                        //Visualitzam tot el que sigui necessari
+                        var t2 = $("#titol2wrap");
+                        var titol2 = $("#titol2");
+                        var tit2 = $("#tit2").val();
+                        var uni2 = $("#uni2").val();
+                        var dta2_display = $("#dta2_display");
+                        var dta2 = $("#dta2").val();
+                        
+                        var t3 = $("#titol3wrap");
+                        var titol3 = $("#titol3");
+                        var tit3 = $("#tit3").val();
+                        var uni3 = $("#uni3").val();
+                        var dta3_display = $("#dta3_display");
+                        var dta3 = $("#dta3").val();
+                        
+                        if(titol2 || tit2 || uni2 || dta2_display || dta2){
+                            t2.show(0, function () {
+                                $(".select2").select2();
+                            });
+                        }
+                        
+                        if(titol3 || tit3 || uni3 || dta3_display || dta3){
+                            t3.show(0, function () {
+                                $(".select2").select2();
+                            });
+                            $("#butmes").hide();
+                        }
+                        
+                        
+                        var r1 = $("#ref1");
+                        var ref1 = $("#ref1").val();
+                        var ref1_email = $("#ref1_email").val();
+                        
+                        var r2 = $("#ref2");
+                        var ref2 = $("#ref2").val();
+                        var ref2_email = $("#ref2_email").val();
+                        
+                        var r3 = $("#ref3");
+                        var ref3 = $("#ref3").val();
+                        var ref3_email = $("#ref3_email").val();
+                        
+                        if(ref1 || ref1_email){
+                            r1.show();
+                        }
+                        
+                        if(ref2 || ref2_email){
+                            r2.show();
+                        }
+                        
+                        if(ref3 || ref3_email){
+                            r3.show();
+                            $("#butref").hide();
+                        }
+                        
+                        
+                        
                         $(".select2").select2();
 
                         $("input:checkbox, input:file").uniform({
@@ -556,8 +612,8 @@
 
 
                         $("#butmes").click(function () {
-                            var t2 = $("#titol2");
-                            var t3 = $("#titol3");
+                            var t2 = $("#titol2wrap");
+                            var t3 = $("#titol3wrap");
                             if (!t2.is(":visible")) {
                                 t2.show(0, function () {
                                     $(".select2").select2();
