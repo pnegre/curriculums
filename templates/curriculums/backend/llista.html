@@ -33,8 +33,10 @@
     function preferit(id, option){
     $.ajax({
     url: "/curriculums/backend/setPref/" + id + '/' + option,
-            data: {},
-            type: "GET",
+            data: {
+                'csrfmiddlewaretoken': getCookie('csrftoken')
+            },
+            type: "POST",
             complete: function(resposta){
             location.reload();
             }
@@ -251,7 +253,7 @@
             </td>
             {% else %}
             <td>
-                {{ c.categoria_laboral_nodocent.nom }}
+                {% for cat in c.categoria_laboral_nodocent.all %} {{ cat.nom }} {% endfor %}
             </td>
             {% endif %}
 

@@ -14,14 +14,22 @@
 {% if cr.categoria == 'D' %}
 <h3>Dades acadèmiques</h3>
 <ul>
-    {% if cr.titol1_generic.nom %}<li>{{cr.titol1_generic.nom}} - {{cr.titol1_nom}} - {{cr.titol1_uni}} en data {{cr.titol1_data}}</li>{% endif %}
-    {% if cr.titol2_generic.nom %}<li>{{cr.titol2_generic.nom}} - {{cr.titol2_nom}} - {{cr.titol2_uni}} en data {{cr.titol2_data}}</li>{% endif %}
-    {% if cr.titol3_generic.nom %}<li>{{cr.titol3_generic.nom}} - {{cr.titol3_nom}} - {{cr.titol3_uni}} en data {{cr.titol3_data}}</li>{% endif %}
+    {% if cr.titol1_generic.nom %}
+        <li>{{cr.titol1_generic.nom}} - {{cr.titol1_nom}} - {{cr.titol1_uni}} en data {{cr.titol1_data|date:"m/d/Y"}}</li>
+    {% endif %}
+    {% if cr.titol2_generic.nom %}
+        <li>{{cr.titol2_generic.nom}} - {{cr.titol2_nom}} - {{cr.titol2_uni}} en data {{cr.titol2_data|date:"m/d/Y"}}</li>
+    {% endif %}
+    {% if cr.titol3_generic.nom %}
+        <li>{{cr.titol3_generic.nom}} - {{cr.titol3_nom}} - {{cr.titol3_uni}} en data {{cr.titol3_data|date:"m/d/Y"}}</li>
+    {% endif %}
 </ul>
 {% else %}
 <h3>Categoria laboral</h3>
 <ul>
-    <li>{{cr.categoria_laboral_nodocent}}</li>
+    {% for c in cr.categoria_laboral_nodocent.all %}
+    <li>{{c.nom}}</li>
+    {% endfor %}
 </ul>
 {% endif %}
 
@@ -33,12 +41,19 @@
 </ul>
 
 <h3>Observacions</h3>
-<textarea id="textareaobs">{% if cr.observacions %}{{ cr.observacions }}{% endif %}</textarea>
-<input type="submit" value="Actualitzar" id="submitobs"/>
+<textarea id="textareaobs" rows="10">{% if cr.observacions %}{{ cr.observacions }}{% endif %}</textarea>
+<input type="submit" value="Actualitza" id="submitobs"/>
 </div>
 
 <script type="text/javascript">
     var csrftoken = getCookie('csrftoken');
+
+    $("#submitobs").prop( "disabled", true );
+
+    $("#textareaobs").on('change keyup paste', function() {
+        $("#submitobs").prop( "disabled", false );
+        $("#submitobs").val("Actualitza");
+    });
 
     $("#submitobs").click(function() {
         var obs = $("#textareaobs").val();
@@ -47,7 +62,8 @@
             'observacions': obs,
             'csrfmiddlewaretoken': csrftoken
         }, function(data) {
-            alert("OK");
+            $("#submitobs").prop( "disabled", true );
+            $("#submitobs").val("Canvis desats");
         });
     });
 </script>

@@ -19,7 +19,7 @@
 
         <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300italic,300,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="/static/curriculums/css/styles.css">
-    </head> 
+    </head>
     <body>
         <div id="header">
             <img src="/static/curriculums/img/logo_esliceu.png" alt="Logo Es Liceu">
@@ -114,10 +114,12 @@
                     <legend><span class="number">2</span> Categoria laboral </legend>
                     <div id="titol1">
                         <label>Lloc de feina a què aspires:</label>
-                        <select name="catlaboral" id="catlaboral" class="select2">
-                            <option disabled selected> -- Selecciona una opció -- </option>
+                        <select name="catlaboral" id="catlaboral" class="select2" multiple>
+                            <!-- <option disabled selected> -- Selecciona una opció -- </option> -->
                             {% for c in catlaborals %}
-                            <option value="{{ c.id }}"> {{c.nom}} </option>
+                            <option value="{{ c.id }}"
+                                {% if c in cr.categoria_laboral_nodocent.all %} selected {% endif %}
+                                > {{c.nom}} </option>
                             {% endfor %}
                         </select>
                     </div>
@@ -604,7 +606,7 @@
                                     catlaboral:{
                                         required: true
                                     }
-                                    
+
                                 }
                             });
                         }

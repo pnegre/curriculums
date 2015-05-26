@@ -13,7 +13,7 @@ from django import forms
 
 from curriculums.models import Curriculum, TitolGeneric, CategoriaLaboralND, FamiliaTitol
 
-MAX_UPLOAD_SIZE = "5242880"
+MAX_UPLOAD_SIZE = "15242880"
 
 # Quan treiem les pàgines amb RequestContext, fem visibles a la template
 # algunes variables que no estarien disponibles.
@@ -22,12 +22,13 @@ def renderResponse(request,tmpl,dic):
     return render_to_response(tmpl, dic, context_instance=RequestContext(request))
 
 # Mostra missatge d'error/warning
-def showMsg(request, m1, m2):
+def showMsg(request, m1, m2, errors=None):
     return renderResponse(
         request,
         'curriculums/missatge.html', {
             'miss_title': m1,
             'miss_body': m2,
+            'errors': errors,
         }
     )
 
@@ -70,13 +71,13 @@ class SegonPasForm_Docents(forms.Form):
     def clean(self):
         cleaned_data = super(SegonPasForm_Docents, self).clean()
 
-        titol2, tit2, uni2, dta2 = cleaned_data['titol2'], cleaned_data['tit2'], \
-            cleaned_data['uni2'], cleaned_data['dta2']
+        titol2, tit2, uni2, dta2 = cleaned_data.get('titol2'), cleaned_data.get('tit2'), \
+            cleaned_data.get('uni2'), cleaned_data.get('dta2')
         if (titol2 or tit2 or uni2 or dta2) and not (titol2 and tit2 and uni2 and dta2):
             raise forms.ValidationError("Necessitem tots els camps de títol2")
 
-        titol3, tit3, uni3, dta3 = cleaned_data['titol3'], cleaned_data['tit3'], \
-            cleaned_data['uni3'], cleaned_data['dta3']
+        titol3, tit3, uni3, dta3 = cleaned_data.get('titol3'), cleaned_data.get('tit3'), \
+            cleaned_data.get('uni3'), cleaned_data.get('dta3')
         if (titol3 or tit3 or uni3 or dta3) and not (titol3 and tit3 and uni3 and dta3):
             raise forms.ValidationError("Necessitem tots els camps de títol3")
 
@@ -90,7 +91,7 @@ class SegonPasForm_NoDocents(forms.Form):
     tel = forms.CharField(max_length=200)
     pob = forms.CharField(max_length=200)
 
-    catlaboral = forms.ModelChoiceField(queryset=CategoriaLaboralND.objects.all())
+    catlaboral = forms.ModelMultipleChoiceField(queryset=CategoriaLaboralND.objects.all())
 
     ref1 = forms.CharField(required=False, max_length=200)
     ref1_email = forms.CharField(required=False, validators=[validate_email])
@@ -169,10 +170,10 @@ def primerPas(request):
         'curriculums/index.html', {
     } )
 
-# Comprovem que no fa més de 1 hora que hem demanat el link
+# Comprovem que no fa més de 1 dia que hem demanat el link
 def tooLate(cr):
     delta_seconds = (datetime.datetime.now() - cr.codi_data).seconds
-    if delta_seconds > 3600:
+    if delta_seconds > 3600*24:
         return True
     return False
 
@@ -284,7 +285,7 @@ def processar_candidat(request, cr, f):
             }
         )
 
-    return showMsg(request, "ERROR", "Error en l'enviament del formulari. Revisa la informació introduïda.")
+    return showMsg(request, "ERROR", "Error en l'enviament del formulari. Revisa la informació introduïda.", f.errors)
     # raise Exception("ERROR!!" + str(f.errors))
 
 # Es crida al final, quan es fa el POST amb les dades definitives
