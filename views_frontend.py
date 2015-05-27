@@ -211,7 +211,9 @@ def segonPas(request):
         else:
             return showMsg(request, "ERROR", "Error en la categoria")
     else:
-        showMsg(request, "ERROR", "L'enllaç ha caducat")
+        return showMsg(request, "ERROR", "L'enllaç ha caducat")
+
+    return showMsg(request, "ERROR", "Error")
 
 
 # Procediment que mira si el fitxer que l'aspirant ha pujat és vàlid
