@@ -180,8 +180,12 @@ def tooLate(cr):
 # Vista de la segona pantalla (es demana la resta de dades al candidat)
 @csrf_protect
 def segonPas(request):
-    codi = request.GET.get('codi')
-    cr = Curriculum.objects.get(codi_edicio=codi)
+    try:
+        codi = request.GET.get('codi')
+        cr = Curriculum.objects.get(codi_edicio=codi)
+    except:
+        return showMsg(request, "ERROR", "El link no és vàlid")
+
     if not tooLate(cr):
         if cr.categoria == 'D':
             # Docent
@@ -204,8 +208,11 @@ def segonPas(request):
                     'catlaborals': catlaborals,
                 }
             )
+        else:
+            return showMsg(request, "ERROR", "Error en la categoria")
+    else:
+        showMsg(request, "ERROR", "L'enllaç ha caducat")
 
-    return showMsg(request, "ERROR", "Error en la categoria")
 
 # Procediment que mira si el fitxer que l'aspirant ha pujat és vàlid
 # (es comprova grandària, mime...)
