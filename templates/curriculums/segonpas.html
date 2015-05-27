@@ -197,7 +197,7 @@
 
                     jQuery.validator.addMethod("dataValida", function(value, element) {
                         try{
-                            
+
                             if(this.optional(element)){
                                 return true;
                             }
@@ -223,16 +223,16 @@
                             return false;
                         }
                     }, jQuery.validator.format("Per favor, introdueixi una data vàlida."));
-                    
+
                     function envia(){
                         if($("#formulari").valid()){
                             $("#formulari").submit();
                         }
                     }
-                    
+
                     function comprovaDataBuida(data_display, data){
                         var d = $("#"+data_display).val();
-                        
+
                         if(d==="" || d===null || d==="undefined"){
                             $("#"+data).val('');
                         }
@@ -246,55 +246,55 @@
                         var uni2 = $("#uni2").val();
                         var dta2_display = $("#dta2_display");
                         var dta2 = $("#dta2").val();
-                        
+
                         var t3 = $("#titol3wrap");
                         var titol3 = $("#titol3");
                         var tit3 = $("#tit3").val();
                         var uni3 = $("#uni3").val();
                         var dta3_display = $("#dta3_display");
                         var dta3 = $("#dta3").val();
-                        
+
                         if(tit2 || uni2){
                             t2.show(0, function () {
                                 $(".select2").select2();
                             });
                         }
-                        
+
                         if(tit3 || uni3){
                             t3.show(0, function () {
                                 $(".select2").select2();
                             });
                             $("#butmes").hide();
                         }
-                        
-                        
+
+
                         var r1 = $("#ref1");
                         var ref1 = $("#ref1").val();
                         var ref1_email = $("#ref1_email").val();
-                        
+
                         var r2 = $("#ref2");
                         var ref2 = $("#ref2").val();
                         var ref2_email = $("#ref2_email").val();
-                        
+
                         var r3 = $("#ref3");
                         var ref3 = $("#ref3").val();
                         var ref3_email = $("#ref3_email").val();
-                        
+
                         if(ref1 || ref1_email){
                             r1.show();
                         }
-                        
+
                         if(ref2 || ref2_email){
                             r2.show();
                         }
-                        
+
                         if(ref3 || ref3_email){
                             r3.show();
                             $("#butref").hide();
                         }
-                        
-                        
-                        
+
+
+
                         $(".select2").select2();
 
                         $("input:checkbox, input:file").uniform({
@@ -305,7 +305,7 @@
                         $("#dta1_display").datepicker({
                             showAnim: "fadeIn",
                             dateFormat: "dd/mm/yy", //Format client
-                            altField: "#dta1", 
+                            altField: "#dta1",
                             altFormat: "yy-mm-dd", //Format servidor
                             dayNames: ["Diumenge", "Dilluns", "Dimarts", "Dimecres", "Dijous", "Divendres", "Dissabte"],
                             dayNamesMin: ["Dg", "Dl", "Dm", "Dc", "Dj", "Dv", "Ds"],
@@ -319,11 +319,11 @@
                             changeMonth: true,
                             changeYear: true
                         });
-                        
+
                         $("#dta2_display").datepicker({
                             showAnim: "fadeIn",
                             dateFormat: "dd/mm/yy", //Format client
-                            altField: "#dta2", 
+                            altField: "#dta2",
                             altFormat: "yy-mm-dd", //Format servidor
                             dayNames: ["Diumenge", "Dilluns", "Dimarts", "Dimecres", "Dijous", "Divendres", "Dissabte"],
                             dayNamesMin: ["Dg", "Dl", "Dm", "Dc", "Dj", "Dv", "Ds"],
@@ -337,11 +337,11 @@
                             changeMonth: true,
                             changeYear: true
                         });
-                        
+
                         $("#dta3_display").datepicker({
                             showAnim: "fadeIn",
                             dateFormat: "dd/mm/yy", //Format client
-                            altField: "#dta3", 
+                            altField: "#dta3",
                             altFormat: "yy-mm-dd", //Format servidor
                             dayNames: ["Diumenge", "Dilluns", "Dimarts", "Dimecres", "Dijous", "Divendres", "Dissabte"],
                             dayNamesMin: ["Dg", "Dl", "Dm", "Dc", "Dj", "Dv", "Ds"],
@@ -383,7 +383,7 @@
                                             var tit2 = $("#tit2").val();
                                             var uni2 = $("#uni2").val();
                                             var dta2 = $("#dta2").val();
-                                            
+
 
                                             if (titol2 || tit2 || uni2 || dta2) {
                                                 return true;
@@ -642,14 +642,35 @@
                             }
                         });
 
+                        // using jQuery
+                        function getCookie(name) {
+                            var cookieValue = null;
+                            if (document.cookie && document.cookie != '') {
+                                var cookies = document.cookie.split(';');
+                                for (var i = 0; i < cookies.length; i++) {
+                                    var cookie = jQuery.trim(cookies[i]);
+                                    // Does this cookie string begin with the name we want?
+                                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                        break;
+                                    }
+                                }
+                            }
+                            return cookieValue;
+                        }
+
                         $("#buteliminar").click(function () {
                             var cf = confirm("Segur que vols esborrar les dades dels nostres servidors?");
+                            var csrftoken = getCookie('csrftoken');
                             if (cf) {
                                 var cod = $("input[name='codi_edicio']").val();
                                 // Fem el post per eliminar l'usuari
                                 // TODO: hauríem d'avisar a l'aspirant si no hem pogut eliminar les dades...
-                                $.post("/curriculums/delete", {codi_edicio: cod}, function (result) {
-                                    window.location.replace("/curriculums/missatge");
+                                $.post("/curriculums/delete", {
+                                    codi_edicio: cod,
+                                    'csrfmiddlewaretoken': csrftoken
+                                    }, function (result) {
+                                        window.location.replace("/curriculums/missatge");
                                 })
                             }
 
