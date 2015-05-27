@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import hashlib, datetime, random
+import requests
 
 from django.shortcuts import render_to_response, redirect
 from django.http import HttpResponse
@@ -14,6 +15,17 @@ from django import forms
 from curriculums.models import Curriculum, TitolGeneric, CategoriaLaboralND, FamiliaTitol
 
 MAX_UPLOAD_SIZE = "15242880"
+
+# MAILGUN
+def send_simple_message(to, text):
+    return requests.post(
+        settings.MAILGUN_POST,
+        auth=("api", settings.MAILGUN_API_KEY),
+        data={"from": "curriculums@esliceu.com",
+              "to": to,
+              "subject": "[Es Liceu] Sol·licitud per enviar el currículum",
+              "text": text })
+
 
 # Quan treiem les pàgines amb RequestContext, fem visibles a la template
 # algunes variables que no estarien disponibles.
@@ -145,11 +157,14 @@ def primerPas(request):
                     "Aquest enllaç només serà vàlid durant 24 hores.\n\n" +
                     "Feu clic en el següent enllaç per continuar: %s", 'utf-8')
                 txt = txtEmail % (unicode(lnk))
-                send_mail('[Es Liceu] Sol·licitud per enviar el currículum',
-                    txt,
-                    'curriculums@esliceu.com',
-                    [cr.email],
-                    fail_silently=False)
+
+                send_simple_message(cr.email, txt)
+
+                # send_mail('[Es Liceu] Sol·licitud per enviar el currículum',
+                #     txt,
+                #     'curriculums@esliceu.com',
+                #     [cr.email],
+                #     fail_silently=False)
 
                 return showMsg(request,
                     'Hem enregistrat la seva petició. Consulti el seu correu electrònic per a continuar.',
