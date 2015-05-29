@@ -66,7 +66,7 @@
             var datamin = new Date(any1, mes1, dia1, 0, 0, 0, 0);
             var datamax = new Date(any2, mes2, dia2, 0, 0, 0, 0);
             //Parser del contingut
-            var content = data[3];
+            var content = data[2];
             var regExp = /\(([^)]*)\)/g;
             var matches = [];
             var match;
@@ -79,8 +79,8 @@
                 var dia = matches[i].substring(0, 2);
                 var mes = matches[i].substring(3, 5);
                 var any = matches[i].substring(6, 10);
-                var data = new Date(any, mes, dia, 0, 0, 0, 0);
-                if (data >= datamin && data <= datamax){
+                var datav = new Date(any, mes, dia, 0, 0, 0, 0);
+                if (datav >= datamin && datav <= datamax){
                     return true;
                 }
             }
@@ -96,7 +96,7 @@
             $(document).ready(function () {
 
     $("#min").datepicker({
-    showAnim: "fadeIn",
+            showAnim: "fadeIn",
             dateFormat: "dd/mm/yy", //Format client
             dayNames: ["Diumenge", "Dilluns", "Dimarts", "Dimecres", "Dijous", "Divendres", "Dissabte"],
             dayNamesMin: ["Dg", "Dl", "Dm", "Dc", "Dj", "Dv", "Ds"],
@@ -110,8 +110,8 @@
             changeMonth: true,
             changeYear: true
     });
-            $("#max").datepicker({
-    showAnim: "fadeIn",
+    $("#max").datepicker({
+            showAnim: "fadeIn",
             dateFormat: "dd/mm/yy", //Format client
             dayNames: ["Diumenge", "Dilluns", "Dimarts", "Dimecres", "Dijous", "Divendres", "Dissabte"],
             dayNamesMin: ["Dg", "Dl", "Dm", "Dc", "Dj", "Dv", "Ds"],
@@ -134,11 +134,11 @@
     });
     });
             var taula = $("#tcurriculums").dataTable({
-    "language": {
-    "aria": {
-    "sortAscending": ": ordena de manera ascendent",
-            "sortDescending": ": ordena de manera descendent"
-    },
+            "language": {
+            "aria": {
+            "sortAscending": ": ordena de manera ascendent",
+                    "sortDescending": ": ordena de manera descendent"
+            },
             "emptyTable": "Sense dades",
             "info": "Mostrant _START_ a _END_ de _TOTAL_ registres",
             "infoEmpty": "Registre no trobat",
