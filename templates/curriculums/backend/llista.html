@@ -94,6 +94,8 @@
 
 
             $(document).ready(function () {
+                
+            
 
     $("#min").datepicker({
             showAnim: "fadeIn",
@@ -125,6 +127,8 @@
             changeMonth: true,
             changeYear: true
     });
+    
+    
             $(".veurecurr").click(function() {
     var currid = $(this).attr("currid");
             $("#dialog").load("/curriculums/backend/show/" + currid).dialog({
@@ -133,6 +137,47 @@
                 position: { my: "center bottom" }
     });
     });
+    
+        jQuery.fn.dataTableExt.oSort['dataorder-asc'] = function(x, y) {
+    var dia1 = x.substring(0, 2);
+            var mes1 = x.substring(3, 5);
+            var any1 = x.substring(6, 10);
+            var hora1 = x.substring(11, 13);
+            var minut1 = x.substring(14, 16);
+            var segon1 = x.substring(17, 19);
+            var dia2 = y.substring(0, 2);
+            var mes2 = y.substring(3, 5);
+            var any2 = y.substring(6, 10);
+            var hora2 = y.substring(11, 13);
+            var minut2 = y.substring(14, 16);
+            var segon2 = y.substring(17, 19);
+            //alert(dia1+"-"+mes1+"-"+any1+"-"+hora1+"-"+minut1+"-"+segon1);
+
+            var data1 = new Date(any1, mes1, dia1, hora1, minut1, segon1, 0);
+            var data2 = new Date(any2, mes2, dia2, hora2, minut2, segon2, 0);
+            return ((data1 < data2) ? - 1 : ((data1 > data2) ?  1 : 0));
+    };
+            jQuery.fn.dataTableExt.oSort['dataorder-desc'] = function(x, y) {
+    var dia1 = x.substring(0, 2);
+            var mes1 = x.substring(3, 5);
+            var any1 = x.substring(6, 10);
+            var hora1 = x.substring(11, 13);
+            var minut1 = x.substring(14, 16);
+            var segon1 = x.substring(17, 19);
+            var dia2 = y.substring(0, 2);
+            var mes2 = y.substring(3, 5);
+            var any2 = y.substring(6, 10);
+            var hora2 = y.substring(11, 13);
+            var minut2 = y.substring(14, 16);
+            var segon2 = y.substring(17, 19);
+            //alert(dia1+"-"+mes1+"-"+any1+"-"+hora1+"-"+minut1+"-"+segon1);
+
+            var data1 = new Date(any1, mes1, dia1, hora1, minut1, segon1, 0);
+            var data2 = new Date(any2, mes2, dia2, hora2, minut2, segon2, 0);
+            return ((data1 < data2) ?  1 : ((data1 > data2) ? - 1 : 0));
+    };
+    
+    
             var taula = $("#tcurriculums").dataTable({
             "language": {
             "aria": {
@@ -169,6 +214,7 @@
                     null,
                     null,
                     null,
+                    { "sType": 'dataorder' },
                     null,
                     null
             ]
@@ -182,16 +228,37 @@
     {% else %}
         {type: "select", values: [ {% for c in catlaboral %} '{{ c.nom }}', {% endfor %} ]},
     {% endif %}
-
+    null, //{ type: "date-range" },
     {type: "text"},
             null
     ]});
+
+
+   $.datepicker.setDefaults({
+            showAnim: "fadeIn",
+            dateFormat: "dd/mm/yy", //Format client
+            altFormat: "dd/mm/yy", //Format client
+            dayNames: ["Diumenge", "Dilluns", "Dimarts", "Dimecres", "Dijous", "Divendres", "Dissabte"],
+            dayNamesMin: ["Dg", "Dl", "Dm", "Dc", "Dj", "Dv", "Ds"],
+            dayNamesShort: ["Dg", "Dl", "Dm", "Dc", "Dj", "Dv", "Ds"],
+            firstDay: 1, //1 = Dilluns
+            monthNames: ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"],
+            monthNamesShort: ["Gen", "Feb", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Des"],
+            nextText: "Més tard",
+            prevText: "Més prest",
+            currentText: "Ara",
+            changeMonth: true,
+            changeYear: true
+    });
 
 // Event listener to the two range filtering inputs to redraw on input
             $('#min, #max').change(function() {
     taula.fnDraw();
     });
-    });</script>
+    });
+
+
+</script>
 
 {% endblock %}
 
@@ -225,6 +292,7 @@
             {% else %}
             <th>Categoria laboral</th>
             {% endif %}
+            <th>Data actualització</th>
             <th>Referències</th>
             <th>Fitxer</th>
         </tr>
@@ -256,6 +324,8 @@
                 {% for cat in c.categoria_laboral_nodocent.all %} {{ cat.nom }} {% endfor %}
             </td>
             {% endif %}
+            
+            <td>{{ c.data_inicial|date:"d/m/Y" }}</td>
 
             <td> {% if c.ref1 %}{{c.ref1}} (<a href="mailto:{{c.ref1_email}}">{{c.ref1_email}}</a>){% endif %} {% if c.ref2 %}<br>{{c.ref2}} (<a href="mailto:{{c.ref2_email}}">{{c.ref2_email}}</a>){% endif %} {% if c.ref3 %}<br>{{c.ref3}} (<a href="mailto:{{c.ref3_email}}">{{c.ref3_email}}</a>){% endif %} </td>
             <td style="text-align: center;"><a href="download/{{c.id}}"><img src="/static/curriculums/img/pin.png" alt="Descarrega" style="width: 22px;"></a> </td>
@@ -270,10 +340,10 @@
             {% else %}
             <th>Categoria laboral</th>
             {% endif %}
+            <th>Data actualització</th>
             <th>Referències</th>
             <th>Fitxer</th>
         </tr>
     </tfoot>
 </table>
-
 {% endblock %}
