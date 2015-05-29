@@ -124,6 +124,16 @@ def generarCodi(email):
     codi_sha.update(email)
     return codi_sha.hexdigest()
 
+
+# Comprovem que no fa més de 2 dies que hem demanat el link
+def tooLate(cr):
+    delta_seconds = (datetime.datetime.now() - cr.codi_data).seconds
+    if delta_seconds > 3600*48:
+        return True
+    return False
+
+
+
 # Vista de la primera pantalla (es demana email i tipus de feina)
 @csrf_protect
 def primerPas(request):
@@ -132,19 +142,27 @@ def primerPas(request):
         if f.is_valid():
             email = f.cleaned_data['email']
             feina = f.cleaned_data['feina']
-            codi = generarCodi(email)
+            codi = None
 
             # Agafem l'objecte "curriculum" amb l'email que ens han proporcionat
             # des de la BBDD. Si no existeix, el creem.
             cr = None
             try:
                 cr = Curriculum.objects.get(email=email,categoria=feina)
+                if tooLate(cr):
+                    codi = generarCodi(email)
+                    cr.codi_edicio = codi
+                    cr.codi_data = datetime.datetime.now()
+                else:
+                    codi = cr.codi_edicio
+
             except Curriculum.DoesNotExist:
-                cr = Curriculum(email=email, categoria=feina, codi_edicio=codi)
+                codi = generarCodi(email)
+                cr = Curriculum(email=email, categoria=feina)
+                cr.codi_edicio = codi
+                cr.codi_data = datetime.datetime.now()
 
             cr.data_inicial = datetime.datetime.now()
-            cr.codi_edicio = codi
-            cr.codi_data = datetime.datetime.now()
             cr.save()
 
             lnk = "%s/curriculums/next?codi=%s" % (settings.CURR_SERVER, codi)
@@ -154,17 +172,11 @@ def primerPas(request):
                 txtEmail = unicode("Això és un missatge automàtic. No cal que responeu.\n\n" +
                     "Hem rebut la seva sol·ŀicitud per introduir el currículum. \n\n" +
                     "Li hem enviat un enllaç perquè pugui completar el procés d'inscripció a la borsa de currículums. " +
-                    "Aquest enllaç només serà vàlid durant 24 hores.\n\n" +
+                    "Aquest enllaç només serà vàlid durant 48 hores.\n\n" +
                     "Feu clic en el següent enllaç per continuar: %s", 'utf-8')
                 txt = txtEmail % (unicode(lnk))
 
                 send_simple_message(cr.email, txt)
-
-                # send_mail('[Es Liceu] Sol·licitud per enviar el currículum',
-                #     txt,
-                #     'curriculums@esliceu.com',
-                #     [cr.email],
-                #     fail_silently=False)
 
                 return showMsg(request,
                     'Hem enregistrat la seva petició. Consulti el seu correu electrònic per a continuar.',
@@ -185,12 +197,6 @@ def primerPas(request):
         'curriculums/index.html', {
     } )
 
-# Comprovem que no fa més de 1 dia que hem demanat el link
-def tooLate(cr):
-    delta_seconds = (datetime.datetime.now() - cr.codi_data).seconds
-    if delta_seconds > 3600*24:
-        return True
-    return False
 
 # Vista de la segona pantalla (es demana la resta de dades al candidat)
 @csrf_protect
