@@ -17,7 +17,7 @@ from curriculums.models import Curriculum, TitolGeneric, CategoriaLaboralND, Fam
 MAX_UPLOAD_SIZE = "15242880"
 
 # MAILGUN
-def send_simple_message(to, text):
+def sendEmailMailGun(to, text):
     return requests.post(
         settings.MAILGUN_POST,
         auth=("api", settings.MAILGUN_API_KEY),
@@ -176,7 +176,7 @@ def primerPas(request):
                     "Feu clic en el següent enllaç per continuar: %s", 'utf-8')
                 txt = txtEmail % (unicode(lnk))
 
-                send_simple_message(cr.email, txt)
+                sendEmailMailGun(cr.email, txt)
 
                 return showMsg(request,
                     'Hem enregistrat la seva petició. Consulti el seu correu electrònic per a continuar.',
