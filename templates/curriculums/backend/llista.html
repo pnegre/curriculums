@@ -94,7 +94,7 @@
 
 
     $(document).ready(function () {
-                
+
 
             $("#min").datepicker({
                     showAnim: "fadeIn",
@@ -127,8 +127,8 @@
                     changeMonth: true,
                     changeYear: true
             });
-    
-    
+
+
             $(".veurecurr").click(function() {
                 var currid = $(this).attr("currid");
                         $("#dialog").load("/curriculums/backend/show/" + currid).dialog({
@@ -137,7 +137,7 @@
                             position: { my: "center bottom" }
                 });
             });
-    
+
             jQuery.fn.dataTableExt.oSort['dataorder-asc'] = function(x, y) {
                     var dia1 = x.substring(0, 2);
                     var mes1 = x.substring(3, 5);
@@ -147,7 +147,7 @@
                     var any2 = y.substring(6, 10);
                     //alert(dia1+"-"+mes1+"-"+any1+"--"+dia2+"-"+mes2+"-"+any2);
 
-                    var data1 = new Date(any1, (mes1-1), dia1, 0, 0, 0, 0); 
+                    var data1 = new Date(any1, (mes1-1), dia1, 0, 0, 0, 0);
                     var data2 = new Date(any2, (mes2-1), dia2, 0, 0, 0, 0);
                     //alert(data1+'--'+data2);
                     return ((data1 < data2) ? - 1 : ((data1 > data2) ?  1 : 0));
@@ -166,8 +166,8 @@
                     var data2 = new Date(any2, (mes2-1), dia2, 0, 0, 0, 0);
                     return ((data1 < data2) ?  1 : ((data1 > data2) ? - 1 : 0));
             };
-    
-    
+
+
         var taula = $("#tcurriculums").dataTable({
             "language": {
                 "aria": {
@@ -189,17 +189,17 @@
             "bStateSave": true,
             "iCookieDuration": 365 * 60 * 60 * 24, //1 any
             "aaSorting": [[1, 'asc']],
-            "sDom": "<'dt_header'<'row-fluid'<'span6'l><'span6'T>>r>t<'dt_footer'<'row-fluid'<'span6'i><'span6'p>>>",
+            // "sDom": "<'dt_header'<'row-fluid'<'span6'l><'span6'T>>r>t<'dt_footer'<'row-fluid'<'span6'i><'span6'p>>>",
             "aoColumnDefs": [{"bSortable": false, "aTargets": [4]}],
-            "oTableTools": {
-            "sSwfPath": "/static/curriculums/js/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
-                    "aButtons": [
-                    {
-                    "sExtends": "print",
-                            "sButtonText": 'Imprimir'
-                    }
-                    ]
-            },
+            // "oTableTools": {
+            // "sSwfPath": "/static/curriculums/js/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
+            //         "aButtons": [
+            //         {
+            //         "sExtends": "print",
+            //                 "sButtonText": 'Imprimir'
+            //         }
+            //         ]
+            // },
             "aoColumns": [
                     null,
                     null,
@@ -314,7 +314,7 @@
                 {% for cat in c.categoria_laboral_nodocent.all %} {{ cat.nom }} {% endfor %}
             </td>
             {% endif %}
-            
+
             <td>{{ c.data_inicial|date:"d/m/Y" }}</td>
 
             <td> {% if c.ref1 %}{{c.ref1}} (<a href="mailto:{{c.ref1_email}}">{{c.ref1_email}}</a>){% endif %} {% if c.ref2 %}<br>{{c.ref2}} (<a href="mailto:{{c.ref2_email}}">{{c.ref2_email}}</a>){% endif %} {% if c.ref3 %}<br>{{c.ref3}} (<a href="mailto:{{c.ref3_email}}">{{c.ref3_email}}</a>){% endif %} </td>
